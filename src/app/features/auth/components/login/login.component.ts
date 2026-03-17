@@ -5,10 +5,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
+import { LoadingOverlayComponent } from '../../../../shared/components/loading-overlay/loading-overlay.component';
+import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
 import { AuthFacade } from '../../facades/auth.facade';
-import { LoginRequest } from '../../models/login-request';
 
 @Component({
     selector: 'app-login',
@@ -20,22 +20,22 @@ import { LoginRequest } from '../../models/login-request';
         MatInputModule,
         MatButtonModule,
         MatCheckboxModule,
-        MatProgressSpinnerModule
+        LoadingOverlayComponent
     ],
+    providers: [ComponentLoadingService],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css',
 })
 export class LoginComponent {
     protected readonly loginForm: FormGroup;
 
-    protected readonly loading = signal(false);
-
     protected readonly errorMessages = signal<string[]>([]);
 
     constructor(
         private fb: FormBuilder,
         private authFacade: AuthFacade,
-        private router: Router) {
+        private router: Router,
+        public loadingService: ComponentLoadingService) {
 
         this.loginForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -45,24 +45,23 @@ export class LoginComponent {
     }
 
     public async onSubmit(): Promise<void> {
-        if (this.loginForm.invalid) return;
+        if (this.loginForm.invalid || this.loadingService.isLoading()) return;
 
-        this.loading.set(true);
         this.errorMessages.set([]);
 
         try {
-            const result = await this.authFacade.login(this.loginForm.getRawValue());
+            await this.loadingService.trackAsync(async () => {
+                const result = await this.authFacade.login(this.loginForm.getRawValue());
 
-            if (result.success) {
-                await this.router.navigate(['/conversations']);
-                return;
-            } 
-            
-            this.errorMessages.set(result.validationErrors.map(error => error.message));
+                if (result.success) {
+                    await this.router.navigate(['/conversations']);
+                    return;
+                }
+
+                this.errorMessages.set(result.validationErrors.map(error => error.message));
+            });
         } catch {
             this.errorMessages.set(['Erro ao conectar com o servidor. Tente novamente.']);
-        } finally {
-            this.loading.set(false);
         }
     }
 }

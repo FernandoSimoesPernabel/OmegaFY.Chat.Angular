@@ -1,0 +1,11 @@
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: inherit;
+    backdrop-filter: blur(2px);
+    background: color-mix(in srgb, var(--mat-sys-surface) 70%, transparent);
+}
