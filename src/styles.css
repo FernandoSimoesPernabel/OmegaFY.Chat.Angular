@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+
+.mat-mdc-snack-bar-container.notification-snackbar {
+	margin-top: 10px;
+}
+
+.mat-mdc-snack-bar-container.notification-snackbar .mdc-snackbar__surface {
+	border-radius: 12px;
+	box-shadow: 0 10px 24px color-mix(in srgb, var(--mat-sys-shadow) 22%, transparent);
+}
+
+.mat-mdc-snack-bar-container.notification-snackbar-success .mdc-snackbar__surface {
+	background: #2e7d32;
+}
+
+.mat-mdc-snack-bar-container.notification-snackbar-error .mdc-snackbar__surface {
+	background: #c62828;
+}
+
+.mat-mdc-snack-bar-container.notification-snackbar-warning .mdc-snackbar__surface {
+	background: #8d6e00;
+}
+
+.mat-mdc-snack-bar-container.notification-snackbar .mat-mdc-snack-bar-label,
+.mat-mdc-snack-bar-container.notification-snackbar .mat-mdc-button {
+	color: #ffffff;
+}

@@ -42,14 +42,6 @@
                     Mantenha-me conectado
                 </mat-checkbox>
 
-                @if (errorMessages().length > 0) {
-                <div class="error-messages">
-                    @for (error of errorMessages(); track error) {
-                    <p>{{ error }}</p>
-                    }
-                </div>
-                }
-
                 <button mat-flat-button type="submit" [disabled]="loadingService.isLoading() || loginForm.invalid"
                     class="full-width submit-button">
                     @if (loadingService.isLoading()) { Entrando... }
