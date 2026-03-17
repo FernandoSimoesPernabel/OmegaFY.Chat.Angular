@@ -7,9 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/auth/services/auth.service';
-import { OmegaFyChatClient } from '../../../core/external-services/omega-fy-chat-client.service';
-import { LoginRequest } from '../models/login-request';
+import { AuthService } from '../../../../core/auth/services/auth.service';
+import { OmegaFyChatClient } from '../../../../core/external-services/omega-fy-chat-client.service';
+import { LoginRequest } from '../../models/login-request';
 
 @Component({
     selector: 'app-login',
@@ -41,7 +41,7 @@ export class LoginComponent {
 
         this.loginForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(6)]],
+            password: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(64)]],
             rememberMe: [false]
         });
     }

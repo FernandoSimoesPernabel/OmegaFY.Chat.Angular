@@ -11,7 +11,9 @@ export const routes: Routes = [
         path: 'conversations',
         canActivate: [authGuard],
         loadComponent: () =>
-            import('./features/conversations/conversations.component').then(m => m.ConversationsComponent)
+            import('./features/conversations/components/conversations.component').then(
+                m => m.ConversationsComponent
+            )
     },
     { path: '**', redirectTo: 'login' }
 ];
