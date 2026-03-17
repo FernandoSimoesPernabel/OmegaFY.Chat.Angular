@@ -7,8 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../../core/auth/services/auth.service';
-import { OmegaFyChatClient } from '../../../../core/external-services/omega-fy-chat-client.service';
+import { AuthFacade } from '../../facades/auth.facade';
 import { LoginRequest } from '../../models/login-request';
 
 @Component({
@@ -35,8 +34,7 @@ export class LoginComponent {
 
     constructor(
         private fb: FormBuilder,
-        private omegaFyChatClient: OmegaFyChatClient,
-        private authService: AuthService,
+        private authFacade: AuthFacade,
         private router: Router) {
 
         this.loginForm = this.fb.group({
@@ -53,15 +51,14 @@ export class LoginComponent {
         this.errorMessages.set([]);
 
         try {
-            const request: LoginRequest = this.loginForm.getRawValue();
-            const response = await this.omegaFyChatClient.login(request);
+            const result = await this.authFacade.login(this.loginForm.getRawValue());
 
-            if (response.succeeded) {
-                this.authService.saveTokens(response.data.token, response.data.refreshToken);
+            if (result.success) {
                 await this.router.navigate(['/conversations']);
-            } else {
-                this.errorMessages.set(response.errors.map(e => e.message));
-            }
+                return;
+            } 
+            
+            this.errorMessages.set(result.validationErrors.map(error => error.message));
         } catch {
             this.errorMessages.set(['Erro ao conectar com o servidor. Tente novamente.']);
         } finally {

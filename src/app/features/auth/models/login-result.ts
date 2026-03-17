@@ -1,6 +1,6 @@
 import { Token } from '../../../core/models/auth/token';
 
-export type LoginCommandResult = {
+export type LoginResult = {
     userId: string;
     displayName: string;
     email: string;
