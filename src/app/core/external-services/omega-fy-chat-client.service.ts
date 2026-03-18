@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { LoginRequest } from '../../features/auth/models/login-request';
 import { LoginResult } from '../../features/auth/models/login-result';
-import { API_BASE_URL } from '../config/api/api.config';
+import { AppConfig } from '../config/runtime/app-config';
 import { ApiResponse } from '../models/base/api-response';
 
 @Injectable({ providedIn: 'root' })
 export class OmegaFyChatClient {
     constructor(
-        private http: HttpClient,
-        @Inject(API_BASE_URL) private baseUrl: string) { }
+        private readonly http: HttpClient,
+        private readonly appConfig: AppConfig) { }
 
     public async login(request: LoginRequest): Promise<ApiResponse<LoginResult>> {
-        return firstValueFrom(this.http.post<ApiResponse<LoginResult>>(`${this.baseUrl}api/Auth/login`, request));
+        return firstValueFrom(this.http.post<ApiResponse<LoginResult>>(`${this.appConfig.API_BASE_URL}/Auth/login`, request));
     }
 }
