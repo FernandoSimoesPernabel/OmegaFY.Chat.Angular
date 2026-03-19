@@ -22,7 +22,7 @@ export class NotificationService {
 
     private show(type: 'success' | 'error' | 'warning', message: string): void {
         const config: MatSnackBarConfig = {
-            duration: 5000,
+            duration: 2000,
             horizontalPosition: 'right',
             verticalPosition: 'top',
             panelClass: ['notification-snackbar', `notification-snackbar-${type}`]

@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { JWT_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../../../shared/constants/local-storage-keys.constants';
 import { Token } from '../../models/auth/token';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { JwtToken } from '../models/jwt-token';
-
-const JWT_TOKEN_KEY = 'omegafy_jwt_token';
-const REFRESH_TOKEN_KEY = 'omegafy_refresh_token';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

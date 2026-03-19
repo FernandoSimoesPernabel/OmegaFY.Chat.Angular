@@ -3,14 +3,14 @@ import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer, 
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { AppConfig } from './core/config/runtime/app-config';
+import { AppConfigFile } from './core/config/app-config-file';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
         provideRouter(routes),
         provideHttpClient(),
-        provideAppInitializer(() => inject(AppConfig).bind()),
+        provideAppInitializer(() => inject(AppConfigFile).bind()),
         importProvidersFrom(MatSnackBarModule)
     ]
 };
