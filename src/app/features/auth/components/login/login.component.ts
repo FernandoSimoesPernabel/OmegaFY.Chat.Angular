@@ -31,11 +31,11 @@ export class LoginComponent {
     protected readonly loginForm: FormGroup;
 
     constructor(
-        private fb: FormBuilder,
-        private authFacade: AuthFacade,
-        private router: Router,
-        private notificationService: NotificationService,
-        public loadingService: ComponentLoadingService) {
+        private readonly fb: FormBuilder,
+        private readonly authFacade: AuthFacade,
+        private readonly router: Router,
+        private readonly notificationService: NotificationService,
+        public readonly loadingService: ComponentLoadingService) {
 
         this.loginForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -47,27 +47,18 @@ export class LoginComponent {
     public async onSubmit(): Promise<void> {
         if (this.loginForm.invalid || this.loadingService.isLoading()) return;
 
-        try {
-            await this.loadingService.trackAsync(async () => {
-                const result = await this.authFacade.login(this.loginForm.getRawValue());
+        await this.loadingService.trackAsync(async () => {
+            const result = await this.authFacade.login(this.loginForm.getRawValue());
 
-                if (result.success) {
-                    this.notificationService.success('Login realizado com sucesso.');
-                    await this.router.navigate(['/conversations']);
-                    return;
-                }
+            if (result.success) {
+                this.notificationService.success('Login realizado com sucesso.');
+           
+                await this.router.navigate(['/conversations']);
+           
+                return;
+            }
 
-                if (result.validationErrors.length === 0) {
-                    this.notificationService.error('Nao foi possivel realizar o login.');
-                    return;
-                }
-
-                for (const error of result.validationErrors) {
-                    this.notificationService.warning(error.message);
-                }
-            });
-        } catch {
-            this.notificationService.error('Erro ao conectar com o servidor. Tente novamente.');
-        }
+            this.notificationService.error('Usuário ou senha inválidos. Tente novamente.');
+        });
     }
 }

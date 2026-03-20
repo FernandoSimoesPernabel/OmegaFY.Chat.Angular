@@ -21,11 +21,4 @@ export class JwtToken {
     public isValid(): boolean {
         return !!this.value && !this.isExpired();
     }
-
-    public toJson(): Token {
-        return {
-            value: this.value,
-            expirationDate: this.expirationDate.toISOString()
-        };
-    }
 }

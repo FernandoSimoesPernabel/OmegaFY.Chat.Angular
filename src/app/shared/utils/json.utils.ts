@@ -1,4 +1,4 @@
-export class JsonUtils {
+export abstract class JsonUtils {
     public static serialize<T>(value: T): string {
         return JSON.stringify(value);
     }

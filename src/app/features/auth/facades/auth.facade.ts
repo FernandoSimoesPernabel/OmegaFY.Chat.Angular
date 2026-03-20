@@ -8,8 +8,8 @@ import { LoginResult } from '../models/login-result';
 @Injectable({ providedIn: 'root' })
 export class AuthFacade {
     constructor(
-        private omegaFyChatClient: OmegaFyChatClient,
-        private authService: AuthService) { }
+        private readonly omegaFyChatClient: OmegaFyChatClient,
+        private readonly authService: AuthService) { }
 
     public async login(request: LoginRequest): Promise<UseCaseResult<LoginResult>> {
         const response = await this.omegaFyChatClient.login(request);

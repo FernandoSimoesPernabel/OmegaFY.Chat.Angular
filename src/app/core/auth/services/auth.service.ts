@@ -8,18 +8,15 @@ import { JwtToken } from '../models/jwt-token';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     constructor(
-        private localStorageService: LocalStorageService,
-        private router: Router) { }
+        private readonly localStorageService: LocalStorageService,
+        private readonly router: Router) { }
 
     public saveTokens(token: Token, refreshToken: Token | null): void {
-        const jwt = JwtToken.createFromJson(token);
-        
-        this.localStorageService.set(JWT_TOKEN_KEY, jwt.toJson());
+        this.localStorageService.set(JWT_TOKEN_KEY, JwtToken.createFromJson(token));
 
-        if (refreshToken) {
-            const refreshJwt = JwtToken.createFromJson(refreshToken);
-            this.localStorageService.set(REFRESH_TOKEN_KEY, refreshJwt.toJson());
-        }
+        refreshToken
+            ? this.localStorageService.set(REFRESH_TOKEN_KEY, JwtToken.createFromJson(refreshToken))
+            : this.localStorageService.remove(REFRESH_TOKEN_KEY);
     }
 
     public getToken(): JwtToken | null {
@@ -41,7 +38,7 @@ export class AuthService {
     public isAuthenticated(): boolean {
         const token = this.getToken();
 
-        return token !== null && token.isValid();
+        return token?.isValid() ?? false;
     }
 
     public clearTokens(): void {
