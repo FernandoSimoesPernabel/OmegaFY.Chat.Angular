@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -26,6 +26,7 @@ import { AuthFacade } from '../../facades/auth.facade';
     providers: [ComponentLoadingService],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
     protected readonly loginForm: FormGroup;
@@ -52,9 +53,9 @@ export class LoginComponent {
 
             if (result.success) {
                 this.notificationService.success('Login realizado com sucesso.');
-           
+
                 await this.router.navigate(['/conversations']);
-           
+
                 return;
             }
 

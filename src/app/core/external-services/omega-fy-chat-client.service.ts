@@ -5,6 +5,8 @@ import { LoginRequest } from '../../features/auth/models/login-request';
 import { LoginResult } from '../../features/auth/models/login-result';
 import { NOT_DOMAIN_ERROR } from '../../shared/constants/error-codes.constants';
 import { AppConfigFile } from '../config/app-config-file';
+import { RefreshTokenRequest } from '../models/auth/refresh-token-request';
+import { RefreshTokenResult } from '../models/auth/refresh-token-result';
 import { ApiResponse } from '../models/base/api-response';
 
 @Injectable({ providedIn: 'root' })
@@ -15,6 +17,10 @@ export class OmegaFyChatClient {
 
     public async login(request: LoginRequest): Promise<ApiResponse<LoginResult>> {
         return this.post<LoginRequest, LoginResult>('Auth/login', request);
+    }
+
+    public async refreshToken(request: RefreshTokenRequest): Promise<ApiResponse<RefreshTokenResult>> {
+        return this.post<RefreshTokenRequest, RefreshTokenResult>('Auth/refresh-token', request);
     }
 
     private async post<TRequest, TResponse>(endpoint: string, request: TRequest): Promise<ApiResponse<TResponse>> {
@@ -40,7 +46,6 @@ export class OmegaFyChatClient {
 
         return this.createUnknownApiResponse<TResponse>();
     }
-
 
     private createUnknownApiResponse<TResponse>(): ApiResponse<TResponse> {
         return {
