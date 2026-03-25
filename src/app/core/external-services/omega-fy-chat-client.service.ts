@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { LoginRequest } from '../../features/auth/models/login-request';
 import { LoginResult } from '../../features/auth/models/login-result';
+import { GetUserConversationsQueryResult } from '../../features/conversations/models/get-user-conversations-query-result';
 import { NOT_DOMAIN_ERROR } from '../../shared/constants/error-codes.constants';
 import { AppConfigFile } from '../config/app-config-file';
 import { RefreshTokenRequest } from '../models/auth/refresh-token-request';
@@ -21,6 +22,18 @@ export class OmegaFyChatClient {
 
     public async refreshToken(request: RefreshTokenRequest): Promise<ApiResponse<RefreshTokenResult>> {
         return this.post<RefreshTokenRequest, RefreshTokenResult>('Auth/refresh-token', request);
+    }
+
+    public async getUserConversations(): Promise<ApiResponse<GetUserConversationsQueryResult>> {
+        return this.get<GetUserConversationsQueryResult>('Chat/me/conversations');
+    }
+
+    private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {
+        try {
+            return await firstValueFrom(this.http.get<ApiResponse<TResponse>>(this.buildUrl(endpoint)));
+        } catch (ex: unknown) {
+            return this.createApiResponseFromException<TResponse>(ex);
+        }
     }
 
     private async post<TRequest, TResponse>(endpoint: string, request: TRequest): Promise<ApiResponse<TResponse>> {

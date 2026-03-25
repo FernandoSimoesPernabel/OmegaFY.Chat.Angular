@@ -34,7 +34,6 @@ export class AuthService {
 
     public isAuthenticated(): boolean {
         const token = this.getToken();
-
         return token?.isValid() ?? false;
     }
 

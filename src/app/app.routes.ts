@@ -8,12 +8,25 @@ export const routes: Routes = [
         loadChildren: () => import('./features/auth/auth.routes').then(m => m.authRoutes)
     },
     {
-        path: 'conversations',
+        path: 'conversation',
         canActivate: [authGuard],
-        loadComponent: () =>
-            import('./features/conversations/components/conversations.component').then(
-                m => m.ConversationsComponent
-            )
+        children: [
+            {
+                path: '',
+                loadComponent: () =>
+                    import('./features/conversations/components/conversations.component').then(
+                        m => m.ConversationsComponent
+                    )
+            },
+            {
+                path: ':id',
+                loadComponent: () =>
+                    import('./features/conversations/components/conversation-detail.component').then(
+                        m => m.ConversationDetailComponent
+                    )
+            }
+        ]
     },
+    { path: 'conversations', redirectTo: 'conversation', pathMatch: 'full' },
     { path: '**', redirectTo: 'login' }
 ];
