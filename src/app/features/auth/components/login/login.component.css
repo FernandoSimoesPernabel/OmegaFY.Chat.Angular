@@ -1,0 +1,209 @@
+:host {
+    --theme-secondary: var(--mat-sys-secondary, var(--mat-sys-tertiary));
+    display: block;
+    width: 100%;
+    min-height: 100dvh;
+}
+
+.login-shell {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100dvh;
+    padding: clamp(16px, 3vw, 32px);
+    box-sizing: border-box;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at 14% 10%,
+            color-mix(in srgb, var(--mat-sys-primary) 30%, transparent) 0%,
+            transparent 44%
+        ),
+        radial-gradient(
+            circle at 88% 82%,
+            color-mix(in srgb, var(--theme-secondary) 30%, transparent) 0%,
+            transparent 44%
+        ),
+        linear-gradient(
+            160deg,
+            color-mix(in srgb, var(--mat-sys-surface) 92%, var(--mat-sys-primary) 8%) 0%,
+            color-mix(in srgb, var(--mat-sys-surface-container) 92%, var(--theme-secondary) 8%)
+                100%
+        );
+}
+
+.login-shell::before,
+.login-shell::after {
+    content: '';
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 999px;
+    pointer-events: none;
+    filter: blur(18px);
+    opacity: 0.34;
+    z-index: 0;
+    animation: float-blob 14s ease-in-out infinite;
+}
+
+.login-shell::before {
+    top: -100px;
+    right: -100px;
+    background: color-mix(in srgb, var(--mat-sys-primary-container) 72%, transparent);
+}
+
+.login-shell::after {
+    left: -100px;
+    bottom: -130px;
+    background: color-mix(in srgb, var(--theme-secondary) 30%, transparent);
+}
+
+.login-card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 440px);
+    margin: 0 auto;
+    padding: 14px 10px 4px;
+    border-radius: 22px;
+    border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 24%, transparent);
+    background: color-mix(in srgb, var(--mat-sys-surface-container-high) 80%, transparent);
+    backdrop-filter: blur(18px);
+    box-shadow:
+        0 24px 56px color-mix(in srgb, var(--mat-sys-shadow) 22%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--mat-sys-on-surface) 12%, transparent);
+    animation: card-enter 320ms ease-out;
+}
+
+.login-header {
+    margin-bottom: 8px;
+}
+
+.brand-avatar {
+    border-radius: 12px;
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--mat-sys-primary) 88%, white 12%),
+        color-mix(in srgb, var(--theme-secondary) 78%, white 22%)
+    );
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--mat-sys-primary) 25%, transparent);
+}
+
+.status-badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.badge {
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    border-radius: 999px;
+    padding: 6px 8px;
+    color: var(--mat-sys-on-primary-container);
+    background: color-mix(in srgb, var(--mat-sys-primary-container) 72%, transparent);
+}
+
+.badge-secondary {
+    color: color-mix(in srgb, var(--theme-secondary) 70%, black 30%);
+    background: color-mix(in srgb, var(--theme-secondary) 18%, transparent);
+}
+
+.full-width {
+    width: 100%;
+}
+
+.remember-me {
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 8px;
+}
+
+.submit-button {
+    height: 46px;
+    margin-top: 14px;
+    border-radius: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(
+        130deg,
+        color-mix(in srgb, var(--mat-sys-primary) 88%, white 12%),
+        color-mix(in srgb, var(--theme-secondary) 76%, white 24%)
+    );
+    color: var(--mat-sys-on-primary);
+}
+
+.submit-button[disabled] {
+    background: color-mix(in srgb, var(--mat-sys-outline-variant) 65%, transparent);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.card-actions {
+    margin-top: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-hint {
+    font-size: 13px;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+@keyframes card-enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes float-blob {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .login-shell {
+        padding: 16px;
+    }
+
+    .login-card {
+        width: min(100%, 480px);
+        padding: 12px 8px 2px;
+        border-radius: 18px;
+    }
+
+    .status-badges {
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        gap: 2px;
+        padding-bottom: 4px;
+    }
+}
