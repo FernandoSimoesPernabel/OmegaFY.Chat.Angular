@@ -5,7 +5,7 @@
         }
 
         <mat-card-header>
-            <mat-card-title>Conversations</mat-card-title>
+            <mat-card-title>OmegaFY Chat</mat-card-title>
             <mat-card-subtitle>Escolha uma conversa para continuar.</mat-card-subtitle>
         </mat-card-header>
 
@@ -16,13 +16,16 @@
                     <div class="note-head">
                         <strong>{{ conversation.displayName }}</strong>
                         @if (getMessageDate(conversation); as sendDate) {
-                        <span>{{ sendDate | date:'dd/MM HH:mm' }}</span>
+                        <span>{{ sendDate | date:'dd/MM/yyyy HH:mm' }}</span>
                         } @else {
                         <span>Nenhuma atividade</span>
                         }
                     </div>
 
-                    <p class="note-message">{{ conversation.lastMessage?.content?.trim() }}</p>
+                    <p class="note-message">
+                        <strong>{{ conversation.lastMessage?.senderDisplayName }}: </strong>
+                        {{ conversation.lastMessage?.content?.trim() }}
+                    </p>
 
                     <div class="note-chips">
                         <small class="chip">{{ toConversationTypeLabel(conversation.type) }}</small>

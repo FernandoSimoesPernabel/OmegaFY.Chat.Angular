@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OmegaFyChatClient } from '../../../core/external-services/omega-fy-chat-client.service';
 import { UseCaseResult } from '../../../core/models/base/use-case-result';
-import { GetUserConversationsQueryResult } from '../models/get-user-conversations-query-result';
+import { GetUserConversationsQueryResult } from '../../../core/models/conversations/get-user-conversations-query-result';
 
 @Injectable({ providedIn: 'root' })
 export class ChatFacade {

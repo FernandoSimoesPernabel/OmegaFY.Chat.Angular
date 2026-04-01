@@ -1,14 +1,16 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { LoginRequest } from '../../features/auth/models/login-request';
-import { LoginResult } from '../../features/auth/models/login-result';
-import { GetUserConversationsQueryResult } from '../../features/conversations/models/get-user-conversations-query-result';
 import { NOT_DOMAIN_ERROR } from '../../shared/constants/error-codes.constants';
 import { AppConfigFile } from '../config/app-config-file';
+import { LoginRequest } from '../models/auth/login-request';
+import { LoginResult } from '../models/auth/login-result';
 import { RefreshTokenRequest } from '../models/auth/refresh-token-request';
 import { RefreshTokenResult } from '../models/auth/refresh-token-result';
+import { RegisterNewUserRequest } from '../models/auth/register-new-user-request';
+import { RegisterNewUserResult } from '../models/auth/register-new-user-result';
 import { ApiResponse } from '../models/base/api-response';
+import { GetUserConversationsQueryResult } from '../models/conversations/get-user-conversations-query-result';
 
 @Injectable({ providedIn: 'root' })
 export class OmegaFyChatClient {
@@ -18,6 +20,10 @@ export class OmegaFyChatClient {
 
     public async login(request: LoginRequest): Promise<ApiResponse<LoginResult>> {
         return this.post<LoginRequest, LoginResult>('Auth/login', request);
+    }
+
+    public async registerNewUser(request: RegisterNewUserRequest): Promise<ApiResponse<RegisterNewUserResult>> {
+        return this.post<RegisterNewUserRequest, RegisterNewUserResult>('Auth/register-new-user', request);
     }
 
     public async refreshToken(request: RefreshTokenRequest): Promise<ApiResponse<RefreshTokenResult>> {
