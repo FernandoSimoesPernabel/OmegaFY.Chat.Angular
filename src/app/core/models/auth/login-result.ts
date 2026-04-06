@@ -1,4 +1,4 @@
-import { Token } from '../../../core/models/auth/token';
+import { Token } from './token';
 
 export type LoginResult = {
     userId: string;
