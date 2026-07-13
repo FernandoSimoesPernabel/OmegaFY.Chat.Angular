@@ -50,6 +50,22 @@ export class OmegaFyChatClient {
         }
     }
 
+    private async put<TRequest, TResponse>(endpoint: string, request: TRequest): Promise<ApiResponse<TResponse>> {
+        try {
+            return await firstValueFrom(this.http.put<ApiResponse<TResponse>>(this.buildUrl(endpoint), request));
+        } catch (ex: unknown) {
+            return this.createApiResponseFromException<TResponse>(ex);
+        }
+    }
+
+    private async delete<TRequest, TResponse>(endpoint: string, request: TRequest): Promise<ApiResponse<TResponse>> {
+        try {
+            return await firstValueFrom(this.http.delete<ApiResponse<TResponse>>(this.buildUrl(endpoint), { body: request }));
+        } catch (ex: unknown) {
+            return this.createApiResponseFromException<TResponse>(ex);
+        }
+    }
+
     private createApiResponseFromException<TResponse>(ex: unknown): ApiResponse<TResponse> {
         if (ex instanceof HttpErrorResponse) {
             const errorApiResponse = ex.error as ApiResponse<TResponse>;

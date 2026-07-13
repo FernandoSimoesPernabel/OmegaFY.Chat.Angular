@@ -2,13 +2,13 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
-import { ConversationStatus } from '../../../core/models/conversations/conversation-status';
-import { ConversationType } from '../../../core/models/conversations/conversation-type';
-import { UserConversation } from '../../../core/models/conversations/user-conversation';
-import { LoadingOverlayComponent } from '../../../shared/components/loading-overlay/loading-overlay.component';
-import { ComponentLoadingService } from '../../../shared/services/component-loading.service';
-import { NotificationService } from '../../../shared/services/notification.service';
-import { ChatFacade } from '../facades/chat.facade';
+import { ConversationStatus } from '../../../../core/models/conversations/conversation-status';
+import { ConversationType } from '../../../../core/models/conversations/conversation-type';
+import { UserConversation } from '../../../../core/models/conversations/user-conversation';
+import { LoadingOverlayComponent } from '../../../../shared/components/loading-overlay/loading-overlay.component';
+import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
+import { ChatFacade } from '../../facades/chat.facade';
 
 @Component({
     selector: 'app-conversations',
