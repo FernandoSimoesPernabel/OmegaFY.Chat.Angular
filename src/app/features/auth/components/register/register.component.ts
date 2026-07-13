@@ -6,9 +6,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { RegisterNewUserRequest } from '../../../../core/models/auth/register-new-user-request';
-import { ValidationError } from '../../../../core/models/base/validation-error';
 import { LoadingOverlayComponent } from '../../../../shared/components/loading-overlay/loading-overlay.component';
+import { ValidationErrorsComponent } from '../../../../shared/components/validation-errors/validation-errors.component';
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
+import { ComponentValidationErrorsService } from '../../../../shared/services/component-validation-errors.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { AuthFacade } from '../../facades/auth.facade';
 
@@ -21,16 +22,15 @@ import { AuthFacade } from '../../facades/auth.facade';
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
-        LoadingOverlayComponent
+        LoadingOverlayComponent,
+        ValidationErrorsComponent
     ],
-    providers: [ComponentLoadingService],
+    providers: [ComponentLoadingService, ComponentValidationErrorsService],
     templateUrl: './register.component.html',
     styleUrl: './register.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent {
-    protected readonly validationErrors = signal<ValidationError[]>([]);
-
     protected readonly registerModel = signal<RegisterNewUserRequest & { confirmPassword: string }>({
         displayName: '',
         email: '',
@@ -74,6 +74,7 @@ export class RegisterComponent {
         private readonly authFacade: AuthFacade,
         private readonly router: Router,
         private readonly notificationService: NotificationService,
+        public readonly validationErrorsService: ComponentValidationErrorsService,
         public readonly loadingService: ComponentLoadingService) { }
 
     public async onSubmit(event: SubmitEvent): Promise<void> {
@@ -82,7 +83,7 @@ export class RegisterComponent {
         if (this.loadingService.isLoading())
             return;
 
-        this.validationErrors.set([]);
+        this.validationErrorsService.clear();
 
         await submit(this.registerForm, {
             onInvalid: () => { },
@@ -99,7 +100,7 @@ export class RegisterComponent {
                         return;
                     }
 
-                    this.validationErrors.set(result.validationErrors);
+                    this.validationErrorsService.setErrors(result.validationErrors);
                     this.notificationService.error('Não foi possível criar a conta.');
                 });
 

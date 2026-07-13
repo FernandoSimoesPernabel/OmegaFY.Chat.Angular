@@ -1,0 +1,11 @@
+@if (hasErrors()) {
+    <section class="validation-errors" role="alert" aria-live="polite">
+        <p class="validation-errors-title">{{ title() }}</p>
+
+        <ul class="validation-errors-list">
+            @for (error of validationErrorsService.errors(); track error.code) {
+                <li>{{ error.message }}</li>
+            }
+        </ul>
+    </section>
+}
