@@ -1,7 +1,7 @@
 <div class="login-shell">
     <mat-card class="login-card">
         @if (loadingService.isLoading()) {
-        <app-loading-overlay></app-loading-overlay>
+            <app-loading-overlay></app-loading-overlay>
         }
 
         <mat-card-header class="login-header">
@@ -17,32 +17,32 @@
                 <span class="badge">Real Time Updates</span>
             </div>
 
-            <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <form class="login-form" (submit)="onSubmit($event)">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email</mat-label>
-                    <input matInput formControlName="email" type="email" />
-                    @if (loginForm.controls['email'].hasError('required')) {
-                    <mat-error>Email é obrigatório</mat-error>
-                    } @else if (loginForm.controls['email'].hasError('email')) {
-                    <mat-error>Email inválido</mat-error>
+                    <input matInput [formField]="loginForm.email" type="email" />
+                    @if (hasFieldError('email', 'required')) {
+                        <mat-error>Email é obrigatório</mat-error>
+                    } @else if (hasFieldError('email', 'email')) {
+                        <mat-error>Email inválido</mat-error>
                     }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Senha</mat-label>
-                    <input matInput formControlName="password" type="password" />
-                    @if (loginForm.controls['password'].hasError('required')) {
-                    <mat-error>Senha é obrigatória</mat-error>
-                    } @else if (loginForm.controls['password'].hasError('minlength')) {
-                    <mat-error>Senha deve ter pelo menos 10 caracteres</mat-error>
+                    <input matInput [formField]="loginForm.password" type="password" />
+                    @if (hasFieldError('password', 'required')) {
+                        <mat-error>Senha é obrigatória</mat-error>
+                    } @else if (hasFieldError('password', 'minLength')) {
+                        <mat-error>Senha deve ter pelo menos 10 caracteres</mat-error>
                     }
                 </mat-form-field>
 
-                <mat-checkbox formControlName="rememberMe" class="remember-me">
+                <mat-checkbox [formField]="loginForm.rememberMe" class="remember-me">
                     Mantenha-me conectado
                 </mat-checkbox>
 
-                <button mat-flat-button type="submit" [disabled]="loadingService.isLoading() || loginForm.invalid"
+                <button mat-flat-button type="submit" [disabled]="loadingService.isLoading() || loginForm().invalid()"
                     class="full-width submit-button">
                     @if (loadingService.isLoading()) { Entrando... }
                     @else { Entrar }

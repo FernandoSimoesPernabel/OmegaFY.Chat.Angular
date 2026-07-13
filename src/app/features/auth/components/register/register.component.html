@@ -1,7 +1,7 @@
 <div class="register-shell">
     <mat-card class="register-card">
         @if (loadingService.isLoading()) {
-        <app-loading-overlay></app-loading-overlay>
+            <app-loading-overlay></app-loading-overlay>
         }
 
         <mat-card-header class="register-header">
@@ -18,61 +18,62 @@
             </div>
 
             @if (validationErrors().length > 0) {
-            <section class="validation-errors" role="alert" aria-live="polite">
-                <p class="validation-errors-title">Erros ao criar conta:</p>
+                <section class="validation-errors" role="alert" aria-live="polite">
+                    <p class="validation-errors-title">Erros ao criar conta:</p>
 
-                <ul class="validation-errors-list">
-                    @for (error of validationErrors(); track error.message) {
-                    <li>{{ error.message }}</li>
-                    }
-                </ul>
-            </section>
+                    <ul class="validation-errors-list">
+                        @for (error of validationErrors(); track error.message) {
+                            <li>{{ error.message }}</li>
+                        }
+                    </ul>
+                </section>
             }
 
-            <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <form class="register-form" (submit)="onSubmit($event)">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Nome para exibição</mat-label>
-                    <input matInput formControlName="displayName" type="text" />
-                    @if (registerForm.controls['displayName'].hasError('required')) {
-                    <mat-error>Nome para exibição é obrigatório</mat-error>
-                    } @else if (registerForm.controls['displayName'].hasError('minlength')) {
-                    <mat-error>Nome para exibição deve ter pelo menos 3 caracteres</mat-error>
+                    <input matInput [formField]="registerForm.displayName" type="text" />
+                    @if (hasFieldError('displayName', 'required')) {
+                        <mat-error>Nome para exibição é obrigatório</mat-error>
+                    } @else if (hasFieldError('displayName', 'minLength')) {
+                        <mat-error>Nome para exibição deve ter pelo menos 3 caracteres</mat-error>
                     }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email</mat-label>
-                    <input matInput formControlName="email" type="email" />
-                    @if (registerForm.controls['email'].hasError('required')) {
-                    <mat-error>Email é obrigatório</mat-error>
-                    } @else if (registerForm.controls['email'].hasError('email')) {
-                    <mat-error>Email inválido</mat-error>
+                    <input matInput [formField]="registerForm.email" type="email" />
+                    @if (hasFieldError('email', 'required')) {
+                        <mat-error>Email é obrigatório</mat-error>
+                    } @else if (hasFieldError('email', 'email')) {
+                        <mat-error>Email inválido</mat-error>
                     }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Senha</mat-label>
-                    <input matInput formControlName="password" type="password" />
-                    @if (registerForm.controls['password'].hasError('required')) {
-                    <mat-error>Senha é obrigatória</mat-error>
-                    } @else if (registerForm.controls['password'].hasError('minlength')) {
-                    <mat-error>Senha deve ter pelo menos 10 caracteres</mat-error>
+                    <input matInput [formField]="registerForm.password" type="password" />
+                    @if (hasFieldError('password', 'required')) {
+                        <mat-error>Senha é obrigatória</mat-error>
+                    } @else if (hasFieldError('password', 'minLength')) {
+                        <mat-error>Senha deve ter pelo menos 10 caracteres</mat-error>
                     }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Confirmar senha</mat-label>
-                    <input matInput formControlName="confirmPassword" type="password" />
-                    @if (registerForm.controls['confirmPassword'].hasError('required')) {
-                    <mat-error>Confirmação de senha é obrigatória</mat-error>
-                    } @else if (registerForm.controls['confirmPassword'].hasError('minlength')) {
-                    <mat-error>Confirmação de senha deve ter pelo menos 10 caracteres</mat-error>
-                    } @else if (registerForm.hasError('passwordMismatch')) {
-                    <mat-error>As senhas devem ser iguais</mat-error>
+                    <input matInput [formField]="registerForm.confirmPassword" type="password" />
+                    @if (hasFieldError('confirmPassword', 'required')) {
+                        <mat-error>Confirmação de senha é obrigatória</mat-error>
+                    } @else if (hasFieldError('confirmPassword', 'minLength')) {
+                        <mat-error>Confirmação de senha deve ter pelo menos 10 caracteres</mat-error>
+                    } @else if (hasFieldError('confirmPassword', 'passwordMismatch')) {
+                        <mat-error>As senhas devem ser iguais</mat-error>
                     }
                 </mat-form-field>
 
-                <button mat-flat-button type="submit" [disabled]="loadingService.isLoading() || registerForm.invalid"
+                <button mat-flat-button type="submit"
+                    [disabled]="loadingService.isLoading() || registerForm().invalid()"
                     class="full-width submit-button">
                     @if (loadingService.isLoading()) { Cadastrando... }
                     @else { Criar conta }
