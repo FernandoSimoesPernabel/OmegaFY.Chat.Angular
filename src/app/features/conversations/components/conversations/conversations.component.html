@@ -1,4 +1,12 @@
 <div class="conversations-shell">
+    <header class="page-header">
+        <div class="page-header__identity">
+            <span class="page-header__label">Bem vindo, <strong>{{ loggedUserName() }}</strong></span>
+        </div>
+
+        <button type="button" class="page-header__action" mat-stroked-button (click)="logoff()">Sair</button>
+    </header>
+
     <mat-card class="conversations-card">
         @if (loadingService.isLoading()) {
             <app-loading-overlay />

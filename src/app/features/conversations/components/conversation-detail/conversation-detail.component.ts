@@ -5,7 +5,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-conversation-detail',
-    standalone: true,
     imports: [RouterLink, MatButtonModule, MatCardModule],
     templateUrl: './conversation-detail.component.html',
     styleUrls: ['./conversation-detail.component.css'],
