@@ -33,7 +33,7 @@ export class LoginComponent {
     protected readonly loginModel = signal<LoginRequest>({
         email: '',
         password: '',
-        rememberMe: false
+        rememberMe: true
     });
 
     protected readonly loginForm = form(this.loginModel, (loginForm) => {

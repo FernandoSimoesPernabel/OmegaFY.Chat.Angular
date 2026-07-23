@@ -15,13 +15,19 @@ export const omegafyRefreshTokenInterceptor: HttpInterceptorFn = (request, next)
     const authService = inject(AuthService);
     const omegaFyChatClient = inject(OmegaFyChatClient);
 
+    const apiBaseUrl = appConfigFile.API_OMEGAFY_CHAT_BASE_URL?.trim().toLowerCase();
+
+    if (!apiBaseUrl)
+        return next(request);
+
     const requestUrl = request.url.toLowerCase();
 
-    const isApiRequest = requestUrl.startsWith(appConfigFile.API_OMEGAFY_CHAT_BASE_URL.toLowerCase());
+    const isAppConfigRequest = requestUrl.endsWith('/app-config.json');
+    const isApiRequest = requestUrl.startsWith(apiBaseUrl);
     const isLoginRequest = requestUrl.includes('/auth/login');
     const isRefreshRequest = requestUrl.includes('/auth/refresh-token');
 
-    if (!isApiRequest || isLoginRequest || isRefreshRequest)
+    if (isAppConfigRequest || !isApiRequest || isLoginRequest || isRefreshRequest)
         return next(request);
 
     return from(ensureValidAccessToken(authService, omegaFyChatClient)).pipe(
