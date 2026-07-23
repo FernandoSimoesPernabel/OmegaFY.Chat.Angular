@@ -10,6 +10,12 @@ export const unauthorizedGuard: CanActivateFn = async () => {
         return router.createUrlTree(['/conversations']);
     }
 
+    const refreshToken = authService.getRefreshToken();
+
+    if (refreshToken?.isValid()) {
+        return router.createUrlTree(['/conversations']);
+    }
+
     authService.clearTokens();
 
     return true;

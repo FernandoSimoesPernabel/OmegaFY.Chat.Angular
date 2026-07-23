@@ -1,11 +1,14 @@
 import { Token } from '../../models/auth/token';
 
 export class JwtToken {
+    public readonly userId: string;
+    
     public readonly value: string;
 
     public readonly expirationDate: Date;
 
-    private constructor(value: string, expirationDate: Date) {
+    private constructor(userId: string, value: string, expirationDate: Date) {
+        this.userId = userId;
         this.value = value;
         this.expirationDate = expirationDate;
     }
@@ -19,7 +22,7 @@ export class JwtToken {
     }
 
     public static createFromToken(json: Token): JwtToken {
-        return new JwtToken(json.value, new Date(json.expirationDate));
+        return new JwtToken(json.userId, json.value, new Date(json.expirationDate));
     }
 
     public static decodeTokenPayload(tokenPayload: string): Record<string, unknown> | null {

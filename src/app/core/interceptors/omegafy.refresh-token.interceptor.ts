@@ -53,7 +53,7 @@ async function ensureValidAccessToken(
 
     if (!refreshInFlightPromise) {
         refreshInFlightPromise = (async () => {
-            const response = await omegaFyChatClient.refreshToken({ currentToken: token.value, refreshToken: refreshToken.value });
+            const response = await omegaFyChatClient.refreshToken({ userId: token.userId, currentToken: token.value, refreshToken: refreshToken.value });
 
             if (!response.succeeded || !response.data) {
                 return false;

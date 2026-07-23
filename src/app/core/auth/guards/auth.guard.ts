@@ -10,6 +10,12 @@ export const authGuard: CanActivateFn = () => {
         return true;
     }
 
+    const refreshToken = authService.getRefreshToken();
+
+    if (refreshToken?.isValid()) {
+        return true;
+    }
+
     authService.clearTokens();
     
     return router.createUrlTree(['/login']);
