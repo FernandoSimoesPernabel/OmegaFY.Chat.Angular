@@ -10,6 +10,8 @@ import { RefreshTokenResult } from '../models/auth/refresh-token-result';
 import { RegisterNewUserRequest } from '../models/auth/register-new-user-request';
 import { RegisterNewUserResult } from '../models/auth/register-new-user-result';
 import { ApiResponse } from '../models/base/api-response';
+import { CursorPagination } from '../models/base/cursor-pagination';
+import { GetUserConversationMessagesQueryResult } from '../models/conversations/get-user-conversation-messages-query-result';
 import { GetUserConversationsQueryResult } from '../models/conversations/get-user-conversations-query-result';
 
 @Injectable({ providedIn: 'root' })
@@ -32,6 +34,10 @@ export class OmegaFyChatClient {
 
     public async getUserConversations(): Promise<ApiResponse<GetUserConversationsQueryResult>> {
         return this.get<GetUserConversationsQueryResult>('Chat/me/conversations');
+    }
+
+    public async getUserConversationMessages(conversationId: string, pagination: CursorPagination<string>): Promise<ApiResponse<GetUserConversationMessagesQueryResult>> {
+        return this.get<GetUserConversationMessagesQueryResult>(`Chat/me/${conversationId}/messages?Take=${pagination.take}&Cursor=${pagination.cursor ?? ''}`);
     }
 
     private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {

@@ -1,16 +1,38 @@
 <div class="conversation-detail-shell">
-    <mat-card>
+    <mat-card class="conversation-detail-card">
+        @if (loadingService.isLoading()) {
+            <app-loading-overlay />
+        }
+
         <mat-card-header>
-            <mat-card-title>Conversation</mat-card-title>
-            <mat-card-subtitle>ID da conversa selecionada.</mat-card-subtitle>
+            <mat-card-title>{{ conversationDisplayName() }}</mat-card-title>
         </mat-card-header>
 
-        <mat-card-content>
-            <p>{{ conversationId }}</p>
+        <mat-card-content class="conversation-content">
+            @if (hasMore()) {
+                <div class="load-more-container">
+                    <button type="button" mat-stroked-button (click)="loadMoreMessages()"
+                        [disabled]="loadingService.isLoading()">
+                        Carregar mais
+                    </button>
+                </div>
+            }
+
+            <div class="messages-container">
+                @for (message of messages(); track message.messageId) {
+                    @if (message.isMessageFromMember) {
+                        <app-conversation-my-message [message]="message" />
+                    } @else {
+                        <app-conversation-others-message [message]="message" />
+                    }
+                } @empty {
+                    <p class="empty-state">Nenhuma mensagem encontrada para esta conversa.</p>
+                }
+            </div>
         </mat-card-content>
 
         <mat-card-actions>
-            <button mat-button routerLink="/conversation">Voltar para lista</button>
+            <button mat-button routerLink="/conversations">Voltar para lista</button>
         </mat-card-actions>
     </mat-card>
 </div>

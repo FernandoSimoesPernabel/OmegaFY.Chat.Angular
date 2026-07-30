@@ -47,7 +47,7 @@ export class ConversationsComponent implements OnInit {
     }
 
     public openConversation(conversationId: string): Promise<boolean> {
-        return this.router.navigate(['/conversation', conversationId]);
+        return this.router.navigate(['/conversations', conversationId]);
     }
 
     public toConversationTypeLabel(type: ConversationType): string {

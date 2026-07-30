@@ -1,0 +1,8 @@
+<article class="message message--other">
+    <header class="message__meta">
+        <strong>{{ message().senderDisplayName }}</strong>
+        <time [attr.datetime]="message().sendDate">{{ message().sendDate | date:'dd/MM/yyyy HH:mm:ss' }}</time>
+    </header>
+
+    <p>{{ message().content }}</p>
+</article>

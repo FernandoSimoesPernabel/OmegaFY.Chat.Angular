@@ -31,8 +31,10 @@
                         </div>
 
                         <p class="note-message">
-                            <strong>{{ conversation.lastMessage?.senderDisplayName }}: </strong>
-                            {{ conversation.lastMessage?.content?.trim() }}
+                            @if (conversation.lastMessage) {
+                                <strong>{{ conversation.lastMessage.senderDisplayName }}: </strong>
+                                {{ conversation.lastMessage.content }}
+                            }
                         </p>
 
                         <div class="note-chips">

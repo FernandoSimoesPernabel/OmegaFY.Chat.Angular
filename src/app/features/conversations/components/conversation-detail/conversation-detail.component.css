@@ -4,3 +4,57 @@
     margin: 24px auto;
     padding: 0 16px;
 }
+
+.conversation-detail-card {
+    position: relative;
+    min-height: 420px;
+    border-radius: 22px;
+    border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 24%, transparent);
+    background: color-mix(in srgb, var(--mat-sys-surface-container-high) 86%, transparent);
+}
+
+.conversation-content {
+    display: grid;
+    gap: 12px;
+}
+
+.load-more-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+.load-more-container small {
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 12px;
+}
+
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 20%, transparent);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--mat-sys-surface-container-low) 84%, transparent);
+    padding: 12px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.empty-state {
+    margin: 24px 0;
+    text-align: center;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+@media (max-width: 640px) {
+    .conversation-detail-shell {
+        margin-top: 16px;
+        padding: 0 12px;
+    }
+
+    .messages-container {
+        max-height: 66vh;
+    }
+}
