@@ -10,7 +10,7 @@ import { ConversationType } from '../../../core/models/conversations/conversatio
 export class ConversationTypeLabelComponent {
     public readonly type = input.required<ConversationType>();
 
-    protected readonly label = computed(() => {
+    protected readonly conversationTypeLabel = computed(() => {
         const conversationType = this.type();
 
         switch (conversationType) {

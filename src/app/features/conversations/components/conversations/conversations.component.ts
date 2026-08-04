@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/auth/services/auth.service';
 import { UserConversation } from '../../../../core/models/conversations/user-conversation';
-import { DisplayNameInitialComponent } from '../../../../shared/components/base/display-name-initial/display-name-initial.component';
+import { DisplayNameInitialComponent } from '../../../../shared/components/display-name-initial/display-name-initial.component';
 import { ConversationStatusLabelComponent } from '../../../../shared/components/conversation-status-label/conversation-status-label.component';
 import { ConversationTypeLabelComponent } from '../../../../shared/components/conversation-type-label/conversation-type-label.component';
 import { LoadingOverlayComponent } from '../../../../shared/components/loading-overlay/loading-overlay.component';

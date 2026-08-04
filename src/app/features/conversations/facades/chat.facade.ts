@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OmegaFyChatClient } from '../../../core/external-services/omega-fy-chat-client.service';
+import { ApiResponse } from '../../../core/models/base/api-response';
 import { CursorPagination } from '../../../core/models/base/cursor-pagination';
 import { UseCaseResult } from '../../../core/models/base/use-case-result';
 import { GetConversationByIdQueryResult } from '../../../core/models/conversations/get-conversation-by-id-query-result';
@@ -12,28 +13,20 @@ export class ChatFacade {
 
     public async getUserConversations(): Promise<UseCaseResult<GetUserConversationsQueryResult>> {
         const response = await this.omegaFyChatClient.getUserConversations();
-
-        if (!response.succeeded)
-            return { success: false, validationErrors: response.errors };
-
-        return { success: true, data: response.data };
+        return this.toUseCaseResult(response);
     }
 
     public async getConversationById(conversationId: string): Promise<UseCaseResult<GetConversationByIdQueryResult>> {
         const response = await this.omegaFyChatClient.getConversationById(conversationId);
-
-        if (!response.succeeded)
-            return { success: false, validationErrors: response.errors };
-
-        return { success: true, data: response.data };
+        return this.toUseCaseResult(response);
     }
 
     public async getUserConversationMessages(conversationId: string, pagination: CursorPagination<string>): Promise<UseCaseResult<GetUserConversationMessagesQueryResult>> {
         const response = await this.omegaFyChatClient.getUserConversationMessages(conversationId, pagination);
+        return this.toUseCaseResult(response);
+    }
 
-        if (!response.succeeded)
-            return { success: false, validationErrors: response.errors };
-
-        return { success: true, data: response.data };
+    private toUseCaseResult<TData>(response: ApiResponse<TData>): UseCaseResult<TData> {
+        return !response.succeeded ? { success: false, validationErrors: response.errors } : { success: true, data: response.data };
     }
 }

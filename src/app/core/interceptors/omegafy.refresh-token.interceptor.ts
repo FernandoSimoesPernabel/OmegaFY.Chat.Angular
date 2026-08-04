@@ -11,23 +11,10 @@ const REFRESH_WINDOW_IN_MILLISECONDS = 10 * 60 * 1000;
 let refreshInFlightPromise: Promise<boolean> | null = null;
 
 export const omegafyRefreshTokenInterceptor: HttpInterceptorFn = (request, next) => {
-    const appConfigFile = inject(AppConfigFile);
     const authService = inject(AuthService);
     const omegaFyChatClient = inject(OmegaFyChatClient);
 
-    const apiBaseUrl = appConfigFile.API_OMEGAFY_CHAT_BASE_URL?.trim().toLowerCase();
-
-    if (!apiBaseUrl)
-        return next(request);
-
-    const requestUrl = request.url.toLowerCase();
-
-    const isAppConfigRequest = requestUrl.endsWith('/app-config.json');
-    const isApiRequest = requestUrl.startsWith(apiBaseUrl);
-    const isLoginRequest = requestUrl.includes('/auth/login');
-    const isRefreshRequest = requestUrl.includes('/auth/refresh-token');
-
-    if (isAppConfigRequest || !isApiRequest || isLoginRequest || isRefreshRequest)
+    if (!shouldEnsureValidAccessToken(request.url))
         return next(request);
 
     return from(ensureValidAccessToken(authService, omegaFyChatClient)).pipe(
@@ -35,10 +22,24 @@ export const omegafyRefreshTokenInterceptor: HttpInterceptorFn = (request, next)
     );
 };
 
-async function ensureValidAccessToken(
-    authService: AuthService,
-    omegaFyChatClient: OmegaFyChatClient): Promise<void> {
+function shouldEnsureValidAccessToken(requestUrl: string): boolean {
+    const appConfigFile = inject(AppConfigFile);
 
+    const apiBaseUrl = appConfigFile.API_OMEGAFY_CHAT_BASE_URL?.trim().toLowerCase();
+
+    if (!apiBaseUrl)
+        return false;
+
+    const url = requestUrl.toLowerCase();
+    const isAppConfigRequest = url.endsWith('/app-config.json');
+    const isApiRequest = url.startsWith(apiBaseUrl);
+    const isLoginRequest = url.includes('/auth/login');
+    const isRefreshRequest = url.includes('/auth/refresh-token');
+
+    return !(isAppConfigRequest || !isApiRequest || isLoginRequest || isRefreshRequest);
+}
+
+async function ensureValidAccessToken(authService: AuthService, omegaFyChatClient: OmegaFyChatClient): Promise<void> {
     const token = authService.getToken();
     const refreshToken = authService.getRefreshToken();
 

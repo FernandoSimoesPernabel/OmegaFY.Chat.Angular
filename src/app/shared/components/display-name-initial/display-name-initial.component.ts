@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 export class DisplayNameInitialComponent {
     public readonly displayName = input<string>('');
 
-    protected readonly initial = computed(() => {
+    protected readonly displayNameInitial = computed(() => {
         const normalizedDisplayName = this.displayName().trim();
 
         if (!normalizedDisplayName)

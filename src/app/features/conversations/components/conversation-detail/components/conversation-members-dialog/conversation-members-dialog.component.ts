@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ConversationAndMembersModel } from '../../../../../../core/models/conversations/conversation-and-members-model';
 import { ConversationType } from '../../../../../../core/models/conversations/conversation-type';
-import { DisplayNameInitialComponent } from '../../../../../../shared/components/base/display-name-initial/display-name-initial.component';
+import { DisplayNameInitialComponent } from '../../../../../../shared/components/display-name-initial/display-name-initial.component';
 import { ConversationStatusLabelComponent } from '../../../../../../shared/components/conversation-status-label/conversation-status-label.component';
 import { ConversationTypeLabelComponent } from '../../../../../../shared/components/conversation-type-label/conversation-type-label.component';
 import { ConversationDateTimePipe } from '../../../../../../shared/pipes/conversation-date-time.pipe';

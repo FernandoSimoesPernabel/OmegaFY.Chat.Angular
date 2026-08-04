@@ -10,7 +10,7 @@ import { ConversationStatus } from '../../../core/models/conversations/conversat
 export class ConversationStatusLabelComponent {
     public readonly status = input.required<ConversationStatus>();
 
-    protected readonly label = computed(() => {
+    protected readonly conversationStatusLabel = computed(() => {
         const conversationStatus = this.status();
 
         switch (conversationStatus) {
