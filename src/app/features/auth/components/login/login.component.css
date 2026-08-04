@@ -80,16 +80,6 @@
     margin-bottom: 8px;
 }
 
-.brand-avatar {
-    border-radius: 12px;
-    background: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--mat-sys-primary) 88%, white 12%),
-        color-mix(in srgb, var(--theme-secondary) 78%, white 22%)
-    );
-    box-shadow: 0 6px 14px color-mix(in srgb, var(--mat-sys-primary) 25%, transparent);
-}
-
 .status-badges {
     display: flex;
     gap: 8px;

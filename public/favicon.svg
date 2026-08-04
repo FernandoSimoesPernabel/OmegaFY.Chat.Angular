@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="OmegaFY Chat icon">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b1220" />
+      <stop offset="1" stop-color="#0f4c81" />
+    </linearGradient>
+    <linearGradient id="accent" x1="18" y1="18" x2="48" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#67e8f9" />
+      <stop offset="1" stop-color="#22d3ee" />
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bg)" />
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="none" stroke="#38bdf8" stroke-opacity="0.28" />
+  <path fill="#f8fafc" d="M18 16h28a8 8 0 0 1 8 8v12a8 8 0 0 1-8 8H33l-11 9v-9h-4a8 8 0 0 1-8-8V24a8 8 0 0 1 8-8Z" />
+  <rect x="22" y="26" width="22" height="4" rx="2" fill="url(#accent)" />
+  <rect x="22" y="33" width="15" height="4" rx="2" fill="#0891b2" />
+  <circle cx="47" cy="18" r="5" fill="#22d3ee" />
+  <circle cx="47" cy="18" r="2" fill="#0b1220" />
+</svg>
