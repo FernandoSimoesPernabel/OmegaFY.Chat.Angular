@@ -1,3 +1,5 @@
+@import '../../../../../../shared/styles/conversation-message-base.css';
+
 .message {
     max-width: 72%;
     margin-left: auto;
@@ -7,20 +9,4 @@
     background: color-mix(in srgb, var(--mat-sys-primary-container) 78%, transparent);
     color: var(--mat-sys-on-primary-container);
     border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 20%, transparent);
-}
-
-.message__meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 10px;
-    margin-bottom: 6px;
-    font-size: 12px;
-}
-
-.message p {
-    margin: 0;
-    white-space: pre-wrap;
-    word-break: break-word;
-    line-height: 1.4;
 }

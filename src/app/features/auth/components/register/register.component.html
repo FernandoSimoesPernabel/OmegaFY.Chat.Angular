@@ -5,13 +5,13 @@
         }
 
         <mat-card-header class="register-header">
-            <div style="display: grid; gap: 4px;">
-                <mat-card-title style="display: inline-flex; align-items: center; gap: 8px; margin: 0;">
-                    <span class="material-icons" aria-hidden="true" style="font-size: 21px; width: 21px; height: 21px;">app_registration</span>
+            <div class="register-header__identity">
+                <mat-card-title class="register-header__title">
+                    <span class="material-icons register-header__title-icon" aria-hidden="true">app_registration</span>
                     Crie sua conta
                 </mat-card-title>
 
-                <mat-card-subtitle style="margin: 0;">
+                <mat-card-subtitle class="register-header__subtitle">
                     Cadastre-se para acessar suas conversas no OmegaFY Chat.
                 </mat-card-subtitle>
             </div>
@@ -19,24 +19,24 @@
 
         <mat-card-content class="register-content">
             <div class="status-badges" aria-hidden="true">
-                <span class="badge" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
-                    <span class="material-icons" style="font-size: 14px; width: 14px; height: 14px;">shield</span>
+                <span class="badge">
+                    <span class="material-icons badge__icon">shield</span>
                     Proteção JWT
                 </span>
 
-                <span class="badge badge-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
-                    <span class="material-icons" style="font-size: 14px; width: 14px; height: 14px;">psychology</span>
+                <span class="badge badge-secondary">
+                    <span class="material-icons badge__icon">psychology</span>
                     Sessão Inteligente
                 </span>
 
-                <span class="badge" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
-                    <span class="material-icons" style="font-size: 14px; width: 14px; height: 14px;">chat</span>
+                <span class="badge">
+                    <span class="material-icons badge__icon">chat</span>
                     Tempo Real
                 </span>
             </div>
 
-            <p style="margin: 0 0 12px; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; opacity: 0.82;">
-                <span class="material-icons" aria-hidden="true" style="font-size: 16px; width: 16px; height: 16px;">verified</span>
+            <p class="register-highlight">
+                <span class="material-icons register-highlight__icon" aria-hidden="true">verified</span>
                 Cadastro rápido e seguro, sem burocracia.
             </p>
 
@@ -45,8 +45,7 @@
             <form class="register-form" (submit)="onSubmit($event)">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Nome para exibição</mat-label>
-                    <span matPrefix class="material-icons" aria-hidden="true"
-                        style="font-size: 18px; width: 18px; height: 18px; margin-right: 8px; opacity: 0.75;">account_circle</span>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">account_circle</span>
                     <input matInput [formField]="registerForm.displayName" type="text" />
                     @if (hasFieldError('displayName', 'required')) {
                         <mat-error>Nome para exibição é obrigatório</mat-error>
@@ -57,8 +56,7 @@
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email</mat-label>
-                    <span matPrefix class="material-icons" aria-hidden="true"
-                        style="font-size: 18px; width: 18px; height: 18px; margin-right: 8px; opacity: 0.75;">mail</span>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">mail</span>
                     <input matInput [formField]="registerForm.email" type="email" />
                     @if (hasFieldError('email', 'required')) {
                         <mat-error>Email é obrigatório</mat-error>
@@ -69,8 +67,7 @@
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Senha</mat-label>
-                    <span matPrefix class="material-icons" aria-hidden="true"
-                        style="font-size: 18px; width: 18px; height: 18px; margin-right: 8px; opacity: 0.75;">lock</span>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">lock</span>
                     <input matInput [formField]="registerForm.password" type="password" />
                     @if (hasFieldError('password', 'required')) {
                         <mat-error>Senha é obrigatória</mat-error>
@@ -81,8 +78,7 @@
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Confirmar senha</mat-label>
-                    <span matPrefix class="material-icons" aria-hidden="true"
-                        style="font-size: 18px; width: 18px; height: 18px; margin-right: 8px; opacity: 0.75;">task_alt</span>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">task_alt</span>
                     <input matInput [formField]="registerForm.confirmPassword" type="password" />
                     @if (hasFieldError('confirmPassword', 'required')) {
                         <mat-error>Confirmação de senha é obrigatória</mat-error>
@@ -96,14 +92,12 @@
                 <button mat-flat-button type="submit"
                     [disabled]="loadingService.isLoading() || registerForm().invalid()"
                     class="full-width submit-button">
-                    <span style="display: inline-flex; align-items: center; gap: 8px;">
+                    <span class="submit-button__content">
                         @if (loadingService.isLoading()) {
-                            <span class="material-icons" aria-hidden="true"
-                                style="font-size: 18px; width: 18px; height: 18px;">hourglass_top</span>
+                            <span class="material-icons submit-button__icon" aria-hidden="true">hourglass_top</span>
                             Cadastrando...
                         } @else {
-                            <span class="material-icons" aria-hidden="true"
-                                style="font-size: 18px; width: 18px; height: 18px;">person_add_alt_1</span>
+                            <span class="material-icons submit-button__icon" aria-hidden="true">person_add_alt_1</span>
                             Criar conta
                         }
                     </span>
@@ -114,8 +108,8 @@
         <mat-card-actions class="card-actions">
             <span class="action-hint">Já possui conta?</span>
 
-            <button mat-button routerLink="/login" style="display: inline-flex; align-items: center; gap: 6px;">
-                <span class="material-icons" aria-hidden="true" style="font-size: 18px; width: 18px; height: 18px;">arrow_back</span>
+            <button mat-button routerLink="/login" class="card-action-button">
+                <span class="material-icons card-action-button__icon" aria-hidden="true">arrow_back</span>
                 Voltar para login
             </button>
         </mat-card-actions>

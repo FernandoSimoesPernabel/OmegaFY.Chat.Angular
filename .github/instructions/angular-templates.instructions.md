@@ -27,6 +27,21 @@ Use Angular's built-in control flow — never `*ngIf`, `*ngFor`, or `*ngSwitch`:
 }
 ```
 
+## Styling (Mandatory)
+
+- Never use static inline style attributes like `style="..."` in templates
+- Use semantic `class` names in HTML and define styles in the component stylesheet
+- For runtime-dependent style values, use Angular style bindings (`[style.width.px]`, `[style.color]`, etc.)
+- Never use `ngStyle`
+
+If a style block is repeated in 2 or more components, extract it to a shared style module under `src/app/shared/styles/` and import it from each component stylesheet:
+
+```css
+@import '../../../../shared/styles/auth-ui-base.css';
+```
+
+Keep shared style modules generic and token-based. Keep page-specific layout in the component-local stylesheet.
+
 ## Signal Form Bindings
 
 Bind inputs and checkboxes using `[formField]` (requires `FormField` in component `imports`):

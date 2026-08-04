@@ -5,13 +5,13 @@
         }
 
         <mat-card-header class="login-header">
-            <div style="display: grid; gap: 4px;">
-                <mat-card-title style="display: inline-flex; align-items: center; gap: 8px; margin: 0;">
-                    <span class="material-icons" aria-hidden="true" style="font-size: 21px; width: 21px; height: 21px;">forum</span>
+            <div class="login-header__identity">
+                <mat-card-title class="login-header__title">
+                    <span class="material-icons login-header__title-icon" aria-hidden="true">forum</span>
                     OmegaFY Chat
                 </mat-card-title>
 
-                <mat-card-subtitle style="margin: 0;">
+                <mat-card-subtitle class="login-header__subtitle">
                     Faça login para acessar suas conversas.
                 </mat-card-subtitle>
             </div>
@@ -19,18 +19,18 @@
 
         <mat-card-content class="login-content">
             <div class="status-badges" aria-hidden="true">
-                <span class="badge" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
-                    <span class="material-icons" style="font-size: 14px; width: 14px; height: 14px;">shield</span>
+                <span class="badge">
+                    <span class="material-icons badge__icon">shield</span>
                     Safe JWT
                 </span>
 
-                <span class="badge badge-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
-                    <span class="material-icons" style="font-size: 14px; width: 14px; height: 14px;">bolt</span>
+                <span class="badge badge-secondary">
+                    <span class="material-icons badge__icon">bolt</span>
                     Smart Session
                 </span>
 
-                <span class="badge" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
-                    <span class="material-icons" style="font-size: 14px; width: 14px; height: 14px;">hub</span>
+                <span class="badge">
+                    <span class="material-icons badge__icon">hub</span>
                     Real Time
                 </span>
             </div>
@@ -38,8 +38,7 @@
             <form class="login-form" (submit)="onSubmit($event)">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email</mat-label>
-                    <span matPrefix class="material-icons" aria-hidden="true"
-                        style="font-size: 18px; width: 18px; height: 18px; margin-right: 8px; opacity: 0.75;">mail</span>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">mail</span>
                     <input matInput [formField]="loginForm.email" type="email" />
                     @if (hasFieldError('email', 'required')) {
                         <mat-error>Email é obrigatório</mat-error>
@@ -50,8 +49,7 @@
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Senha</mat-label>
-                    <span matPrefix class="material-icons" aria-hidden="true"
-                        style="font-size: 18px; width: 18px; height: 18px; margin-right: 8px; opacity: 0.75;">lock</span>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">lock</span>
                     <input matInput [formField]="loginForm.password" type="password" />
                     @if (hasFieldError('password', 'required')) {
                         <mat-error>Senha é obrigatória</mat-error>
@@ -61,23 +59,20 @@
                 </mat-form-field>
 
                 <mat-checkbox [formField]="loginForm.rememberMe" class="remember-me">
-                    <span style="display: inline-flex; align-items: center; gap: 6px;">
-                        <span class="material-icons" aria-hidden="true"
-                            style="font-size: 17px; width: 17px; height: 17px; opacity: 0.8;">verified_user</span>
+                    <span class="remember-me__content">
+                        <span class="material-icons remember-me__icon" aria-hidden="true">verified_user</span>
                         Mantenha-me conectado
                     </span>
                 </mat-checkbox>
 
                 <button mat-flat-button type="submit" [disabled]="loadingService.isLoading() || loginForm().invalid()"
                     class="full-width submit-button">
-                    <span style="display: inline-flex; align-items: center; gap: 8px;">
+                    <span class="submit-button__content">
                         @if (loadingService.isLoading()) {
-                            <span class="material-icons" aria-hidden="true"
-                                style="font-size: 18px; width: 18px; height: 18px;">hourglass_top</span>
+                            <span class="material-icons submit-button__icon" aria-hidden="true">hourglass_top</span>
                             Entrando...
                         } @else {
-                            <span class="material-icons" aria-hidden="true"
-                                style="font-size: 18px; width: 18px; height: 18px;">login</span>
+                            <span class="material-icons submit-button__icon" aria-hidden="true">login</span>
                             Entrar
                         }
                     </span>
@@ -88,8 +83,8 @@
         <mat-card-actions class="card-actions">
             <span class="action-hint">Novo por aqui?</span>
 
-            <button mat-button routerLink="/register" style="display: inline-flex; align-items: center; gap: 6px;">
-                <span class="material-icons" aria-hidden="true" style="font-size: 18px; width: 18px; height: 18px;">person_add</span>
+            <button mat-button routerLink="/register" class="card-action-button">
+                <span class="material-icons card-action-button__icon" aria-hidden="true">person_add</span>
                 Criar conta
             </button>
         </mat-card-actions>

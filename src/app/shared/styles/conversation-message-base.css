@@ -1,0 +1,42 @@
+.message__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+
+.message__author,
+.message__time {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.message__author-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.message__time-icon {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+}
+
+.message__content-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    vertical-align: text-bottom;
+    margin-right: 6px;
+}
+
+.message p {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.4;
+}

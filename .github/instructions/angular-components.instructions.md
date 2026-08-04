@@ -11,6 +11,13 @@ Every component must use:
 - `standalone: true` (implicit in Angular 19+; import directly in `imports` array)
 - `templateUrl` and `styleUrl` (singular)
 
+## Template and Style Boundary
+
+- Keep static presentation styles in the component stylesheet, not in the HTML template
+- Use semantic classes in templates; never rely on static inline `style="..."`
+- If the same style rules are duplicated across 2 or more components, extract them to `src/app/shared/styles/` and import them from each component stylesheet
+- Keep component-unique visual rules in the local stylesheet
+
 ## Providers
 
 Scope services to the component via `providers` when they hold per-component state:

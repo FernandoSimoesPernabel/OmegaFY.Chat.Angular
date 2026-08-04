@@ -21,6 +21,8 @@ Load the appropriate instruction file before generating code:
 ## Key Rules
 
 - All components: `ChangeDetectionStrategy.OnPush`, standalone, `templateUrl` + `styleUrl`
+- Templates: never use inline style attributes (`style="..."`) for static styles; use CSS classes
+- Shared styling: if the same style block appears in 2+ components, extract it to `src/app/shared/styles/` and import it from component stylesheets
 - Forms: signal forms from `@angular/forms/signals` — never `ReactiveFormsModule` or `FormsModule`
 - Facades are the single integration point between components and `OmegaFyChatClient`
 - `NotificationService` — user feedback (success/error/warning snackbars)

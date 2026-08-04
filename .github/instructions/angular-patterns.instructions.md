@@ -18,6 +18,14 @@ Rules:
 - `shared/` can depend on `core/`, never on `features/`
 - `core/` has no dependency on `shared/` or `features/`
 
+## Shared Style Architecture
+
+- Reusable style modules live in `src/app/shared/styles/`
+- Feature component stylesheets may import shared style modules
+- Shared style modules must not import from `features/`
+- When style rules are duplicated across 2 or more components, extract them into shared style modules
+- Keep feature-specific layout and one-off visual rules in each component stylesheet
+
 ## Facade Pattern
 
 Facades live in `features/<name>/facades/`. They are the single integration point between components and the HTTP client + domain services.

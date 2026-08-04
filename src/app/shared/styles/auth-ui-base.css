@@ -1,0 +1,117 @@
+.status-badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.badge {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    border-radius: 999px;
+    padding: 6px 8px;
+    color: var(--mat-sys-on-primary-container);
+    background: color-mix(in srgb, var(--mat-sys-primary-container) 72%, transparent);
+}
+
+.badge__icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.badge-secondary {
+    color: color-mix(in srgb, var(--theme-secondary) 70%, black 30%);
+    background: color-mix(in srgb, var(--theme-secondary) 18%, transparent);
+}
+
+.full-width {
+    width: 100%;
+}
+
+.form-prefix-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    opacity: 0.75;
+}
+
+.submit-button {
+    height: 46px;
+    margin-top: 14px;
+    border-radius: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(
+        130deg,
+        color-mix(in srgb, var(--mat-sys-primary) 88%, white 12%),
+        color-mix(in srgb, var(--theme-secondary) 76%, white 24%)
+    );
+    color: var(--mat-sys-on-primary);
+}
+
+.submit-button__content {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.submit-button__icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.submit-button[disabled] {
+    background: color-mix(in srgb, var(--mat-sys-outline-variant) 65%, transparent);
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.card-actions {
+    margin-top: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-hint {
+    font-size: 13px;
+    color: var(--mat-sys-on-surface-variant);
+}
+
+.card-action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-action-button__icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 600px) {
+    .status-badges {
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        gap: 2px;
+        padding-bottom: 4px;
+    }
+}

@@ -1,19 +1,18 @@
 <article class="message message--other">
     <header class="message__meta">
-        <strong style="display: inline-flex; align-items: center; gap: 5px;">
-            <span class="material-icons" aria-hidden="true" style="font-size: 14px; width: 14px; height: 14px;">person_outline</span>
+        <strong class="message__author">
+            <span class="material-icons message__author-icon" aria-hidden="true">person_outline</span>
             {{ message().senderDisplayName }}
         </strong>
 
-        <time [attr.datetime]="message().sendDate" style="display: inline-flex; align-items: center; gap: 5px;">
-            <span class="material-icons" aria-hidden="true" style="font-size: 13px; width: 13px; height: 13px;">schedule</span>
+        <time [attr.datetime]="message().sendDate" class="message__time">
+            <span class="material-icons message__time-icon" aria-hidden="true">schedule</span>
             {{ message().sendDate | appConversationDateTime }}
         </time>
     </header>
 
     <p>
-        <span class="material-icons" aria-hidden="true"
-            style="font-size: 14px; width: 14px; height: 14px; vertical-align: text-bottom; margin-right: 6px;">chat_bubble</span>
+        <span class="material-icons message__content-icon" aria-hidden="true">chat_bubble</span>
         {{ message().content }}
     </p>
 </article>

@@ -48,6 +48,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         private readonly chatFacade: ChatFacade,
         private readonly notificationService: NotificationService,
         public readonly loadingService: ComponentLoadingService) {
+
         super();
 
         this.conversationId = this.route.snapshot.paramMap.get('id') ?? '';
