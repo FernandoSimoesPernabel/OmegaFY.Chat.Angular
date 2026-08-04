@@ -1,8 +1,19 @@
 <article class="message message--mine">
     <header class="message__meta">
-        <strong>Você</strong>
-        <time [attr.datetime]="message().sendDate">{{ message().sendDate | date:'dd/MM/yyyy HH:mm:ss' }}</time>
+        <strong style="display: inline-flex; align-items: center; gap: 5px;">
+            <span class="material-icons" aria-hidden="true" style="font-size: 14px; width: 14px; height: 14px;">person</span>
+            Você
+        </strong>
+
+        <time [attr.datetime]="message().sendDate" style="display: inline-flex; align-items: center; gap: 5px;">
+            <span class="material-icons" aria-hidden="true" style="font-size: 13px; width: 13px; height: 13px;">schedule</span>
+            {{ message().sendDate | appConversationDateTime }}
+        </time>
     </header>
 
-    <p>{{ message().content }}</p>
+    <p>
+        <span class="material-icons" aria-hidden="true"
+            style="font-size: 14px; width: 14px; height: 14px; vertical-align: text-bottom; margin-right: 6px;">sms</span>
+        {{ message().content }}
+    </p>
 </article>

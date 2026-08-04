@@ -1,49 +1,154 @@
 <div class="conversations-shell">
-    <header class="page-header">
-        <div class="page-header__identity">
-            <span class="page-header__label">Bem vindo, <strong>{{ loggedUserName() }}</strong></span>
+    <header class="page-header"
+        style="margin-bottom: 16px; padding: 10px 12px; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 22%, transparent); background: linear-gradient(150deg, color-mix(in srgb, var(--mat-sys-surface-container) 86%, transparent), color-mix(in srgb, var(--mat-sys-primary-container) 30%, transparent)); box-shadow: 0 8px 18px color-mix(in srgb, var(--mat-sys-shadow) 10%, transparent);">
+        <div class="page-header__identity" style="gap: 4px;">
+            <span class="page-header__label" style="display: inline-flex; align-items: center; gap: 6px;">
+                <span class="material-icons" aria-hidden="true"
+                    style="font-size: 15px; width: 15px; height: 15px;">waving_hand</span>
+                Bem vindo, <strong>{{ loggedUserName() }}</strong>
+            </span>
+
+            <small
+                style="color: var(--mat-sys-on-surface-variant); display: inline-flex; align-items: center; gap: 6px;">
+                <span class="material-icons" aria-hidden="true"
+                    style="font-size: 14px; width: 14px; height: 14px;">coffee</span>
+                Continue de onde parou.
+            </small>
         </div>
 
-        <button type="button" class="page-header__action" mat-stroked-button (click)="logoff()">Sair</button>
+        <button type="button" class="page-header__action" mat-stroked-button (click)="logoff()"
+            style="display: inline-flex; align-items: center; gap: 6px; min-width: 108px; border-radius: 999px;">
+            <span class="material-icons" aria-hidden="true"
+                style="font-size: 18px; width: 18px; height: 18px;">logout</span>
+            Sair
+        </button>
     </header>
 
-    <mat-card class="conversations-card">
+    <mat-card class="conversations-card" style="overflow: hidden;">
         @if (loadingService.isLoading()) {
             <app-loading-overlay />
         }
 
-        <mat-card-header>
-            <mat-card-title>OmegaFY Chat</mat-card-title>
-            <mat-card-subtitle>Escolha uma conversa para continuar.</mat-card-subtitle>
+        <mat-card-header style="display: grid; gap: 12px; margin-bottom: 6px;">
+            <div
+                style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+                <div style="display: grid; gap: 8px;">
+                    <mat-card-title style="display: inline-flex; align-items: center; gap: 8px; margin: 0;">
+                        <span class="material-icons" aria-hidden="true"
+                            style="font-size: 24px; width: 24px; height: 24px;">forum</span>
+                        OmegaFY Chat
+                    </mat-card-title>
+
+                    <mat-card-subtitle style="margin: 0; display: inline-flex; align-items: center; gap: 6px;">
+                        <span class="material-icons" aria-hidden="true"
+                            style="font-size: 16px; width: 16px; height: 16px;">dashboard</span>
+                        Escolha uma conversa para continuar.
+                    </mat-card-subtitle>
+                </div>
+
+                <span
+                    style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 35%, transparent); background: color-mix(in srgb, var(--mat-sys-primary-container) 55%, transparent); color: var(--mat-sys-on-primary-container); font-size: 12px; font-weight: 600;">
+                    <span class="material-icons" aria-hidden="true"
+                        style="font-size: 14px; width: 14px; height: 14px;">verified_user</span>
+                    Sessão ativa
+                </span>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <span
+                    style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; background: color-mix(in srgb, var(--mat-sys-primary-container) 56%, transparent); color: var(--mat-sys-on-primary-container); font-size: 12px; font-weight: 600;">
+                    <span class="material-icons" aria-hidden="true"
+                        style="font-size: 15px; width: 15px; height: 15px;">mark_chat_read</span>
+                    {{ conversations().length }} conversa(s) disponível(is)
+                </span>
+
+                <span
+                    style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 25%, transparent); color: var(--mat-sys-on-surface-variant); font-size: 12px; font-weight: 500;">
+                    <span class="material-icons" aria-hidden="true"
+                        style="font-size: 15px; width: 15px; height: 15px;">touch_app</span>
+                    Toque em um card para abrir a conversa
+                </span>
+            </div>
         </mat-card-header>
 
         <mat-card-content>
-            <div class="notes-grid">
+            <div class="notes-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
                 @for (conversation of conversations(); track conversation.conversationId) {
-                    <button type="button" class="note" (click)="openConversation(conversation.conversationId)">
-                        <div class="note-head">
-                            <strong>{{ conversation.displayName }}</strong>
-                            @if (getMessageDate(conversation); as sendDate) {
-                                <span>{{ sendDate | date:'dd/MM/yyyy HH:mm' }}</span>
-                            } @else {
-                                <span>Nenhuma atividade</span>
-                            }
+                    <button type="button" class="note" (click)="openConversation(conversation.conversationId)"
+                        style="min-height: 196px; border-radius: 16px; padding: 16px 14px 14px;">
+                        <div class="note-head" style="gap: 10px; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: flex-start; gap: 10px; min-width: 0;">
+                                <span aria-hidden="true"
+                                    style="width: 34px; height: 34px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--mat-sys-on-primary-container); background: color-mix(in srgb, var(--mat-sys-primary-container) 70%, transparent); border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 28%, transparent); flex: 0 0 34px;">
+                                    <app-display-name-initial [displayName]="conversation.displayName" />
+                                </span>
+
+                                <div style="display: grid; gap: 6px; min-width: 0;">
+                                    <div style="display: flex; align-items: start; gap: 7px;">
+                                        <span class="material-icons" aria-hidden="true"
+                                            style="font-size: 17px; width: 17px; height: 17px; margin-top: 1px; opacity: 0.88;">chat_bubble</span>
+                                        <strong>{{ conversation.displayName }}</strong>
+                                    </div>
+
+                                    @if (getMessageDate(conversation); as sendDate) {
+                                        <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                            <span class="material-icons" aria-hidden="true"
+                                                style="font-size: 13px; width: 13px; height: 13px;">schedule</span>
+                                            {{ sendDate | appConversationDateTime }}
+                                        </span>
+                                    } @else {
+                                        <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                            <span class="material-icons" aria-hidden="true"
+                                                style="font-size: 13px; width: 13px; height: 13px;">hourglass_empty</span>
+                                            Nenhuma atividade
+                                        </span>
+                                    }
+                                </div>
+                            </div>
                         </div>
 
-                        <p class="note-message">
+                        <p class="note-message"
+                            style="margin-bottom: 12px; padding: 10px 11px; border-radius: 11px; background: color-mix(in srgb, var(--mat-sys-surface-container-high) 65%, transparent); border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 18%, transparent);">
                             @if (conversation.lastMessage) {
+                                <span class="material-icons" aria-hidden="true"
+                                    style="font-size: 14px; width: 14px; height: 14px; vertical-align: text-bottom; margin-right: 5px;">alternate_email</span>
                                 <strong>{{ conversation.lastMessage.senderDisplayName }}: </strong>
                                 {{ conversation.lastMessage.content }}
+                            } @else {
+                                <span class="material-icons" aria-hidden="true"
+                                    style="font-size: 14px; width: 14px; height: 14px; vertical-align: text-bottom; margin-right: 5px;">chat</span>
+                                Esta conversa ainda não possui mensagens.
                             }
                         </p>
 
                         <div class="note-chips">
-                            <small class="chip">{{ toConversationTypeLabel(conversation.type) }}</small>
-                            <small class="chip">{{ toConversationStatusLabel(conversation.status) }}</small>
+                            <small class="chip" style="display: inline-flex; align-items: center; gap: 4px;">
+                                <span class="material-icons" aria-hidden="true"
+                                    style="font-size: 12px; width: 12px; height: 12px;">forum</span>
+                                <app-conversation-type-label [type]="conversation.type" />
+                            </small>
+
+                            <small class="chip" style="display: inline-flex; align-items: center; gap: 4px;">
+                                <span class="material-icons" aria-hidden="true"
+                                    style="font-size: 12px; width: 12px; height: 12px;">adjust</span>
+                                <app-conversation-status-label [status]="conversation.status" />
+                            </small>
                         </div>
+
+                        <small class="note-sender"
+                            style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                            <span class="material-icons" aria-hidden="true"
+                                style="font-size: 14px; width: 14px; height: 14px;">north_east</span>
+                            Abrir conversa
+                        </small>
                     </button>
                 } @empty {
-                    <p>Nenhuma conversa encontrada.</p>
+                    <p
+                        style="grid-column: 1 / -1; margin: 0; padding: 24px 16px; border-radius: 14px; border: 1px dashed color-mix(in srgb, var(--mat-sys-outline) 30%, transparent); display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--mat-sys-on-surface-variant); background: color-mix(in srgb, var(--mat-sys-surface-container) 70%, transparent);">
+                        <span class="material-icons" aria-hidden="true"
+                            style="font-size: 20px; width: 20px; height: 20px;">inbox</span>
+                        Nenhuma conversa encontrada.
+                    </p>
                 }
             </div>
         </mat-card-content>

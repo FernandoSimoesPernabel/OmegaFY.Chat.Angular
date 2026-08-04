@@ -18,6 +18,11 @@
     gap: 12px;
 }
 
+.conversation-detail-card mat-card-header {
+    display: block;
+    box-sizing: border-box;
+}
+
 .load-more-container {
     display: flex;
     align-items: center;

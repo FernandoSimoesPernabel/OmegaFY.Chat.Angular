@@ -1,0 +1,59 @@
+<h2 mat-dialog-title class="members-dialog__title">
+    <span class="material-icons" aria-hidden="true">groups</span>
+    Membros da conversa
+</h2>
+
+<mat-dialog-content class="members-dialog__content">
+    <section class="members-dialog__summary">
+        <span class="members-summary-pill">
+            <span class="material-icons" aria-hidden="true">forum</span>
+            <app-conversation-type-label [type]="conversation.type" />
+        </span>
+
+        <span class="members-summary-pill">
+            <span class="material-icons" aria-hidden="true">check_circle</span>
+            <app-conversation-status-label [status]="conversation.status" />
+        </span>
+
+        <span class="members-summary-pill">
+            <span class="material-icons" aria-hidden="true">groups</span>
+            {{ conversation.members.length }} participante(s)
+        </span>
+    </section>
+
+    @if (conversation.type === conversationType.GroupChat && conversation.groupConfig.groupName) {
+        <p class="members-dialog__group-name">
+            <span class="material-icons" aria-hidden="true">group_work</span>
+            {{ conversation.groupConfig.groupName }}
+        </p>
+    }
+
+    <div class="members-dialog__list">
+        @for (member of conversation.members; track member.memberId) {
+            <article class="member-card">
+                <span class="member-card__avatar" aria-hidden="true">
+                    <app-display-name-initial [displayName]="member.displayName" />
+                </span>
+
+                <div class="member-card__identity">
+                    <strong>{{ member.displayName }}</strong>
+                    <small>ID do usuário: {{ member.userId }}</small>
+                </div>
+
+                <time [attr.datetime]="member.joinedDate" class="member-card__joined-date">
+                    <span class="material-icons" aria-hidden="true">schedule</span>
+                    {{ member.joinedDate | appConversationDateTime }}
+                </time>
+            </article>
+        } @empty {
+            <p class="members-dialog__empty">Nenhum membro foi encontrado para esta conversa.</p>
+        }
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button type="button" mat-button (click)="close()">
+        <span class="material-icons" aria-hidden="true">close</span>
+        Fechar
+    </button>
+</mat-dialog-actions>

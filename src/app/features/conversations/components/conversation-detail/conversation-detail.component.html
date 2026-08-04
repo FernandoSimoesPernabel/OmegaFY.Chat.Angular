@@ -1,24 +1,61 @@
 <div class="conversation-detail-shell">
-    <mat-card class="conversation-detail-card">
+    <mat-card class="conversation-detail-card" style="overflow: hidden;">
         @if (loadingService.isLoading()) {
             <app-loading-overlay />
         }
 
-        <mat-card-header>
-            <mat-card-title>{{ conversationDisplayName() }}</mat-card-title>
+        <mat-card-header style="margin-bottom: 4px;">
+            <app-conversation-header-data [conversationId]="conversationId" />
         </mat-card-header>
 
         <mat-card-content class="conversation-content">
+            <div
+                style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 20%, transparent); border-radius: 12px; background: color-mix(in srgb, var(--mat-sys-surface-container) 70%, transparent);">
+                <small
+                    style="display: inline-flex; align-items: center; gap: 5px; color: var(--mat-sys-on-surface-variant);">
+                    <span class="material-icons" aria-hidden="true"
+                        style="font-size: 14px; width: 14px; height: 14px;">update</span>
+                    Atualização automática
+                </small>
+
+                @if (hasMore()) {
+                    <small
+                        style="display: inline-flex; align-items: center; gap: 5px; color: var(--mat-sys-on-surface-variant);">
+                        <span class="material-icons" aria-hidden="true"
+                            style="font-size: 14px; width: 14px; height: 14px;">unfold_more</span>
+                        Há histórico adicional disponível
+                    </small>
+                } @else {
+                    <small
+                        style="display: inline-flex; align-items: center; gap: 5px; color: var(--mat-sys-on-surface-variant);">
+                        <span class="material-icons" aria-hidden="true"
+                            style="font-size: 14px; width: 14px; height: 14px;">check_circle</span>
+                        Você está vendo todas as mensagens
+                    </small>
+                }
+            </div>
+
             @if (hasMore()) {
-                <div class="load-more-container">
+                <div class="load-more-container"
+                    style="padding: 8px 10px; border: 1px dashed color-mix(in srgb, var(--mat-sys-outline) 26%, transparent); border-radius: 12px; background: color-mix(in srgb, var(--mat-sys-surface-container-low) 72%, transparent);">
                     <button type="button" mat-stroked-button (click)="loadMoreMessages()"
-                        [disabled]="loadingService.isLoading()">
-                        Carregar mais
+                        [disabled]="loadingService.isLoading()"
+                        style="display: inline-flex; align-items: center; gap: 6px;">
+                        <span class="material-icons" aria-hidden="true"
+                            style="font-size: 18px; width: 18px; height: 18px;">expand_less</span>
+                        Carregar mensagens antigas
                     </button>
+
+                    <small style="display: inline-flex; align-items: center; gap: 5px;">
+                        <span class="material-icons" aria-hidden="true"
+                            style="font-size: 14px; width: 14px; height: 14px;">update</span>
+                        Atualize o histórico sem sair da conversa
+                    </small>
                 </div>
             }
 
-            <div class="messages-container">
+            <div class="messages-container"
+                style="padding: 14px; border-radius: 16px; background: linear-gradient(160deg, color-mix(in srgb, var(--mat-sys-surface-container-low) 88%, transparent), color-mix(in srgb, var(--mat-sys-surface-container) 88%, transparent));">
                 @for (message of messages(); track message.messageId) {
                     @if (message.isMessageFromMember) {
                         <app-conversation-my-message [message]="message" />
@@ -26,13 +63,30 @@
                         <app-conversation-others-message [message]="message" />
                     }
                 } @empty {
-                    <p class="empty-state">Nenhuma mensagem encontrada para esta conversa.</p>
+                    <p class="empty-state"
+                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin: 30px 0;">
+                        <span class="material-icons" aria-hidden="true"
+                            style="font-size: 19px; width: 19px; height: 19px;">forum</span>
+                        Nenhuma mensagem encontrada para esta conversa.
+                    </p>
                 }
             </div>
         </mat-card-content>
 
-        <mat-card-actions>
-            <button mat-button routerLink="/conversations">Voltar para lista</button>
+        <mat-card-actions
+            style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+            <button mat-button routerLink="/conversations" style="display: inline-flex; align-items: center; gap: 6px;">
+                <span class="material-icons" aria-hidden="true"
+                    style="font-size: 18px; width: 18px; height: 18px;">arrow_back</span>
+                Voltar para lista
+            </button>
+
+            <small
+                style="display: inline-flex; align-items: center; gap: 5px; color: var(--mat-sys-on-surface-variant);">
+                <span class="material-icons" aria-hidden="true"
+                    style="font-size: 14px; width: 14px; height: 14px;">wifi</span>
+                Conectado ao fluxo em tempo real
+            </small>
         </mat-card-actions>
     </mat-card>
 </div>

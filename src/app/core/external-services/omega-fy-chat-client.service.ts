@@ -11,6 +11,7 @@ import { RegisterNewUserRequest } from '../models/auth/register-new-user-request
 import { RegisterNewUserResult } from '../models/auth/register-new-user-result';
 import { ApiResponse } from '../models/base/api-response';
 import { CursorPagination } from '../models/base/cursor-pagination';
+import { GetConversationByIdQueryResult } from '../models/conversations/get-conversation-by-id-query-result';
 import { GetUserConversationMessagesQueryResult } from '../models/conversations/get-user-conversation-messages-query-result';
 import { GetUserConversationsQueryResult } from '../models/conversations/get-user-conversations-query-result';
 
@@ -34,6 +35,10 @@ export class OmegaFyChatClient {
 
     public async getUserConversations(): Promise<ApiResponse<GetUserConversationsQueryResult>> {
         return this.get<GetUserConversationsQueryResult>('Chat/me/conversations');
+    }
+
+    public async getConversationById(conversationId: string): Promise<ApiResponse<GetConversationByIdQueryResult>> {
+        return this.get<GetConversationByIdQueryResult>(`Chat/${conversationId}`);
     }
 
     public async getUserConversationMessages(conversationId: string, pagination: CursorPagination<string>): Promise<ApiResponse<GetUserConversationMessagesQueryResult>> {

@@ -1,20 +1,29 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/auth/services/auth.service';
-import { ConversationStatus } from '../../../../core/models/conversations/conversation-status';
-import { ConversationType } from '../../../../core/models/conversations/conversation-type';
 import { UserConversation } from '../../../../core/models/conversations/user-conversation';
+import { DisplayNameInitialComponent } from '../../../../shared/components/base/display-name-initial/display-name-initial.component';
+import { ConversationStatusLabelComponent } from '../../../../shared/components/conversation-status-label/conversation-status-label.component';
+import { ConversationTypeLabelComponent } from '../../../../shared/components/conversation-type-label/conversation-type-label.component';
 import { LoadingOverlayComponent } from '../../../../shared/components/loading-overlay/loading-overlay.component';
+import { ConversationDateTimePipe } from '../../../../shared/pipes/conversation-date-time.pipe';
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ChatFacade } from '../../facades/chat.facade';
 
 @Component({
     selector: 'app-conversations',
-    imports: [DatePipe, MatButtonModule, MatCardModule, LoadingOverlayComponent],
+    imports: [
+        ConversationDateTimePipe,
+        MatButtonModule,
+        MatCardModule,
+        LoadingOverlayComponent,
+        DisplayNameInitialComponent,
+        ConversationTypeLabelComponent,
+        ConversationStatusLabelComponent
+    ],
     providers: [ComponentLoadingService],
     templateUrl: './conversations.component.html',
     styleUrl: './conversations.component.css',
@@ -48,24 +57,6 @@ export class ConversationsComponent implements OnInit {
 
     public openConversation(conversationId: string): Promise<boolean> {
         return this.router.navigate(['/conversations', conversationId]);
-    }
-
-    public toConversationTypeLabel(type: ConversationType): string {
-        switch (type) {
-            case ConversationType.MemberToMember:
-                return 'Direta';
-            case ConversationType.GroupChat:
-                return 'Grupo';
-        }
-    }
-
-    public toConversationStatusLabel(status: ConversationStatus): string {
-        switch (status) {
-            case ConversationStatus.Open:
-                return 'Aberta';
-            case ConversationStatus.Closed:
-                return 'Fechada';
-        }
     }
 
     public getMessageDate(conversation: UserConversation): string | null {

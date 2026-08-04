@@ -11,6 +11,7 @@ import { LoadingOverlayComponent } from '../../../../shared/components/loading-o
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ChatFacade } from '../../facades/chat.facade';
+import { ConversationHeaderDataComponent } from './components/conversation-header-data/conversation-header-data.component';
 import { ConversationMyMessageComponent } from './components/conversation-my-message/conversation-my-message.component';
 import { ConversationOthersMessageComponent } from './components/conversation-others-message/conversation-others-message.component';
 
@@ -24,6 +25,7 @@ const REFRESH_INTERVAL = 10000;
         MatButtonModule,
         MatCardModule,
         LoadingOverlayComponent,
+        ConversationHeaderDataComponent,
         ConversationMyMessageComponent,
         ConversationOthersMessageComponent
     ],
@@ -33,9 +35,7 @@ const REFRESH_INTERVAL = 10000;
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConversationDetailComponent extends DestroyableComponent implements OnInit {
-    private readonly conversationId: string;
-
-    protected readonly conversationDisplayName = signal<string>('');
+    protected readonly conversationId: string;
 
     protected readonly messages = signal<MessageFromMemberModel[]>([]);
 
@@ -102,7 +102,6 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         const mergedMessages = isRefresh ? result.data.messages : this.mergeMessages(this.messages(), result.data.messages);
 
         this.messages.set(this.orderMessagesBySendDate(mergedMessages));
-        this.conversationDisplayName.set(result.data.conversationDisplayName);
         this.hasMore.set(result.data.paginationInfo.hasMore);
         this.nextCursor = result.data.paginationInfo.nextCursor ?? null;
     }
@@ -110,7 +109,6 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     private resetValues(): void {
         this.messages.set([]);
         this.hasMore.set(false);
-        this.conversationDisplayName.set('');
         this.nextCursor = null;
     }
 
