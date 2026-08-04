@@ -7,7 +7,7 @@ export const omegafyAuthInterceptor: HttpInterceptorFn = (request, next) => {
     const appConfigFile = inject(AppConfigFile);
     const authService = inject(AuthService);
 
-    if (!request.url.toLowerCase().startsWith(appConfigFile.API_OMEGAFY_CHAT_BASE_URL.toLowerCase()))
+    if (!request.url.toLowerCase().startsWith(appConfigFile.API_OMEGAFY_CHAT_BASE_URL_API.toLowerCase()))
         return next(request);
 
     const token = authService.getToken();

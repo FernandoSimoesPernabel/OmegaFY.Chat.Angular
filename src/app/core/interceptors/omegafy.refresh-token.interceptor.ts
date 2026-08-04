@@ -25,7 +25,7 @@ export const omegafyRefreshTokenInterceptor: HttpInterceptorFn = (request, next)
 function shouldEnsureValidAccessToken(requestUrl: string): boolean {
     const appConfigFile = inject(AppConfigFile);
 
-    const apiBaseUrl = appConfigFile.API_OMEGAFY_CHAT_BASE_URL?.trim().toLowerCase();
+    const apiBaseUrl = appConfigFile.API_OMEGAFY_CHAT_BASE_URL_API?.trim().toLowerCase();
 
     if (!apiBaseUrl)
         return false;

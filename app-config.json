@@ -1,3 +1,4 @@
 {
-    "API_OMEGAFY_CHAT_BASE_URL": "https://localhost:7155/api"
+    "API_OMEGAFY_CHAT_BASE_URL_API": "https://localhost:7155/api",
+    "API_OMEGAFY_CHAT_BASE_URL_HUB": "https://localhost:7155/hub"
 }

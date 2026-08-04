@@ -12,6 +12,7 @@ import { ConversationDateTimePipe } from '../../../../shared/pipes/conversation-
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ChatFacade } from '../../facades/chat.facade';
+import { SignalRConnectionLoopComponent } from './components/signal-r-connection-loop/signal-r-connection-loop.component';
 
 @Component({
     selector: 'app-conversations',
@@ -20,6 +21,7 @@ import { ChatFacade } from '../../facades/chat.facade';
         MatButtonModule,
         MatCardModule,
         LoadingOverlayComponent,
+        SignalRConnectionLoopComponent,
         DisplayNameInitialComponent,
         ConversationTypeLabelComponent,
         ConversationStatusLabelComponent

@@ -102,6 +102,6 @@ export class OmegaFyChatClient {
     }
 
     private buildUrl(endpoint: string): string {
-        return `${this.appConfigFile.API_OMEGAFY_CHAT_BASE_URL}/${endpoint}`;
+        return `${this.appConfigFile.API_OMEGAFY_CHAT_BASE_URL_API}/${endpoint}`;
     }
 }
