@@ -1,58 +1,92 @@
 <div class="login-shell">
     <mat-card class="login-card">
         @if (loadingService.isLoading()) {
-        <app-loading-overlay></app-loading-overlay>
+            <app-loading-overlay />
         }
 
         <mat-card-header class="login-header">
-            <div mat-card-avatar class="brand-avatar" aria-hidden="true"></div>
-            <mat-card-title>OmegaFY Chat</mat-card-title>
-            <mat-card-subtitle>Faça login para acessar suas conversas.</mat-card-subtitle>
+            <div class="login-header__identity">
+                <mat-card-title class="login-header__title">
+                    <span class="material-icons login-header__title-icon" aria-hidden="true">forum</span>
+                    OmegaFY Chat
+                </mat-card-title>
+
+                <mat-card-subtitle class="login-header__subtitle">
+                    Faça login para acessar suas conversas.
+                </mat-card-subtitle>
+            </div>
         </mat-card-header>
 
         <mat-card-content class="login-content">
             <div class="status-badges" aria-hidden="true">
-                <span class="badge">Safe JWT</span>
-                <span class="badge badge-secondary">Smart Session</span>
-                <span class="badge">Real Time Updates</span>
+                <span class="badge">
+                    <span class="material-icons badge__icon">shield</span>
+                    Safe JWT
+                </span>
+
+                <span class="badge badge-secondary">
+                    <span class="material-icons badge__icon">bolt</span>
+                    Smart Session
+                </span>
+
+                <span class="badge">
+                    <span class="material-icons badge__icon">hub</span>
+                    Real Time
+                </span>
             </div>
 
-            <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <form class="login-form" (submit)="onSubmit($event)">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email</mat-label>
-                    <input matInput formControlName="email" type="email" />
-                    @if (loginForm.controls['email'].hasError('required')) {
-                    <mat-error>Email é obrigatório</mat-error>
-                    } @else if (loginForm.controls['email'].hasError('email')) {
-                    <mat-error>Email inválido</mat-error>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">mail</span>
+                    <input matInput [formField]="loginForm.email" type="email" />
+                    @if (hasFieldError('email', 'required')) {
+                        <mat-error>Email é obrigatório</mat-error>
+                    } @else if (hasFieldError('email', 'email')) {
+                        <mat-error>Email inválido</mat-error>
                     }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Senha</mat-label>
-                    <input matInput formControlName="password" type="password" />
-                    @if (loginForm.controls['password'].hasError('required')) {
-                    <mat-error>Senha é obrigatória</mat-error>
-                    } @else if (loginForm.controls['password'].hasError('minlength')) {
-                    <mat-error>Senha deve ter pelo menos 10 caracteres</mat-error>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">lock</span>
+                    <input matInput [formField]="loginForm.password" type="password" />
+                    @if (hasFieldError('password', 'required')) {
+                        <mat-error>Senha é obrigatória</mat-error>
+                    } @else if (hasFieldError('password', 'minLength')) {
+                        <mat-error>Senha deve ter pelo menos 10 caracteres</mat-error>
                     }
                 </mat-form-field>
 
-                <mat-checkbox formControlName="rememberMe" class="remember-me">
-                    Mantenha-me conectado
+                <mat-checkbox [formField]="loginForm.rememberMe" class="remember-me">
+                    <span class="remember-me__content">
+                        <span class="material-icons remember-me__icon" aria-hidden="true">verified_user</span>
+                        Mantenha-me conectado
+                    </span>
                 </mat-checkbox>
 
-                <button mat-flat-button type="submit" [disabled]="loadingService.isLoading() || loginForm.invalid"
+                <button mat-flat-button type="submit" [disabled]="loadingService.isLoading() || loginForm().invalid()"
                     class="full-width submit-button">
-                    @if (loadingService.isLoading()) { Entrando... }
-                    @else { Entrar }
+                    <span class="submit-button__content">
+                        @if (loadingService.isLoading()) {
+                            <span class="material-icons submit-button__icon" aria-hidden="true">hourglass_top</span>
+                            Entrando...
+                        } @else {
+                            <span class="material-icons submit-button__icon" aria-hidden="true">login</span>
+                            Entrar
+                        }
+                    </span>
                 </button>
             </form>
         </mat-card-content>
 
         <mat-card-actions class="card-actions">
             <span class="action-hint">Novo por aqui?</span>
-            <button mat-button routerLink="/register">Criar conta</button>
+
+            <button mat-button routerLink="/register" class="card-action-button">
+                <span class="material-icons card-action-button__icon" aria-hidden="true">person_add</span>
+                Criar conta
+            </button>
         </mat-card-actions>
     </mat-card>
 </div>

@@ -10,6 +10,9 @@ import { RefreshTokenResult } from '../models/auth/refresh-token-result';
 import { RegisterNewUserRequest } from '../models/auth/register-new-user-request';
 import { RegisterNewUserResult } from '../models/auth/register-new-user-result';
 import { ApiResponse } from '../models/base/api-response';
+import { CursorPagination } from '../models/base/cursor-pagination';
+import { GetConversationByIdQueryResult } from '../models/conversations/get-conversation-by-id-query-result';
+import { GetUserConversationMessagesQueryResult } from '../models/conversations/get-user-conversation-messages-query-result';
 import { GetUserConversationsQueryResult } from '../models/conversations/get-user-conversations-query-result';
 
 @Injectable({ providedIn: 'root' })
@@ -34,6 +37,14 @@ export class OmegaFyChatClient {
         return this.get<GetUserConversationsQueryResult>('Chat/me/conversations');
     }
 
+    public async getConversationById(conversationId: string): Promise<ApiResponse<GetConversationByIdQueryResult>> {
+        return this.get<GetConversationByIdQueryResult>(`Chat/${conversationId}`);
+    }
+
+    public async getUserConversationMessages(conversationId: string, pagination: CursorPagination<string>): Promise<ApiResponse<GetUserConversationMessagesQueryResult>> {
+        return this.get<GetUserConversationMessagesQueryResult>(`Chat/me/${conversationId}/messages?Take=${pagination.take}&Cursor=${pagination.cursor ?? ''}`);
+    }
+
     private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {
         try {
             return await firstValueFrom(this.http.get<ApiResponse<TResponse>>(this.buildUrl(endpoint)));
@@ -45,6 +56,22 @@ export class OmegaFyChatClient {
     private async post<TRequest, TResponse>(endpoint: string, request: TRequest): Promise<ApiResponse<TResponse>> {
         try {
             return await firstValueFrom(this.http.post<ApiResponse<TResponse>>(this.buildUrl(endpoint), request));
+        } catch (ex: unknown) {
+            return this.createApiResponseFromException<TResponse>(ex);
+        }
+    }
+
+    private async put<TRequest, TResponse>(endpoint: string, request: TRequest): Promise<ApiResponse<TResponse>> {
+        try {
+            return await firstValueFrom(this.http.put<ApiResponse<TResponse>>(this.buildUrl(endpoint), request));
+        } catch (ex: unknown) {
+            return this.createApiResponseFromException<TResponse>(ex);
+        }
+    }
+
+    private async delete<TRequest, TResponse>(endpoint: string, request: TRequest): Promise<ApiResponse<TResponse>> {
+        try {
+            return await firstValueFrom(this.http.delete<ApiResponse<TResponse>>(this.buildUrl(endpoint), { body: request }));
         } catch (ex: unknown) {
             return this.createApiResponseFromException<TResponse>(ex);
         }

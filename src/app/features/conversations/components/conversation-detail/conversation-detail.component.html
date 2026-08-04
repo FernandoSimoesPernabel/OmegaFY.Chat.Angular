@@ -1,0 +1,74 @@
+<div class="conversation-detail-shell">
+    <mat-card class="conversation-detail-card">
+        @if (loadingService.isLoading()) {
+            <app-loading-overlay />
+        }
+
+        <mat-card-header class="conversation-detail-header">
+            <app-conversation-header-data [conversationId]="conversationId" />
+        </mat-card-header>
+
+        <mat-card-content class="conversation-content">
+            <div class="history-status">
+                <small class="history-status__item">
+                    <span class="material-icons history-status__icon" aria-hidden="true">update</span>
+                    Atualização automática
+                </small>
+
+                @if (hasMore()) {
+                    <small class="history-status__item">
+                        <span class="material-icons history-status__icon" aria-hidden="true">unfold_more</span>
+                        Há histórico adicional disponível
+                    </small>
+                } @else {
+                    <small class="history-status__item">
+                        <span class="material-icons history-status__icon" aria-hidden="true">check_circle</span>
+                        Você está vendo todas as mensagens
+                    </small>
+                }
+            </div>
+
+            @if (hasMore()) {
+                <div class="load-more-container">
+                    <button type="button" mat-stroked-button (click)="loadMoreMessages()"
+                        [disabled]="loadingService.isLoading()" class="load-more-button">
+                        <span class="material-icons load-more-button__icon" aria-hidden="true">expand_less</span>
+                        Carregar mensagens antigas
+                    </button>
+
+                    <small class="load-more-hint">
+                        <span class="material-icons load-more-hint__icon" aria-hidden="true">update</span>
+                        Atualize o histórico sem sair da conversa
+                    </small>
+                </div>
+            }
+
+            <div class="messages-container">
+                @for (message of messages(); track message.messageId) {
+                    @if (message.isMessageFromMember) {
+                        <app-conversation-my-message [message]="message" />
+                    } @else {
+                        <app-conversation-others-message [message]="message" />
+                    }
+                } @empty {
+                    <p class="empty-state">
+                        <span class="material-icons empty-state__icon" aria-hidden="true">forum</span>
+                        Nenhuma mensagem encontrada para esta conversa.
+                    </p>
+                }
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions class="conversation-actions">
+            <button mat-button routerLink="/conversations" class="conversation-actions__back-button">
+                <span class="material-icons conversation-actions__back-icon" aria-hidden="true">arrow_back</span>
+                Voltar para lista
+            </button>
+
+            <small class="conversation-actions__status">
+                <span class="material-icons conversation-actions__status-icon" aria-hidden="true">wifi</span>
+                Conectado ao fluxo em tempo real
+            </small>
+        </mat-card-actions>
+    </mat-card>
+</div>

@@ -1,0 +1,65 @@
+<div class="conversation-header-data">
+    @if (loadingService.isLoading()) {
+        <app-loading-overlay />
+    }
+
+    @if (conversation(); as conversationData) {
+        <div class="conversation-header-data__top">
+            <div class="conversation-header-data__identity">
+                <mat-card-title class="conversation-header-data__title">
+                    <span class="material-icons" aria-hidden="true">
+                        @if (conversationData.type === conversationType.GroupChat) {
+                            groups
+                        } @else {
+                            chat
+                        }
+                    </span>
+                    {{ conversationData.displayName }}
+                </mat-card-title>
+
+                <mat-card-subtitle class="conversation-header-data__subtitle">
+                    <span class="material-icons" aria-hidden="true">info</span>
+                    <app-conversation-type-label [type]="conversationData.type" /> -
+                    <app-conversation-status-label [status]="conversationData.status" /> -
+                    Criada em {{ conversationData.createdDate | appConversationDateTime }}
+                </mat-card-subtitle>
+            </div>
+
+            <div class="conversation-header-data__pills">
+                <span class="conversation-pill conversation-pill--secondary">
+                    <span class="material-icons" aria-hidden="true">groups</span>
+                    {{ conversationData.members.length }} participante(s)
+                </span>
+            </div>
+        </div>
+
+        <div class="conversation-header-data__bottom">
+            <div class="conversation-header-data__members-preview">
+                @for (member of membersPreview(); track member.memberId) {
+                    <span class="conversation-member-tag">
+                        <span class="material-icons" aria-hidden="true">person</span>
+                        {{ member.displayName }}
+                    </span>
+                }
+
+                @if (remainingMembersCount() > 0) {
+                    <span class="conversation-member-tag conversation-member-tag--muted">
+                        +{{ remainingMembersCount() }} membro(s)
+                    </span>
+                }
+            </div>
+
+            <div class="conversation-header-data__actions">
+                <button type="button" mat-stroked-button (click)="openMembersModal()">
+                    <span class="material-icons" aria-hidden="true">group</span>
+                    Ver membros
+                </button>
+            </div>
+        </div>
+    } @else {
+        <div class="conversation-header-data__fallback">
+            <span class="material-icons" aria-hidden="true">error_outline</span>
+            <p>Não foi possível carregar os dados desta conversa.</p>
+        </div>
+    }
+</div>

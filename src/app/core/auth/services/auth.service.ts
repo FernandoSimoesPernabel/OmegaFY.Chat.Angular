@@ -8,11 +8,22 @@ import { JwtToken } from '../models/jwt-token';
 export class AuthService {
     constructor(private readonly localStorageService: LocalStorageService) { }
 
+    public getLoggedUserName(): string | null {
+        const token = this.getToken();
+
+        if (!token?.isValid())
+            return null;
+
+        const payload = JwtToken.decodeTokenPayload(token.value);
+
+        return payload ? (payload['name'] as string) : null;
+    }
+
     public saveTokens(token: Token, refreshToken: Token | null): void {
-        this.localStorageService.set(OMEGAFY_JWT_TOKEN_KEY, JwtToken.createFromJson(token));
+        this.localStorageService.set(OMEGAFY_JWT_TOKEN_KEY, JwtToken.createFromToken(token));
 
         refreshToken
-            ? this.localStorageService.set(OMEGAFY_REFRESH_TOKEN_KEY, JwtToken.createFromJson(refreshToken))
+            ? this.localStorageService.set(OMEGAFY_REFRESH_TOKEN_KEY, JwtToken.createFromToken(refreshToken))
             : this.localStorageService.remove(OMEGAFY_REFRESH_TOKEN_KEY);
     }
 
@@ -21,7 +32,7 @@ export class AuthService {
 
         if (!json) return null;
 
-        return JwtToken.createFromJson(json);
+        return JwtToken.createFromToken(json);
     }
 
     public getRefreshToken(): JwtToken | null {
@@ -29,7 +40,7 @@ export class AuthService {
 
         if (!json) return null;
 
-        return JwtToken.createFromJson(json);
+        return JwtToken.createFromToken(json);
     }
 
     public isAuthenticated(): boolean {

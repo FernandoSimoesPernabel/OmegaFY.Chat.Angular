@@ -1,0 +1,16 @@
+@import '../../../../../../shared/styles/conversation-message-base.css';
+
+.message {
+    max-width: 72%;
+    margin-right: auto;
+    margin-bottom: 10px;
+    border-radius: 14px 14px 14px 4px;
+    padding: 10px 12px;
+    background: color-mix(in srgb, var(--mat-sys-surface-container) 88%, transparent);
+    color: var(--mat-sys-on-surface);
+    border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 28%, transparent);
+}
+
+.message__meta {
+    color: var(--mat-sys-on-surface-variant);
+}

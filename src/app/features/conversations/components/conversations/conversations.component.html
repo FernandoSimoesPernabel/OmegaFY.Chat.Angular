@@ -1,0 +1,133 @@
+<div class="conversations-shell">
+    <header class="page-header">
+        <div class="page-header__identity">
+            <span class="page-header__label">
+                <span class="material-icons page-header__label-icon" aria-hidden="true">waving_hand</span>
+                Bem vindo, <strong>{{ loggedUserName() }}</strong>
+            </span>
+
+            <small class="page-header__hint">
+                <span class="material-icons page-header__hint-icon" aria-hidden="true">coffee</span>
+                Continue de onde parou.
+            </small>
+        </div>
+
+        <button type="button" class="page-header__action" mat-stroked-button (click)="logoff()">
+            <span class="material-icons page-header__action-icon" aria-hidden="true">logout</span>
+            Sair
+        </button>
+    </header>
+
+    <mat-card class="conversations-card">
+        @if (loadingService.isLoading()) {
+            <app-loading-overlay />
+        }
+
+        <mat-card-header class="conversations-header">
+            <div class="conversations-header__top">
+                <div class="conversations-header__intro">
+                    <mat-card-title class="conversations-header__title">
+                        <span class="material-icons conversations-header__title-icon" aria-hidden="true">forum</span>
+                        OmegaFY Chat
+                    </mat-card-title>
+
+                    <mat-card-subtitle class="conversations-header__subtitle">
+                        <span class="material-icons conversations-header__subtitle-icon"
+                            aria-hidden="true">dashboard</span>
+                        Escolha uma conversa para continuar.
+                    </mat-card-subtitle>
+                </div>
+
+                <span class="session-badge">
+                    <span class="material-icons session-badge__icon" aria-hidden="true">verified_user</span>
+                    Sessão ativa
+                </span>
+            </div>
+
+            <div class="conversations-header__stats">
+                <span class="conversations-count-badge">
+                    <span class="material-icons conversations-count-badge__icon"
+                        aria-hidden="true">mark_chat_read</span>
+                    {{ conversations().length }} conversa(s) disponível(is)
+                </span>
+
+                <span class="conversations-hint-badge">
+                    <span class="material-icons conversations-hint-badge__icon" aria-hidden="true">touch_app</span>
+                    Toque em um card para abrir a conversa
+                </span>
+            </div>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="notes-grid">
+                @for (conversation of conversations(); track conversation.conversationId) {
+                    <button type="button" class="note" (click)="openConversation(conversation.conversationId)">
+                        <div class="note-head">
+                            <div class="note-head__main">
+                                <span aria-hidden="true" class="note-avatar">
+                                    <app-display-name-initial [displayName]="conversation.displayName" />
+                                </span>
+
+                                <div class="note-head__details">
+                                    <div class="note-head__title-row">
+                                        <span class="material-icons note-head__title-icon"
+                                            aria-hidden="true">chat_bubble</span>
+                                        <strong>{{ conversation.displayName }}</strong>
+                                    </div>
+
+                                    @if (getMessageDate(conversation); as sendDate) {
+                                        <span class="note-head__date">
+                                            <span class="material-icons note-head__date-icon"
+                                                aria-hidden="true">schedule</span>
+                                            {{ sendDate | appConversationDateTime }}
+                                        </span>
+                                    } @else {
+                                        <span class="note-head__date">
+                                            <span class="material-icons note-head__date-icon"
+                                                aria-hidden="true">hourglass_empty</span>
+                                            Nenhuma atividade
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="note-message">
+                            @if (conversation.lastMessage) {
+                                <span class="material-icons note-message__icon"
+                                    aria-hidden="true">alternate_email</span>
+                                <strong>{{ conversation.lastMessage.senderDisplayName }}: </strong>
+                                {{ conversation.lastMessage.content }}
+                            } @else {
+                                <span class="material-icons note-message__icon" aria-hidden="true">chat</span>
+                                Esta conversa ainda não possui mensagens.
+                            }
+                        </p>
+
+                        <div class="note-chips">
+                            <small class="chip">
+                                <span class="material-icons chip__icon" aria-hidden="true">forum</span>
+                                <app-conversation-type-label [type]="conversation.type" />
+                            </small>
+
+                            <small class="chip">
+                                <span class="material-icons chip__icon" aria-hidden="true">adjust</span>
+                                <app-conversation-status-label [status]="conversation.status" />
+                            </small>
+                        </div>
+
+                        <small class="note-sender">
+                            <span class="material-icons note-sender__icon" aria-hidden="true">north_east</span>
+                            Abrir conversa
+                        </small>
+                    </button>
+                } @empty {
+                    <p class="notes-empty-state">
+                        <span class="material-icons notes-empty-state__icon" aria-hidden="true">inbox</span>
+                        Nenhuma conversa encontrada.
+                    </p>
+                }
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

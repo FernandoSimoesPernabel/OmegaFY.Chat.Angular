@@ -1,3 +1,5 @@
+@import '../../../../shared/styles/auth-ui-base.css';
+
 :host {
     --theme-secondary: var(--mat-sys-secondary, var(--mat-sys-tertiary));
     display: block;
@@ -80,42 +82,26 @@
     margin-bottom: 8px;
 }
 
-.brand-avatar {
-    border-radius: 12px;
-    background: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--mat-sys-primary) 88%, white 12%),
-        color-mix(in srgb, var(--theme-secondary) 78%, white 22%)
-    );
-    box-shadow: 0 6px 14px color-mix(in srgb, var(--mat-sys-primary) 25%, transparent);
+.login-header__identity {
+    display: grid;
+    gap: 4px;
 }
 
-.status-badges {
-    display: flex;
+.login-header__title {
+    display: inline-flex;
+    align-items: center;
     gap: 8px;
-    margin-bottom: 16px;
+    margin: 0;
 }
 
-.badge {
-    flex: 1;
-    text-align: center;
-    white-space: nowrap;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-    border-radius: 999px;
-    padding: 6px 8px;
-    color: var(--mat-sys-on-primary-container);
-    background: color-mix(in srgb, var(--mat-sys-primary-container) 72%, transparent);
+.login-header__title-icon {
+    font-size: 21px;
+    width: 21px;
+    height: 21px;
 }
 
-.badge-secondary {
-    color: color-mix(in srgb, var(--theme-secondary) 70%, black 30%);
-    background: color-mix(in srgb, var(--theme-secondary) 18%, transparent);
-}
-
-.full-width {
-    width: 100%;
+.login-header__subtitle {
+    margin: 0;
 }
 
 .remember-me {
@@ -124,39 +110,17 @@
     margin-bottom: 8px;
 }
 
-.submit-button {
-    height: 46px;
-    margin-top: 14px;
-    border-radius: 14px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    display: flex;
-    justify-content: center;
+.remember-me__content {
+    display: inline-flex;
     align-items: center;
-    background: linear-gradient(
-        130deg,
-        color-mix(in srgb, var(--mat-sys-primary) 88%, white 12%),
-        color-mix(in srgb, var(--theme-secondary) 76%, white 24%)
-    );
-    color: var(--mat-sys-on-primary);
+    gap: 6px;
 }
 
-.submit-button[disabled] {
-    background: color-mix(in srgb, var(--mat-sys-outline-variant) 65%, transparent);
-    color: var(--mat-sys-on-surface-variant);
-}
-
-.card-actions {
-    margin-top: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
-
-.action-hint {
-    font-size: 13px;
-    color: var(--mat-sys-on-surface-variant);
+.remember-me__icon {
+    font-size: 17px;
+    width: 17px;
+    height: 17px;
+    opacity: 0.8;
 }
 
 @keyframes card-enter {
@@ -194,16 +158,5 @@
         width: min(100%, 480px);
         padding: 12px 8px 2px;
         border-radius: 18px;
-    }
-
-    .status-badges {
-        flex-wrap: wrap;
-        margin-bottom: 14px;
-    }
-
-    .card-actions {
-        flex-direction: column;
-        gap: 2px;
-        padding-bottom: 4px;
     }
 }

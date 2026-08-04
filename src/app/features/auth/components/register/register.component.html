@@ -1,88 +1,117 @@
 <div class="register-shell">
     <mat-card class="register-card">
         @if (loadingService.isLoading()) {
-        <app-loading-overlay></app-loading-overlay>
+            <app-loading-overlay />
         }
 
         <mat-card-header class="register-header">
-            <div mat-card-avatar class="brand-avatar" aria-hidden="true"></div>
-            <mat-card-title>Crie sua conta</mat-card-title>
-            <mat-card-subtitle>Cadastre-se para acessar suas conversas no OmegaFY Chat.</mat-card-subtitle>
+            <div class="register-header__identity">
+                <mat-card-title class="register-header__title">
+                    <span class="material-icons register-header__title-icon" aria-hidden="true">app_registration</span>
+                    Crie sua conta
+                </mat-card-title>
+
+                <mat-card-subtitle class="register-header__subtitle">
+                    Cadastre-se para acessar suas conversas no OmegaFY Chat.
+                </mat-card-subtitle>
+            </div>
         </mat-card-header>
 
         <mat-card-content class="register-content">
             <div class="status-badges" aria-hidden="true">
-                <span class="badge">Proteção JWT</span>
-                <span class="badge badge-secondary">Sessão Inteligente</span>
-                <span class="badge">Mensagens em Tempo Real</span>
+                <span class="badge">
+                    <span class="material-icons badge__icon">shield</span>
+                    Proteção JWT
+                </span>
+
+                <span class="badge badge-secondary">
+                    <span class="material-icons badge__icon">psychology</span>
+                    Sessão Inteligente
+                </span>
+
+                <span class="badge">
+                    <span class="material-icons badge__icon">chat</span>
+                    Tempo Real
+                </span>
             </div>
 
-            @if (validationErrors().length > 0) {
-            <section class="validation-errors" role="alert" aria-live="polite">
-                <p class="validation-errors-title">Erros ao criar conta:</p>
+            <p class="register-highlight">
+                <span class="material-icons register-highlight__icon" aria-hidden="true">verified</span>
+                Cadastro rápido e seguro, sem burocracia.
+            </p>
 
-                <ul class="validation-errors-list">
-                    @for (error of validationErrors(); track error.message) {
-                    <li>{{ error.message }}</li>
-                    }
-                </ul>
-            </section>
-            }
+            <app-validation-errors title="Erros ao criar conta:" />
 
-            <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <form class="register-form" (submit)="onSubmit($event)">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Nome para exibição</mat-label>
-                    <input matInput formControlName="displayName" type="text" />
-                    @if (registerForm.controls['displayName'].hasError('required')) {
-                    <mat-error>Nome para exibição é obrigatório</mat-error>
-                    } @else if (registerForm.controls['displayName'].hasError('minlength')) {
-                    <mat-error>Nome para exibição deve ter pelo menos 3 caracteres</mat-error>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">account_circle</span>
+                    <input matInput [formField]="registerForm.displayName" type="text" />
+                    @if (hasFieldError('displayName', 'required')) {
+                        <mat-error>Nome para exibição é obrigatório</mat-error>
+                    } @else if (hasFieldError('displayName', 'minLength')) {
+                        <mat-error>Nome para exibição deve ter pelo menos 3 caracteres</mat-error>
                     }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email</mat-label>
-                    <input matInput formControlName="email" type="email" />
-                    @if (registerForm.controls['email'].hasError('required')) {
-                    <mat-error>Email é obrigatório</mat-error>
-                    } @else if (registerForm.controls['email'].hasError('email')) {
-                    <mat-error>Email inválido</mat-error>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">mail</span>
+                    <input matInput [formField]="registerForm.email" type="email" />
+                    @if (hasFieldError('email', 'required')) {
+                        <mat-error>Email é obrigatório</mat-error>
+                    } @else if (hasFieldError('email', 'email')) {
+                        <mat-error>Email inválido</mat-error>
                     }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Senha</mat-label>
-                    <input matInput formControlName="password" type="password" />
-                    @if (registerForm.controls['password'].hasError('required')) {
-                    <mat-error>Senha é obrigatória</mat-error>
-                    } @else if (registerForm.controls['password'].hasError('minlength')) {
-                    <mat-error>Senha deve ter pelo menos 10 caracteres</mat-error>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">lock</span>
+                    <input matInput [formField]="registerForm.password" type="password" />
+                    @if (hasFieldError('password', 'required')) {
+                        <mat-error>Senha é obrigatória</mat-error>
+                    } @else if (hasFieldError('password', 'minLength')) {
+                        <mat-error>Senha deve ter pelo menos 10 caracteres</mat-error>
                     }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Confirmar senha</mat-label>
-                    <input matInput formControlName="confirmPassword" type="password" />
-                    @if (registerForm.controls['confirmPassword'].hasError('required')) {
-                    <mat-error>Confirmação de senha é obrigatória</mat-error>
-                    } @else if (registerForm.controls['confirmPassword'].hasError('minlength')) {
-                    <mat-error>Confirmação de senha deve ter pelo menos 10 caracteres</mat-error>
-                    } @else if (registerForm.hasError('passwordMismatch')) {
-                    <mat-error>As senhas devem ser iguais</mat-error>
+                    <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">task_alt</span>
+                    <input matInput [formField]="registerForm.confirmPassword" type="password" />
+                    @if (hasFieldError('confirmPassword', 'required')) {
+                        <mat-error>Confirmação de senha é obrigatória</mat-error>
+                    } @else if (hasFieldError('confirmPassword', 'minLength')) {
+                        <mat-error>Confirmação de senha deve ter pelo menos 10 caracteres</mat-error>
+                    } @else if (hasFieldError('confirmPassword', 'passwordMismatch')) {
+                        <mat-error>As senhas devem ser iguais</mat-error>
                     }
                 </mat-form-field>
 
-                <button mat-flat-button type="submit" [disabled]="loadingService.isLoading() || registerForm.invalid"
+                <button mat-flat-button type="submit"
+                    [disabled]="loadingService.isLoading() || registerForm().invalid()"
                     class="full-width submit-button">
-                    @if (loadingService.isLoading()) { Cadastrando... }
-                    @else { Criar conta }
+                    <span class="submit-button__content">
+                        @if (loadingService.isLoading()) {
+                            <span class="material-icons submit-button__icon" aria-hidden="true">hourglass_top</span>
+                            Cadastrando...
+                        } @else {
+                            <span class="material-icons submit-button__icon" aria-hidden="true">person_add_alt_1</span>
+                            Criar conta
+                        }
+                    </span>
                 </button>
             </form>
         </mat-card-content>
 
         <mat-card-actions class="card-actions">
             <span class="action-hint">Já possui conta?</span>
-            <button mat-button routerLink="/login">Voltar para login</button>
+
+            <button mat-button routerLink="/login" class="card-action-button">
+                <span class="material-icons card-action-button__icon" aria-hidden="true">arrow_back</span>
+                Voltar para login
+            </button>
         </mat-card-actions>
     </mat-card>
 </div>
