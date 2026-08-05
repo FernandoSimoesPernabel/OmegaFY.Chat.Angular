@@ -31,7 +31,11 @@ export class SignalRService {
 
     public async connect(): Promise<void> {
         try {
+            if (this.hubConnection.state === signalR.HubConnectionState.Connected)
+                return;
+
             await this.hubConnection.start();
+
             this.connectionStatusState.set(SignalRConnectionStatus.Connected);
         } catch (error: unknown) {
             this.syncConnectionStatus();
@@ -40,7 +44,11 @@ export class SignalRService {
 
     public async disconnect(): Promise<void> {
         try {
+            if (this.hubConnection.state === signalR.HubConnectionState.Disconnected)
+                return;
+
             await this.hubConnection.stop();
+
             this.connectionStatusState.set(SignalRConnectionStatus.Disconnected);
         } catch (error: unknown) {
             this.syncConnectionStatus();
