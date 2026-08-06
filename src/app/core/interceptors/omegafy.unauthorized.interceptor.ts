@@ -10,7 +10,7 @@ export const omegafyUnauthorizedInterceptor: HttpInterceptorFn = (request, next)
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    const isApiRequest = request.url.toLowerCase().startsWith(appConfigFile.API_OMEGAFY_CHAT_BASE_URL.toLowerCase());
+    const isApiRequest = request.url.toLowerCase().startsWith(appConfigFile.API_OMEGAFY_CHAT_BASE_URL_API.toLowerCase());
 
     return next(request).pipe(
         catchError((error: unknown) => {

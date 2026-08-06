@@ -3,9 +3,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { timer } from 'rxjs';
+import { auditTime, timer } from 'rxjs';
 import { CursorPagination } from '../../../../core/models/base/cursor-pagination';
 import { MessageFromMemberModel } from '../../../../core/models/conversations/message-from-member-model';
+import { SignalRConnectionStatus } from '../../../../core/models/signal-r/signal-r-connection-status';
+import { SignalREventType } from '../../../../core/models/signal-r/signal-r-event-type';
+import { SignalRService } from '../../../../core/services/signal-r.service';
 import { DestroyableComponent } from '../../../../shared/components/base/destroyable-component';
 import { LoadingOverlayComponent } from '../../../../shared/components/loading-overlay/loading-overlay.component';
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
@@ -15,8 +18,9 @@ import { ConversationHeaderDataComponent } from './components/conversation-heade
 import { ConversationMyMessageComponent } from './components/conversation-my-message/conversation-my-message.component';
 import { ConversationOthersMessageComponent } from './components/conversation-others-message/conversation-others-message.component';
 
-const MESSAGES_PAGE_SIZE = 50;
-const REFRESH_INTERVAL = 10000;
+const MESSAGES_PAGE_SIZE = 20;
+const TIMER_REFRESH_INTERVAL = 10000;
+const SIGNAL_R_REFRESH_INTERVAL = 3000;
 
 @Component({
     selector: 'app-conversation-detail',
@@ -47,6 +51,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         private readonly route: ActivatedRoute,
         private readonly chatFacade: ChatFacade,
         private readonly notificationService: NotificationService,
+        private readonly signalRService: SignalRService,
         public readonly loadingService: ComponentLoadingService) {
 
         super();
@@ -62,7 +67,9 @@ export class ConversationDetailComponent extends DestroyableComponent implements
 
         await this.loadMessagesPage(undefined, true);
 
-        timer(REFRESH_INTERVAL, REFRESH_INTERVAL).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => { this.refreshMessagesWithMerge(); });
+        this.subscribeToSignalREvents();
+
+        this.startTimerToRefreshMessages();
     }
 
     public async loadMoreMessages(): Promise<void> {
@@ -125,6 +132,24 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     private orderMessagesBySendDate(messages: MessageFromMemberModel[]): MessageFromMemberModel[] {
         return [...messages].sort((firstMessage, secondMessage) => {
             return new Date(firstMessage.sendDate).getTime() - new Date(secondMessage.sendDate).getTime();
+        });
+    }
+
+    private subscribeToSignalREvents(): void {
+        this.signalRService.listen([SignalREventType.MessageReceived])
+            .pipe(takeUntilDestroyed(this.destroyRef), auditTime(SIGNAL_R_REFRESH_INTERVAL))
+            .subscribe((event) => {
+                if (event.value === this.conversationId) {
+                    this.refreshMessagesWithMerge();
+                }
+            });
+    }
+
+    private startTimerToRefreshMessages(): void {
+        timer(TIMER_REFRESH_INTERVAL, TIMER_REFRESH_INTERVAL).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+            if (this.signalRService.connectionStatus() !== SignalRConnectionStatus.Connected) {
+                this.refreshMessagesWithMerge();
+            }
         });
     }
 }
