@@ -35,11 +35,11 @@
                 </span>
             </div>
 
-            <form class="login-form" (submit)="onSubmit($event)">
+            <form class="login-form" (submit)="onSubmit($event)" autocomplete="on">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email</mat-label>
                     <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">mail</span>
-                    <input matInput [formField]="loginForm.email" type="email" />
+                    <input matInput [formField]="loginForm.email" type="email" autocomplete="username" />
                     @if (hasFieldError('email', 'required')) {
                         <mat-error>Email é obrigatório</mat-error>
                     } @else if (hasFieldError('email', 'email')) {
@@ -50,7 +50,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Senha</mat-label>
                     <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">lock</span>
-                    <input matInput [formField]="loginForm.password" type="password" />
+                    <input matInput [formField]="loginForm.password" type="password" autocomplete="current-password" />
                     @if (hasFieldError('password', 'required')) {
                         <mat-error>Senha é obrigatória</mat-error>
                     } @else if (hasFieldError('password', 'minLength')) {
