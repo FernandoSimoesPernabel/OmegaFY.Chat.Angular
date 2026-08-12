@@ -6,6 +6,8 @@ import { SignalRConnectionStatus } from '../../../core/models/signal-r/signal-r-
 import { SignalRService } from '../../../core/services/signal-r.service';
 import { DestroyableComponent } from '../base/destroyable-component';
 
+const SIGNAL_R_REFRESH_INTERVAL = 10000;
+
 @Component({
     selector: 'app-signalr-connection-loop',
     templateUrl: './signal-r-connection-loop.component.html',
@@ -23,7 +25,7 @@ export class SignalRConnectionLoopComponent extends DestroyableComponent impleme
     }
 
     public ngOnInit(): void {
-        timer(0, 10000).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => { this.checkAndConnectIfNeeded(); });
+        timer(0, SIGNAL_R_REFRESH_INTERVAL).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => { this.checkAndConnectIfNeeded(); });
     }
 
     public ngOnDestroy(): void {
