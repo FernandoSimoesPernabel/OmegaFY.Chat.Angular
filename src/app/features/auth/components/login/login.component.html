@@ -39,7 +39,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email</mat-label>
                     <span matPrefix class="material-icons form-prefix-icon" aria-hidden="true">mail</span>
-                    <input matInput [formField]="loginForm.email" type="email" autocomplete="username" />
+                    <input matInput [formField]="loginForm.email" type="email" autocomplete="email" />
                     @if (hasFieldError('email', 'required')) {
                         <mat-error>Email é obrigatório</mat-error>
                     } @else if (hasFieldError('email', 'email')) {

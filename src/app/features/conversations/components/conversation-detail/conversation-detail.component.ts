@@ -17,8 +17,9 @@ import { ChatFacade } from '../../facades/chat.facade';
 import { ConversationHeaderDataComponent } from './components/conversation-header-data/conversation-header-data.component';
 import { ConversationMyMessageComponent } from './components/conversation-my-message/conversation-my-message.component';
 import { ConversationOthersMessageComponent } from './components/conversation-others-message/conversation-others-message.component';
+import { GetUserConversationMessagesQueryResult } from '../../../../core/models/conversations/get-user-conversation-messages-query-result';
 
-const MESSAGES_PAGE_SIZE = 20;
+const MESSAGES_PAGE_SIZE = 50;
 const TIMER_REFRESH_INTERVAL = 10000;
 const SIGNAL_R_REFRESH_INTERVAL = 3000;
 
@@ -107,6 +108,10 @@ export class ConversationDetailComponent extends DestroyableComponent implements
             return;
         }
 
+        this.setSignalValues(isRefresh, result);
+    }
+
+    private setSignalValues(isRefresh: boolean, result: { success: true; data: GetUserConversationMessagesQueryResult; }) {
         const mergedMessages = isRefresh ? result.data.messages : this.mergeMessages(this.messages(), result.data.messages);
 
         this.messages.set(this.orderMessagesBySendDate(mergedMessages));
