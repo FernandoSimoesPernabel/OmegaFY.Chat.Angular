@@ -1,0 +1,1 @@
+export type HealthCheckStatus = 'Healthy' | 'Unhealthy' | 'Unavailable';

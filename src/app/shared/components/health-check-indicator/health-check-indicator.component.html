@@ -1,0 +1,7 @@
+@if (healthStatus()) {
+  <div class="health-card" [class.healthy]="healthStatus() === 'Healthy'"
+    [class.unhealthy]="healthStatus() === 'Unhealthy'" [class.unavailable]="healthStatus() === 'Unavailable'">
+    <span class="status-dot"></span>
+    <span>{{ healthStatus() }}</span>
+  </div>
+}
