@@ -11,9 +11,11 @@ import { RegisterNewUserRequest } from '../models/auth/register-new-user-request
 import { RegisterNewUserResult } from '../models/auth/register-new-user-result';
 import { ApiResponse } from '../models/base/api-response';
 import { CursorPagination } from '../models/base/cursor-pagination';
-import { GetConversationByIdQueryResult } from '../models/conversations/get-conversation-by-id-query-result';
-import { GetUserConversationMessagesQueryResult } from '../models/conversations/get-user-conversation-messages-query-result';
-import { GetUserConversationsQueryResult } from '../models/conversations/get-user-conversations-query-result';
+import { GetConversationByIdResult } from '../models/conversations/get-conversation-by-id-result';
+import { GetUserConversationMessagesResult } from '../models/conversations/get-user-conversation-messages-result';
+import { GetUserConversationsResult } from '../models/conversations/get-user-conversations-result';
+import { SendMessageResult } from '../models/conversations/send-message-result';
+import { SendMessageRequest } from '../models/conversations/send-message-request';
 
 @Injectable({ providedIn: 'root' })
 export class OmegaFyChatClient {
@@ -33,16 +35,20 @@ export class OmegaFyChatClient {
         return this.post<RefreshTokenRequest, RefreshTokenResult>('Auth/refresh-token', request);
     }
 
-    public async getUserConversations(): Promise<ApiResponse<GetUserConversationsQueryResult>> {
-        return this.get<GetUserConversationsQueryResult>('Chat/me/conversations');
+    public async getUserConversations(): Promise<ApiResponse<GetUserConversationsResult>> {
+        return this.get<GetUserConversationsResult>('Chat/me/conversations');
     }
 
-    public async getConversationById(conversationId: string): Promise<ApiResponse<GetConversationByIdQueryResult>> {
-        return this.get<GetConversationByIdQueryResult>(`Chat/${conversationId}`);
+    public async getConversationById(conversationId: string): Promise<ApiResponse<GetConversationByIdResult>> {
+        return this.get<GetConversationByIdResult>(`Chat/${conversationId}`);
     }
 
-    public async getUserConversationMessages(conversationId: string, pagination: CursorPagination<string>): Promise<ApiResponse<GetUserConversationMessagesQueryResult>> {
-        return this.get<GetUserConversationMessagesQueryResult>(`Chat/me/${conversationId}/messages?Take=${pagination.take}&Cursor=${pagination.cursor ?? ''}`);
+    public async getUserConversationMessages(conversationId: string, pagination: CursorPagination<string>): Promise<ApiResponse<GetUserConversationMessagesResult>> {
+        return this.get<GetUserConversationMessagesResult>(`Chat/me/${conversationId}/messages?Take=${pagination.take}&Cursor=${pagination.cursor ?? ''}`);
+    }
+
+    public async sendMessage(conversationId: string, request: SendMessageRequest): Promise<ApiResponse<SendMessageResult>> {
+        return this.post<SendMessageRequest, SendMessageResult>(`Chat/${conversationId}/messages`, request);
     }
 
     private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {

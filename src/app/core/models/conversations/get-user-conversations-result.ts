@@ -1,5 +1,5 @@
 import { UserConversation } from './user-conversation';
 
-export type GetUserConversationsQueryResult = {
+export type GetUserConversationsResult = {
     userConversations: UserConversation[];
 };

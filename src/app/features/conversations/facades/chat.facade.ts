@@ -3,26 +3,33 @@ import { OmegaFyChatClient } from '../../../core/external-services/omega-fy-chat
 import { ApiResponse } from '../../../core/models/base/api-response';
 import { CursorPagination } from '../../../core/models/base/cursor-pagination';
 import { UseCaseResult } from '../../../core/models/base/use-case-result';
-import { GetConversationByIdQueryResult } from '../../../core/models/conversations/get-conversation-by-id-query-result';
-import { GetUserConversationMessagesQueryResult } from '../../../core/models/conversations/get-user-conversation-messages-query-result';
-import { GetUserConversationsQueryResult } from '../../../core/models/conversations/get-user-conversations-query-result';
+import { GetConversationByIdResult } from '../../../core/models/conversations/get-conversation-by-id-result';
+import { GetUserConversationMessagesResult } from '../../../core/models/conversations/get-user-conversation-messages-result';
+import { GetUserConversationsResult } from '../../../core/models/conversations/get-user-conversations-result';
+import { SendMessageRequest } from '../../../core/models/conversations/send-message-request';
+import { SendMessageResult } from '../../../core/models/conversations/send-message-result';
 
 @Injectable({ providedIn: 'root' })
 export class ChatFacade {
     constructor(private readonly omegaFyChatClient: OmegaFyChatClient) { }
 
-    public async getUserConversations(): Promise<UseCaseResult<GetUserConversationsQueryResult>> {
+    public async getUserConversations(): Promise<UseCaseResult<GetUserConversationsResult>> {
         const response = await this.omegaFyChatClient.getUserConversations();
         return this.toUseCaseResult(response);
     }
 
-    public async getConversationById(conversationId: string): Promise<UseCaseResult<GetConversationByIdQueryResult>> {
+    public async getConversationById(conversationId: string): Promise<UseCaseResult<GetConversationByIdResult>> {
         const response = await this.omegaFyChatClient.getConversationById(conversationId);
         return this.toUseCaseResult(response);
     }
 
-    public async getUserConversationMessages(conversationId: string, pagination: CursorPagination<string>): Promise<UseCaseResult<GetUserConversationMessagesQueryResult>> {
+    public async getUserConversationMessages(conversationId: string, pagination: CursorPagination<string>): Promise<UseCaseResult<GetUserConversationMessagesResult>> {
         const response = await this.omegaFyChatClient.getUserConversationMessages(conversationId, pagination);
+        return this.toUseCaseResult(response);
+    }
+
+    public async sendMessage(conversationId: string, request: SendMessageRequest): Promise<UseCaseResult<SendMessageResult>> {
+        const response = await this.omegaFyChatClient.sendMessage(conversationId, request);
         return this.toUseCaseResult(response);
     }
 
