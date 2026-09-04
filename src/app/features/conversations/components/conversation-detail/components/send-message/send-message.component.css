@@ -1,6 +1,6 @@
 .send-message-container {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 12px;
     padding: 12px;
     border-top: 1px solid color-mix(in srgb, var(--mat-sys-outline) 20%, transparent);
@@ -17,6 +17,7 @@
     font-family: inherit;
     font-size: 14px;
     line-height: 1.5;
+    min-height: 80px;
     resize: none;
 }
 
@@ -33,9 +34,11 @@
 .send-message-button {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     white-space: nowrap;
-    height: fit-content;
+    height: 80px;
+    padding: 0 16px;
 }
 
 .send-message-button__icon {

@@ -1,5 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
+html,
+body {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+
 .mat-mdc-snack-bar-container.notification-snackbar {
 	margin-top: 10px;
 }

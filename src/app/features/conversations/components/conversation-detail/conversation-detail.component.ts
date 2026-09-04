@@ -50,6 +50,12 @@ export class ConversationDetailComponent extends DestroyableComponent implements
 
     private readonly nextCursor = signal<string | undefined>(undefined);
 
+    private readonly scrollPositionBeforeLoadMore = signal<number>(0);
+
+    private readonly scrollHeightBeforeLoadMore = signal<number>(0);
+
+    private readonly isUserAtBottom = signal<boolean>(true);
+
     constructor(
         private readonly route: ActivatedRoute,
         private readonly chatFacade: ChatFacade,
@@ -70,6 +76,10 @@ export class ConversationDetailComponent extends DestroyableComponent implements
 
         await this.loadMessagesPage(undefined, true);
 
+        this.scrollToBottom();
+
+        this.setupScrollListener();
+
         this.subscribeToSignalREvents();
 
         this.startTimerToRefreshMessages();
@@ -79,11 +89,26 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         if (this.loadingService.isLoading() || !this.hasMore() || !this.nextCursor())
             return;
 
+        const messagesContainer = document.querySelector('.messages-container') as HTMLDivElement | null;
+
+        if (messagesContainer) {
+            this.scrollPositionBeforeLoadMore.set(messagesContainer.scrollTop);
+            this.scrollHeightBeforeLoadMore.set(messagesContainer.scrollHeight);
+        }
+
         await this.loadMessagesPage(this.nextCursor(), false);
+
+        if (messagesContainer) {
+            timer(0).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+                const heightDifference = messagesContainer.scrollHeight - this.scrollHeightBeforeLoadMore();
+                messagesContainer.scrollTop = this.scrollPositionBeforeLoadMore() + heightDifference;
+            });
+        }
     }
 
     public onMessageSent(message: MessageFromMemberModel): void {
         this.messages.update(messages => [...messages, message]);
+        this.scrollIfUserIsAtBottom();
     }
 
     private async refreshMessagesWithMerge(): Promise<void> {
@@ -96,6 +121,8 @@ export class ConversationDetailComponent extends DestroyableComponent implements
             return;
 
         this.messages.set(this.orderMessagesBySendDate(this.mergeMessages(this.messages(), result.data.messages)));
+
+        this.scrollIfUserIsAtBottom();
     }
 
     private async loadMessagesPage(cursor: string | undefined, isPageLoad: boolean): Promise<void> {
@@ -161,6 +188,36 @@ export class ConversationDetailComponent extends DestroyableComponent implements
             if (this.signalRService.connectionStatus() !== SignalRConnectionStatus.Connected) {
                 this.refreshMessagesWithMerge();
             }
+        });
+    }
+
+    private scrollToBottom(): void {
+        timer(0).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+            const messagesContainer = document.querySelector('.messages-container') as HTMLDivElement | null;
+
+            if (!messagesContainer)
+                return;
+
+            messagesContainer.scrollTo({ top: messagesContainer.scrollHeight, behavior: 'smooth' });
+
+            this.isUserAtBottom.set(true);
+        });
+    }
+
+    private scrollIfUserIsAtBottom(): void {
+        if (this.isUserAtBottom())
+            this.scrollToBottom();
+    }
+
+    private setupScrollListener(): void {
+        const messagesContainer = document.querySelector('.messages-container') as HTMLDivElement | null;
+
+        if (!messagesContainer)
+            return;
+
+        messagesContainer.addEventListener('scroll', () => {
+            const isNearBottom = messagesContainer.scrollHeight - (messagesContainer.scrollTop + messagesContainer.clientHeight) <= 100;
+            this.isUserAtBottom.set(isNearBottom);
         });
     }
 }
