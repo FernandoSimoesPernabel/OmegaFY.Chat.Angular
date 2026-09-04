@@ -73,6 +73,13 @@
                                         <span class="material-icons note-head__title-icon"
                                             aria-hidden="true">chat_bubble</span>
                                         <strong>{{ conversation.displayName }}</strong>
+
+                                        @if (conversation.unreadMessagesCount) {
+                                            <span class="material-icons note-head__unread-icon"
+                                                aria-hidden="true">mark_email_unread</span>
+                                            <span
+                                                class="note-head__unread-count">{{ conversation.unreadMessagesCount }}</span>
+                                        }
                                     </div>
 
                                     @if (getMessageDate(conversation); as sendDate) {

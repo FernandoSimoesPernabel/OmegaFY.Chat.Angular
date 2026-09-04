@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { auditTime, timer } from 'rxjs';
 import { CursorPagination } from '../../../../core/models/base/cursor-pagination';
+import { GetUserConversationMessagesResult } from '../../../../core/models/conversations/get-user-conversation-messages-result';
 import { MessageFromMemberModel } from '../../../../core/models/conversations/message-from-member-model';
 import { SignalRConnectionStatus } from '../../../../core/models/signal-r/signal-r-connection-status';
 import { SignalREventType } from '../../../../core/models/signal-r/signal-r-event-type';
@@ -17,8 +18,9 @@ import { ChatFacade } from '../../facades/chat.facade';
 import { ConversationHeaderDataComponent } from './components/conversation-header-data/conversation-header-data.component';
 import { ConversationMyMessageComponent } from './components/conversation-my-message/conversation-my-message.component';
 import { ConversationOthersMessageComponent } from './components/conversation-others-message/conversation-others-message.component';
+import { SendMessageComponent } from './components/send-message/send-message.component';
 
-const MESSAGES_PAGE_SIZE = 20;
+const MESSAGES_PAGE_SIZE = 50;
 const TIMER_REFRESH_INTERVAL = 10000;
 const SIGNAL_R_REFRESH_INTERVAL = 3000;
 
@@ -31,7 +33,8 @@ const SIGNAL_R_REFRESH_INTERVAL = 3000;
         LoadingOverlayComponent,
         ConversationHeaderDataComponent,
         ConversationMyMessageComponent,
-        ConversationOthersMessageComponent
+        ConversationOthersMessageComponent,
+        SendMessageComponent
     ],
     providers: [ComponentLoadingService],
     templateUrl: './conversation-detail.component.html',
@@ -45,7 +48,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
 
     protected readonly hasMore = signal(false);
 
-    private nextCursor: string | null = null;
+    private readonly nextCursor = signal<string | undefined>(undefined);
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -73,10 +76,14 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     }
 
     public async loadMoreMessages(): Promise<void> {
-        if (this.loadingService.isLoading() || !this.hasMore() || !this.nextCursor)
+        if (this.loadingService.isLoading() || !this.hasMore() || !this.nextCursor())
             return;
 
-        await this.loadMessagesPage(this.nextCursor, false);
+        await this.loadMessagesPage(this.nextCursor(), false);
+    }
+
+    public onMessageSent(message: MessageFromMemberModel): void {
+        this.messages.update(messages => [...messages, message]);
     }
 
     private async refreshMessagesWithMerge(): Promise<void> {
@@ -91,14 +98,14 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         this.messages.set(this.orderMessagesBySendDate(this.mergeMessages(this.messages(), result.data.messages)));
     }
 
-    private async loadMessagesPage(cursor: string | undefined, isRefresh: boolean): Promise<void> {
+    private async loadMessagesPage(cursor: string | undefined, isPageLoad: boolean): Promise<void> {
         const result = await this.loadingService.trackAsync(async () => {
             const pagination: CursorPagination<string> = { take: MESSAGES_PAGE_SIZE, cursor: cursor };
             return this.chatFacade.getUserConversationMessages(this.conversationId, pagination);
         });
 
         if (!result.success) {
-            if (isRefresh) {
+            if (isPageLoad) {
                 this.resetValues();
             }
 
@@ -107,17 +114,21 @@ export class ConversationDetailComponent extends DestroyableComponent implements
             return;
         }
 
-        const mergedMessages = isRefresh ? result.data.messages : this.mergeMessages(this.messages(), result.data.messages);
+        this.setSignalValues(isPageLoad, result);
+    }
+
+    private setSignalValues(isPageLoad: boolean, result: { success: true; data: GetUserConversationMessagesResult; }) {
+        const mergedMessages = isPageLoad ? result.data.messages : this.mergeMessages(this.messages(), result.data.messages);
 
         this.messages.set(this.orderMessagesBySendDate(mergedMessages));
         this.hasMore.set(result.data.paginationInfo.hasMore);
-        this.nextCursor = result.data.paginationInfo.nextCursor ?? null;
+        this.nextCursor.set(result.data.paginationInfo.nextCursor ?? undefined);
     }
 
     private resetValues(): void {
         this.messages.set([]);
         this.hasMore.set(false);
-        this.nextCursor = null;
+        this.nextCursor.set(undefined);
     }
 
     private mergeMessages(existingMessages: MessageFromMemberModel[], incomingMessages: MessageFromMemberModel[]): MessageFromMemberModel[] {

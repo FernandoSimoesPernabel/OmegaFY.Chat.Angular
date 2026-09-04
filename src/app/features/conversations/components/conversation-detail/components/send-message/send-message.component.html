@@ -1,0 +1,12 @@
+<div class="send-message-container">
+    <textarea #messageInput (keydown)="onKeyDown($event)" class="send-message-textarea" maxlength="999"
+        placeholder="Digite sua mensagem aqui..." rows="4" [disabled]="loadingService.isLoading()"></textarea>
+
+    <button mat-flat-button type="button" (click)="sendMessage(messageInput)"
+        [disabled]="loadingService.isLoading() || !messageInput.value.trim()" class="send-message-button">
+
+        <span class="material-icons send-message-button__icon" aria-hidden="true">
+            {{ loadingService.isLoading() ? 'schedule' : 'send' }}
+        </span>
+    </button>
+</div>

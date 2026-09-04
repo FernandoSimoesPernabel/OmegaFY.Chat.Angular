@@ -9,25 +9,6 @@
         </mat-card-header>
 
         <mat-card-content class="conversation-content">
-            <div class="history-status">
-                <small class="history-status__item">
-                    <span class="material-icons history-status__icon" aria-hidden="true">update</span>
-                    Atualização automática
-                </small>
-
-                @if (hasMore()) {
-                    <small class="history-status__item">
-                        <span class="material-icons history-status__icon" aria-hidden="true">unfold_more</span>
-                        Há histórico adicional disponível
-                    </small>
-                } @else {
-                    <small class="history-status__item">
-                        <span class="material-icons history-status__icon" aria-hidden="true">check_circle</span>
-                        Você está vendo todas as mensagens
-                    </small>
-                }
-            </div>
-
             @if (hasMore()) {
                 <div class="load-more-container">
                     <button type="button" mat-stroked-button (click)="loadMoreMessages()"
@@ -57,6 +38,8 @@
                     </p>
                 }
             </div>
+
+            <app-send-message [conversationId]="conversationId" (messageSent)="onMessageSent($event)" />
         </mat-card-content>
 
         <mat-card-actions class="conversation-actions">
