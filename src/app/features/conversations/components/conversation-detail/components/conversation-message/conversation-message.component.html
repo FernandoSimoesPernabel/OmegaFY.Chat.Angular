@@ -1,9 +1,7 @@
-@if (message().status !== MemberMessageStatus.Deleted) {
-    @if (message().isMessageFromMember) {
-        <app-conversation-my-message [message]="message()" (messageDeleted)="onMessageDelete($event)" />
-    } @else {
-        <app-conversation-others-message [message]="message()" (messageDeleted)="onMessageDelete($event)" />
-    }
-} @else {
+@if (message().status === MemberMessageStatus.Deleted) {
     <app-conversation-message-deleted />
+} @else if (message().isMessageFromMember) {
+    <app-conversation-my-message [message]="message()" (messageDeleted)="onMessageDelete($event)" />
+} @else {
+    <app-conversation-others-message [message]="message()" (messageDeleted)="onMessageDelete($event)" />
 }
