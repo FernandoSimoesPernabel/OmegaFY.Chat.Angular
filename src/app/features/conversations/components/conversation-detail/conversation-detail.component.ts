@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChildren, ElementRef, signal, QueryList, AfterViewInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChildren, ElementRef, signal, QueryList, AfterViewInit, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -58,6 +58,8 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     private intersectionObserver?: IntersectionObserver;
 
     @ViewChildren('messageElements', { read: ElementRef }) private messageElements?: QueryList<ElementRef<HTMLElement>>;
+
+    @ViewChild('messagesContainer', { read: ElementRef }) private messagesContainer?: ElementRef<HTMLDivElement>;
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -223,10 +225,10 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     }
 
     private setupScrollListener(): void {
-        const messagesContainer = document.querySelector('.messages-container') as HTMLDivElement | null;
-
-        if (!messagesContainer)
+        if (!this.messagesContainer?.nativeElement)
             return;
+
+        const messagesContainer = this.messagesContainer.nativeElement;
 
         messagesContainer.addEventListener('scroll', () => {
             const isNearBottom = messagesContainer.scrollHeight - (messagesContainer.scrollTop + messagesContainer.clientHeight) <= 100;
@@ -235,16 +237,16 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     }
 
     private setupIntersectionObserver(): void {
-        const messagesContainer = document.querySelector('.messages-container') as HTMLDivElement | null;
-
-        if (!messagesContainer || !this.messageElements)
+        if (!this.messagesContainer?.nativeElement || !this.messageElements)
             return;
+
+        const messagesContainer = this.messagesContainer.nativeElement;
 
         this.intersectionObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        this.markMessageAsRead(entry.target);
+                        void this.markMessageAsRead(entry.target);
                     }
                 });
             },
@@ -276,7 +278,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         });
     }
 
-    private markMessageAsRead(element: Element): void {
+    private async markMessageAsRead(element: Element): Promise<void> {
         const messageId = element.getAttribute('data-message-id');
 
         if (!messageId)
@@ -299,5 +301,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
                     : m
             )
         );
+
+        await this.chatFacade.markMessageAsRead(this.conversationId, messageId);
     }
 }

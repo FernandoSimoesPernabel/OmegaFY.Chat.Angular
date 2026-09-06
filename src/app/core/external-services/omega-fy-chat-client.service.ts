@@ -52,7 +52,7 @@ export class OmegaFyChatClient {
     }
 
     public async deleteMessage(conversationId: string, messageId: string): Promise<ApiResponse<void>> {
-        return this.delete<{ messageId: string }, void>(`Chat/${conversationId}/messages/${messageId}`, { messageId });
+        return this.delete<null, void>(`Chat/${conversationId}/messages/${messageId}`, null);
     }
 
     public async markMessageAsRead(conversationId: string, messageId: string): Promise<ApiResponse<void>> {
