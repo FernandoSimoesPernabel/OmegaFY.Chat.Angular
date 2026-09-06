@@ -25,8 +25,7 @@ export class ConversationMessageComponent {
 
     constructor(
         private readonly dialog: MatDialog,
-        private readonly chatFacade: ChatFacade
-    ) { }
+        private readonly chatFacade: ChatFacade) { }
 
     protected async onMessageDelete(message: MessageFromMemberModel): Promise<void> {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -42,7 +41,7 @@ export class ConversationMessageComponent {
         const result = await firstValueFrom(dialogRef.afterClosed());
 
         if (result) {
-            const deleteResult = await this.chatFacade.deleteMessage(message.messageId);
+            const deleteResult = await this.chatFacade.deleteMessage(this.conversationId(), message.messageId);
 
             if (deleteResult.success) {
                 const deletedMessage: MessageFromMemberModel = {
