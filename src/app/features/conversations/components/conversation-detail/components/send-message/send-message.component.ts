@@ -42,10 +42,12 @@ export class SendMessageComponent {
                 return;
             }
 
-            messageInput.value = '';
             this.notificationService.success('Mensagem enviada com sucesso.');
             this.messageSent.emit(this.createNewMessage(result, body));
         });
+        
+        messageInput.value = '';
+        requestAnimationFrame(() => messageInput.focus());
     }
 
     public onKeyDown(event: KeyboardEvent): void {

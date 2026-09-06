@@ -9,22 +9,22 @@
         </mat-card-header>
 
         <mat-card-content class="conversation-content">
-            @if (hasMore()) {
-                <div class="load-more-container">
-                    <button type="button" mat-stroked-button (click)="loadMoreMessages()"
-                        [disabled]="loadingService.isLoading()" class="load-more-button">
-                        <span class="material-icons load-more-button__icon" aria-hidden="true">expand_less</span>
-                        Carregar mensagens antigas
-                    </button>
-
-                    <small class="load-more-hint">
-                        <span class="material-icons load-more-hint__icon" aria-hidden="true">update</span>
-                        Atualize o histórico sem sair da conversa
-                    </small>
-                </div>
-            }
-
             <div class="messages-container">
+                @if (hasMore()) {
+                    <div class="load-more-container">
+                        <button type="button" mat-stroked-button (click)="loadMoreMessages()"
+                            [disabled]="loadingService.isLoading()" class="load-more-button">
+                            <span class="material-icons load-more-button__icon" aria-hidden="true">expand_less</span>
+                            Carregar mensagens antigas
+                        </button>
+
+                        <small class="load-more-hint">
+                            <span class="material-icons load-more-hint__icon" aria-hidden="true">update</span>
+                            Atualize o histórico sem sair da conversa
+                        </small>
+                    </div>
+                }
+
                 @for (message of messages(); track message.messageId) {
                     @if (message.isMessageFromMember) {
                         <app-conversation-my-message [message]="message" />
