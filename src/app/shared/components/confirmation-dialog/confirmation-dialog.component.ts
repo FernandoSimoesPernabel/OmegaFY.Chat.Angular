@@ -1,13 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-
-export interface ConfirmationDialogData {
-    title: string;
-    message: string;
-    confirmButtonText?: string;
-    cancelButtonText?: string;
-}
+import { ConfirmationDialogData } from '../../models/dialogs/confirmation-dialog-data.model';
 
 @Component({
     selector: 'app-confirmation-dialog',
