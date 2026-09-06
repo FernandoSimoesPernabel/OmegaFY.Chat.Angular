@@ -18,6 +18,7 @@ import { ConfirmationDialogComponent } from '../../../../../../shared/components
 })
 export class ConversationMessageComponent {
     public readonly message = input.required<MessageFromMemberModel>();
+    public readonly conversationId = input.required<string>();
     public readonly messageDeleted = output<MessageFromMemberModel>();
 
     protected readonly MemberMessageStatus = MemberMessageStatus;
@@ -41,9 +42,9 @@ export class ConversationMessageComponent {
         const result = await firstValueFrom(dialogRef.afterClosed());
 
         if (result) {
-            const result = await this.chatFacade.deleteMessage(message.messageId);
+            const deleteResult = await this.chatFacade.deleteMessage(message.messageId);
 
-            if (result.success) {
+            if (deleteResult.success) {
                 const deletedMessage: MessageFromMemberModel = {
                     ...message,
                     status: MemberMessageStatus.Deleted

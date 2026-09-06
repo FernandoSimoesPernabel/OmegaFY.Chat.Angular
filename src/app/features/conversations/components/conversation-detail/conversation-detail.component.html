@@ -27,7 +27,7 @@
 
                 @for (message of messages(); track message.messageId) {
                     <div #messageElements [attr.data-message-id]="message.messageId">
-                        <app-conversation-message [message]="message" (messageDeleted)="onMessageDeleted($event)" />
+                        <app-conversation-message [message]="message" [conversationId]="conversationId" (messageDeleted)="onMessageDeleted($event)" />
                     </div>
                 } @empty {
                     <p class="empty-state">
