@@ -26,11 +26,7 @@
                 }
 
                 @for (message of messages(); track message.messageId) {
-                    @if (message.isMessageFromMember) {
-                        <app-conversation-my-message [message]="message" />
-                    } @else {
-                        <app-conversation-others-message [message]="message" />
-                    }
+                    <app-conversation-message [message]="message" (messageDeleted)="onMessageDeleted($event)" />
                 } @empty {
                     <p class="empty-state">
                         <span class="material-icons empty-state__icon" aria-hidden="true">forum</span>

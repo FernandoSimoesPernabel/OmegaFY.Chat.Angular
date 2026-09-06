@@ -1,0 +1,9 @@
+@if (message().status !== MemberMessageStatus.Deleted) {
+    @if (message().isMessageFromMember) {
+        <app-conversation-my-message [message]="message()" (messageDeleted)="onMessageDeleted(message())" #messageElements />
+    } @else {
+        <app-conversation-others-message [message]="message()" (messageDeleted)="onMessageDeleted(message())" #messageElements />
+    }
+} @else {
+    <app-conversation-message-deleted #messageElements />
+}

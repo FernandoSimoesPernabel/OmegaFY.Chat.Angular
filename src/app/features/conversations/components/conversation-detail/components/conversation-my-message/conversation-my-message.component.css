@@ -9,4 +9,32 @@
     background: color-mix(in srgb, var(--mat-sys-primary-container) 78%, transparent);
     color: var(--mat-sys-on-primary-container);
     border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 20%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
+
+.message__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.message__action-button {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    color: var(--mat-sys-on-primary-container);
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.message__action-button:hover {
+    opacity: 1;
+}
+
+article.message--mine:hover .message__action-button {
+    opacity: 1;
+}
+
