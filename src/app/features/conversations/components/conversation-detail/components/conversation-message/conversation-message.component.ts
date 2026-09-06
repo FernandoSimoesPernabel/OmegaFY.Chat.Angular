@@ -40,16 +40,18 @@ export class ConversationMessageComponent {
 
         const result = await firstValueFrom(dialogRef.afterClosed());
 
-        if (result) {
-            const deleteResult = await this.chatFacade.deleteMessage(this.conversationId(), message.messageId);
+        if (!result)
+            return;
 
-            if (deleteResult.success) {
-                const deletedMessage: MessageFromMemberModel = {
-                    ...message,
-                    status: MemberMessageStatus.Deleted
-                };
-                this.messageDeleted.emit(deletedMessage);
-            }
-        }
+        const deleteResult = await this.chatFacade.deleteMessage(this.conversationId(), message.messageId);
+
+        if (!deleteResult.success)
+            return;
+
+        const deletedMessage: MessageFromMemberModel = {
+            ...message,
+            status: MemberMessageStatus.Deleted
+        };
+        this.messageDeleted.emit(deletedMessage);
     }
 }
