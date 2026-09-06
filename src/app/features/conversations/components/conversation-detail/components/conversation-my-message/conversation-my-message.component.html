@@ -15,4 +15,11 @@
         <span class="material-icons message__content-icon" aria-hidden="true">sms</span>
         {{ message().content }}
     </p>
+
+    <footer class="message__actions">
+        <button mat-icon-button class="message__action-button" (click)="deleteMessage()" type="button"
+            matTooltip="Deletar mensagem" aria-label="Deletar mensagem">
+            <span class="material-icons" aria-hidden="true">delete</span>
+        </button>
+    </footer>
 </article>

@@ -9,7 +9,7 @@
         </mat-card-header>
 
         <mat-card-content class="conversation-content">
-            <div class="messages-container">
+            <div class="messages-container" #messagesContainer>
                 @if (hasMore()) {
                     <div class="load-more-container">
                         <button type="button" mat-stroked-button (click)="loadMoreMessages()"
@@ -26,11 +26,9 @@
                 }
 
                 @for (message of messages(); track message.messageId) {
-                    @if (message.isMessageFromMember) {
-                        <app-conversation-my-message [message]="message" />
-                    } @else {
-                        <app-conversation-others-message [message]="message" />
-                    }
+                    <div #messageElements [attr.data-message-id]="message.messageId">
+                        <app-conversation-message [message]="message" [conversationId]="conversationId" (messageDeleted)="onMessageDeleted($event)" />
+                    </div>
                 } @empty {
                     <p class="empty-state">
                         <span class="material-icons empty-state__icon" aria-hidden="true">forum</span>

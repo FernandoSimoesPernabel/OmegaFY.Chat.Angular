@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChildren, ElementRef, signal, QueryList, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { auditTime, timer } from 'rxjs';
 import { CursorPagination } from '../../../../core/models/base/cursor-pagination';
 import { GetUserConversationMessagesResult } from '../../../../core/models/conversations/get-user-conversation-messages-result';
 import { MessageFromMemberModel } from '../../../../core/models/conversations/message-from-member-model';
+import { MemberMessageStatus } from '../../../../core/models/conversations/member-message-status';
 import { SignalRConnectionStatus } from '../../../../core/models/signal-r/signal-r-connection-status';
 import { SignalREventType } from '../../../../core/models/signal-r/signal-r-event-type';
 import { SignalRService } from '../../../../core/services/signal-r.service';
@@ -16,8 +17,7 @@ import { ComponentLoadingService } from '../../../../shared/services/component-l
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ChatFacade } from '../../facades/chat.facade';
 import { ConversationHeaderDataComponent } from './components/conversation-header-data/conversation-header-data.component';
-import { ConversationMyMessageComponent } from './components/conversation-my-message/conversation-my-message.component';
-import { ConversationOthersMessageComponent } from './components/conversation-others-message/conversation-others-message.component';
+import { ConversationMessageComponent } from './components/conversation-message/conversation-message.component';
 import { SendMessageComponent } from './components/send-message/send-message.component';
 
 const MESSAGES_PAGE_SIZE = 50;
@@ -32,8 +32,7 @@ const SIGNAL_R_REFRESH_INTERVAL = 3000;
         MatCardModule,
         LoadingOverlayComponent,
         ConversationHeaderDataComponent,
-        ConversationMyMessageComponent,
-        ConversationOthersMessageComponent,
+        ConversationMessageComponent,
         SendMessageComponent
     ],
     providers: [ComponentLoadingService],
@@ -41,7 +40,7 @@ const SIGNAL_R_REFRESH_INTERVAL = 3000;
     styleUrl: './conversation-detail.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConversationDetailComponent extends DestroyableComponent implements OnInit {
+export class ConversationDetailComponent extends DestroyableComponent implements OnInit, AfterViewInit, OnDestroy {
     protected readonly conversationId: string;
 
     protected readonly messages = signal<MessageFromMemberModel[]>([]);
@@ -55,6 +54,12 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     private readonly scrollHeightBeforeLoadMore = signal<number>(0);
 
     private readonly isUserAtBottom = signal<boolean>(true);
+
+    private intersectionObserver?: IntersectionObserver;
+
+    @ViewChildren('messageElements', { read: ElementRef }) private messageElements?: QueryList<ElementRef<HTMLElement>>;
+
+    @ViewChild('messagesContainer', { read: ElementRef }) private messagesContainer?: ElementRef<HTMLDivElement>;
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -85,6 +90,16 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         this.startTimerToRefreshMessages();
     }
 
+    public ngAfterViewInit(): void {
+        this.setupIntersectionObserver();
+    }
+
+    public ngOnDestroy(): void {
+        if (this.intersectionObserver) {
+            this.intersectionObserver.disconnect();
+        }
+    }
+
     public async loadMoreMessages(): Promise<void> {
         if (this.loadingService.isLoading() || !this.hasMore() || !this.nextCursor())
             return;
@@ -109,6 +124,12 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     public onMessageSent(message: MessageFromMemberModel): void {
         this.messages.update(messages => [...messages, message]);
         this.scrollIfUserIsAtBottom();
+    }
+
+    public onMessageDeleted(deletedMessage: MessageFromMemberModel): void {
+        this.messages.update(messages =>
+            messages.map(message => message.messageId === deletedMessage.messageId ? deletedMessage : message)
+        );
     }
 
     private async refreshMessagesWithMerge(): Promise<void> {
@@ -210,14 +231,78 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     }
 
     private setupScrollListener(): void {
-        const messagesContainer = document.querySelector('.messages-container') as HTMLDivElement | null;
-
-        if (!messagesContainer)
+        if (!this.messagesContainer?.nativeElement)
             return;
+
+        const messagesContainer = this.messagesContainer.nativeElement;
 
         messagesContainer.addEventListener('scroll', () => {
             const isNearBottom = messagesContainer.scrollHeight - (messagesContainer.scrollTop + messagesContainer.clientHeight) <= 100;
             this.isUserAtBottom.set(isNearBottom);
         });
+    }
+
+    private setupIntersectionObserver(): void {
+        if (!this.messagesContainer?.nativeElement || !this.messageElements)
+            return;
+
+        this.intersectionObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        void this.markMessageAsRead(entry.target);
+                    }
+                });
+            },
+            {
+                root: this.messagesContainer.nativeElement,
+                threshold: 0.5
+            }
+        );
+
+        this.messageElements.changes.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+            if (!this.intersectionObserver || !this.messageElements)
+                return;
+
+            this.messageElements.forEach(element => {
+                this.intersectionObserver!.observe(element.nativeElement);
+            });
+        });
+
+        if (this.messageElements) {
+            this.messageElements.forEach(element => {
+                this.intersectionObserver!.observe(element.nativeElement);
+            });
+        }
+    }
+
+    private async markMessageAsRead(element: Element): Promise<void> {
+        const messageId = element.getAttribute('data-message-id');
+
+        if (!messageId)
+            return;
+
+        const messageIndex = this.messages().findIndex(m => m.messageId === messageId);
+
+        if (messageIndex < 0)
+            return;
+
+        const message = this.messages()[messageIndex];
+
+        if (!message || message.status === MemberMessageStatus.Read || message.isMessageFromMember)
+            return;
+
+        const result = await this.chatFacade.markMessageAsRead(this.conversationId, messageId);
+
+        if (!result.success)
+            return;
+
+        this.messages.update(messages =>
+            messages.map((message, index) =>
+                index === messageIndex && message.status === MemberMessageStatus.Unread
+                    ? { ...message, status: MemberMessageStatus.Read }
+                    : message
+            )
+        );
     }
 }

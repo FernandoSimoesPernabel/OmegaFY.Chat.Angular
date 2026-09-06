@@ -1,4 +1,5 @@
 @import '../../../../../../shared/styles/conversation-message-base.css';
+@import '../../../../../../shared/styles/conversation-message-actions.css';
 
 .message {
     max-width: 72%;
@@ -9,8 +10,47 @@
     background: color-mix(in srgb, var(--mat-sys-surface-container) 88%, transparent);
     color: var(--mat-sys-on-surface);
     border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 28%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .message__meta {
     color: var(--mat-sys-on-surface-variant);
+}
+
+.message--unread {
+    background: color-mix(in srgb, var(--mat-sys-surface-container) 95%, transparent);
+    border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 15%, transparent);
+}
+
+.message__unread-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+    font-size: 12px;
+    margin-left: auto;
+}
+
+.message__unread-badge .material-icons {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+}
+
+.message__actions {
+    justify-content: flex-start;
+}
+
+.message__action-button {
+    color: var(--mat-sys-on-surface);
+}
+
+article.message--other:hover .message__action-button {
+    opacity: 1;
 }
