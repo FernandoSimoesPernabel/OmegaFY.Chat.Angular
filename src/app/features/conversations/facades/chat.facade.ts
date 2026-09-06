@@ -33,6 +33,16 @@ export class ChatFacade {
         return this.toUseCaseResult(response);
     }
 
+    public async deleteMessage(conversationId: string, messageId: string): Promise<UseCaseResult<void>> {
+        const response = await this.omegaFyChatClient.deleteMessage(conversationId, messageId);
+        return this.toUseCaseResult(response);
+    }
+
+    public async markMessageAsRead(conversationId: string, messageId: string): Promise<UseCaseResult<void>> {
+        const response = await this.omegaFyChatClient.markMessageAsRead(conversationId, messageId);
+        return this.toUseCaseResult(response);
+    }
+
     private toUseCaseResult<TData>(response: ApiResponse<TData>): UseCaseResult<TData> {
         return !response.succeeded ? { success: false, validationErrors: response.errors } : { success: true, data: response.data };
     }

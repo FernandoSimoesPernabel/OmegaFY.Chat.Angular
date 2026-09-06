@@ -51,6 +51,14 @@ export class OmegaFyChatClient {
         return this.post<SendMessageRequest, SendMessageResult>(`Chat/${conversationId}/messages`, request);
     }
 
+    public async deleteMessage(conversationId: string, messageId: string): Promise<ApiResponse<void>> {
+        return this.delete<{ messageId: string }, void>(`Chat/${conversationId}/messages/${messageId}`, { messageId });
+    }
+
+    public async markMessageAsRead(conversationId: string, messageId: string): Promise<ApiResponse<void>> {
+        return this.post<{ messageId: string }, void>(`Chat/${conversationId}/messages/${messageId}/read`, { messageId });
+    }
+
     private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {
         try {
             return await firstValueFrom(this.http.get<ApiResponse<TResponse>>(this.buildUrl(endpoint)));

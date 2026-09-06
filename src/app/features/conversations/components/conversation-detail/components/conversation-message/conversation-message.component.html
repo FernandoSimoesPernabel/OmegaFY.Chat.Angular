@@ -1,9 +1,13 @@
 @if (message().status !== MemberMessageStatus.Deleted) {
-    @if (message().isMessageFromMember) {
-        <app-conversation-my-message [message]="message()" (messageDeleted)="onMessageDeleted(message())" #messageElements />
-    } @else {
-        <app-conversation-others-message [message]="message()" (messageDeleted)="onMessageDeleted(message())" #messageElements />
-    }
+    <div #messageElements [attr.data-message-id]="message().messageId">
+        @if (message().isMessageFromMember) {
+            <app-conversation-my-message [message]="message()" (messageDeleted)="onMessageDeleted(message())" />
+        } @else {
+            <app-conversation-others-message [message]="message()" (messageDeleted)="onMessageDeleted(message())" />
+        }
+    </div>
 } @else {
-    <app-conversation-message-deleted #messageElements />
+    <div #messageElements [attr.data-message-id]="message().messageId">
+        <app-conversation-message-deleted />
+    </div>
 }

@@ -271,7 +271,12 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     }
 
     private markMessageAsRead(element: Element): void {
-        const messageIndex = Array.from(element.parentElement?.children ?? []).indexOf(element as HTMLElement);
+        const messageId = element.getAttribute('data-message-id');
+
+        if (!messageId)
+            return;
+
+        const messageIndex = this.messages().findIndex(m => m.messageId === messageId);
 
         if (messageIndex < 0)
             return;
