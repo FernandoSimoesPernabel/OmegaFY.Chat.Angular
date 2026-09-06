@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChildren, ElementRef, signal, QueryList, AfterViewInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChildren, ElementRef, signal, QueryList, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -40,7 +40,7 @@ const SIGNAL_R_REFRESH_INTERVAL = 3000;
     styleUrl: './conversation-detail.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConversationDetailComponent extends DestroyableComponent implements OnInit, AfterViewInit {
+export class ConversationDetailComponent extends DestroyableComponent implements OnInit, AfterViewInit, OnDestroy {
     protected readonly conversationId: string;
 
     protected readonly messages = signal<MessageFromMemberModel[]>([]);
@@ -94,6 +94,12 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         this.setupIntersectionObserver();
     }
 
+    public ngOnDestroy(): void {
+        if (this.intersectionObserver) {
+            this.intersectionObserver.disconnect();
+        }
+    }
+
     public async loadMoreMessages(): Promise<void> {
         if (this.loadingService.isLoading() || !this.hasMore() || !this.nextCursor())
             return;
@@ -122,7 +128,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
 
     public onMessageDeleted(deletedMessage: MessageFromMemberModel): void {
         this.messages.update(messages =>
-            messages.map(m => m.messageId === deletedMessage.messageId ? deletedMessage : m)
+            messages.map(message => message.messageId === deletedMessage.messageId ? deletedMessage : message)
         );
     }
 
@@ -240,8 +246,6 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         if (!this.messagesContainer?.nativeElement || !this.messageElements)
             return;
 
-        const messagesContainer = this.messagesContainer.nativeElement;
-
         this.intersectionObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
@@ -251,7 +255,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
                 });
             },
             {
-                root: messagesContainer,
+                root: this.messagesContainer.nativeElement,
                 threshold: 0.5
             }
         );
@@ -270,12 +274,6 @@ export class ConversationDetailComponent extends DestroyableComponent implements
                 this.intersectionObserver!.observe(element.nativeElement);
             });
         }
-
-        this.destroyRef.onDestroy(() => {
-            if (this.intersectionObserver) {
-                this.intersectionObserver.disconnect();
-            }
-        });
     }
 
     private async markMessageAsRead(element: Element): Promise<void> {
@@ -294,14 +292,17 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         if (!message || message.status === MemberMessageStatus.Read || message.isMessageFromMember)
             return;
 
+        const result = await this.chatFacade.markMessageAsRead(this.conversationId, messageId);
+
+        if (!result.success)
+            return;
+
         this.messages.update(messages =>
-            messages.map((m, index) =>
-                index === messageIndex && m.status === MemberMessageStatus.Unread
-                    ? { ...m, status: MemberMessageStatus.Read }
-                    : m
+            messages.map((message, index) =>
+                index === messageIndex && message.status === MemberMessageStatus.Unread
+                    ? { ...message, status: MemberMessageStatus.Read }
+                    : message
             )
         );
-
-        await this.chatFacade.markMessageAsRead(this.conversationId, messageId);
     }
 }
