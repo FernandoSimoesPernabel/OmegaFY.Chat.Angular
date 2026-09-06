@@ -268,6 +268,12 @@ export class ConversationDetailComponent extends DestroyableComponent implements
                 this.intersectionObserver!.observe(element.nativeElement);
             });
         }
+
+        this.destroyRef.onDestroy(() => {
+            if (this.intersectionObserver) {
+                this.intersectionObserver.disconnect();
+            }
+        });
     }
 
     private markMessageAsRead(element: Element): void {
