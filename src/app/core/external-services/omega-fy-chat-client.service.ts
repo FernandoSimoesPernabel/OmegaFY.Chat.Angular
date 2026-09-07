@@ -11,9 +11,17 @@ import { RegisterNewUserRequest } from '../models/auth/register-new-user-request
 import { RegisterNewUserResult } from '../models/auth/register-new-user-result';
 import { ApiResponse } from '../models/base/api-response';
 import { CursorPagination } from '../models/base/cursor-pagination';
+import { AddMemberToGroupRequest } from '../models/conversations/add-member-to-group-request';
+import { AddMemberToGroupResult } from '../models/conversations/add-member-to-group-result';
+import { ChangeGroupConfigRequest } from '../models/conversations/change-group-config-request';
+import { ChangeGroupConfigResult } from '../models/conversations/change-group-config-result';
+import { CreateGroupConversationRequest } from '../models/conversations/create-group-conversation-request';
+import { CreateGroupConversationResult } from '../models/conversations/create-group-conversation-result';
 import { GetConversationByIdResult } from '../models/conversations/get-conversation-by-id-result';
 import { GetUserConversationMessagesResult } from '../models/conversations/get-user-conversation-messages-result';
 import { GetUserConversationsResult } from '../models/conversations/get-user-conversations-result';
+import { GetUsersRequest } from '../models/conversations/get-users-request';
+import { GetUsersResult } from '../models/conversations/get-users-result';
 import { SendMessageResult } from '../models/conversations/send-message-result';
 import { SendMessageRequest } from '../models/conversations/send-message-request';
 
@@ -49,6 +57,32 @@ export class OmegaFyChatClient {
 
     public async sendMessage(conversationId: string, request: SendMessageRequest): Promise<ApiResponse<SendMessageResult>> {
         return this.post<SendMessageRequest, SendMessageResult>(`Chat/${conversationId}/messages`, request);
+    }
+
+    public async createGroupConversation(request: CreateGroupConversationRequest): Promise<ApiResponse<CreateGroupConversationResult>> {
+        return this.post<CreateGroupConversationRequest, CreateGroupConversationResult>('Chat', request);
+    }
+
+    public async addMemberToGroup(conversationId: string, request: AddMemberToGroupRequest): Promise<ApiResponse<AddMemberToGroupResult>> {
+        return this.post<AddMemberToGroupRequest, AddMemberToGroupResult>(`Chat/${conversationId}/members`, request);
+    }
+
+    public async changeGroupConfig(conversationId: string, request: ChangeGroupConfigRequest): Promise<ApiResponse<ChangeGroupConfigResult>> {
+        return this.put<ChangeGroupConfigRequest, ChangeGroupConfigResult>(`Chat/${conversationId}/group-config`, request);
+    }
+
+    public async removeMemberFromGroup(conversationId: string, memberId: string): Promise<ApiResponse<void>> {
+        return this.delete<void, void>(`Chat/${conversationId}/members/${memberId}`, undefined as any);
+    }
+
+    public async getUsers(request: GetUsersRequest): Promise<ApiResponse<GetUsersResult>> {
+        const params = new URLSearchParams();
+        if (request.displayName) params.append('DisplayName', request.displayName);
+        if (request.status !== undefined && request.status !== null) params.append('Status', request.status.toString());
+
+        const queryString = params.toString();
+        const endpoint = queryString ? `Chat/users?${queryString}` : 'Chat/users';
+        return this.get<GetUsersResult>(endpoint);
     }
 
     private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {

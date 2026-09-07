@@ -52,6 +52,13 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
+    @if (canAddMembers()) {
+        <button type="button" mat-stroked-button (click)="openAddMembersDialog()">
+            <span class="material-icons" aria-hidden="true">person_add</span>
+            Adicionar membro
+        </button>
+    }
+
     <button type="button" mat-button (click)="close()">
         <span class="material-icons" aria-hidden="true">close</span>
         Fechar

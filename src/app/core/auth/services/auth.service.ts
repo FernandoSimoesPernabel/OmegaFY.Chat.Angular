@@ -19,6 +19,15 @@ export class AuthService {
         return payload ? (payload['name'] as string) : null;
     }
 
+    public getLoggedUserId(): string | null {
+        const token = this.getToken();
+
+        if (!token?.isValid())
+            return null;
+
+        return token.userId;
+    }
+
     public saveTokens(token: Token, refreshToken: Token | null): void {
         this.localStorageService.set(OMEGAFY_JWT_TOKEN_KEY, JwtToken.createFromToken(token));
 

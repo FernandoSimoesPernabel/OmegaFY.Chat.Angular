@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/auth/services/auth.service';
 import { UserConversation } from '../../../../core/models/conversations/user-conversation';
@@ -12,6 +13,7 @@ import { ConversationDateTimePipe } from '../../../../shared/pipes/conversation-
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ChatFacade } from '../../facades/chat.facade';
+import { CreateGroupDialogComponent } from '../create-group-dialog/create-group-dialog.component';
 
 @Component({
     selector: 'app-conversations',
@@ -39,6 +41,7 @@ export class ConversationsComponent implements OnInit {
         private readonly chatFacade: ChatFacade,
         private readonly router: Router,
         private readonly notificationService: NotificationService,
+        private readonly dialog: MatDialog,
         public readonly loadingService: ComponentLoadingService) { }
 
     public async ngOnInit(): Promise<void> {
@@ -59,6 +62,21 @@ export class ConversationsComponent implements OnInit {
         return this.router.navigate(['/conversations', conversationId]);
     }
 
+    public openCreateGroupDialog(): void {
+        const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
+            width: '400px',
+            maxWidth: '95vw',
+            autoFocus: false
+        });
+
+        dialogRef.afterClosed().subscribe(async (conversationId: string | undefined) => {
+            if (!conversationId) return;
+
+            await this.openConversation(conversationId);
+            await this.loadConversations();
+        });
+    }
+
     public getMessageDate(conversation: UserConversation): string | null {
         return conversation.lastMessage?.sendDate ?? null;
     }
@@ -66,7 +84,7 @@ export class ConversationsComponent implements OnInit {
     private setLoggedUserName(): void {
         const loggedUserName = this.authService.getLoggedUserName();
 
-        if (loggedUserName) 
+        if (loggedUserName)
             this.loggedUserName.set(loggedUserName);
     }
 
