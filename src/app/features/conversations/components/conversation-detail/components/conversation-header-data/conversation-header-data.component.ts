@@ -66,6 +66,9 @@ export class ConversationHeaderDataComponent implements OnInit {
             width: '560px',
             maxWidth: '95vw',
             autoFocus: false
+        }).afterClosed().subscribe(async (result) => {
+            if (result?.refreshMembers)
+                await this.loadConversationData();
         });
     }
 
