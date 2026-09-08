@@ -1,4 +1,4 @@
-import { FriendshipStatus } from './user-model';
+import { FriendshipStatus } from './friendship-status';
 
 export type GetUsersRequest = {
     displayName?: string;

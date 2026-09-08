@@ -1,8 +1,4 @@
-export enum FriendshipStatus {
-    Pending = 0,
-    Accepted = 1,
-    Rejected = 2
-}
+import { FriendshipStatus } from './friendship-status';
 
 export type UserModel = {
     id: string;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, effect, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -49,9 +49,31 @@ export class AddMembersDialogComponent implements OnInit {
 
     protected readonly availableUsers = signal<UserModel[]>([]);
 
+    protected readonly filteredUsers = computed(() => {
+        return this.availableUsers();
+    });
+
     protected readonly isUserAlreadyMember = (userId: string): boolean => {
         return this.currentMembers().some(m => m.userId === userId);
     };
+
+    constructor() {
+        effect(async () => {
+            const query = this.searchQuery();
+            await this.loadingService.trackAsync(async () => {
+                const request: GetUsersRequest = query ? { displayName: query } : {};
+                const result = await this.chatFacade.getUsers(request);
+
+                if (!result.success) {
+                    this.notificationService.error('Não foi possível carregar a lista de usuários.');
+                    this.availableUsers.set([]);
+                    return;
+                }
+
+                this.availableUsers.set(result.data.users);
+            });
+        });
+    }
 
     public async ngOnInit(): Promise<void> {
         await this.loadingService.trackAsync(async () => {
@@ -80,7 +102,7 @@ export class AddMembersDialogComponent implements OnInit {
                 return;
             }
 
-            const user = this.availableUsers().find(u => u.id === userId);
+            const user = this.availableUsers().find(user => user.id === userId);
 
             if (user) {
                 this.notificationService.success(`${user.displayName} foi adicionado ao grupo.`);
