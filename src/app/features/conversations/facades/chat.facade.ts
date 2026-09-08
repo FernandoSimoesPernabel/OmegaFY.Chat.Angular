@@ -41,28 +41,38 @@ export class ChatFacade {
         return this.toUseCaseResult(response);
     }
 
-    public async createGroupConversation(request: CreateGroupConversationRequest): Promise<UseCaseResult<CreateGroupConversationResult>> {
-        const response = await this.omegaFyChatClient.createGroupConversation(request);
-        return this.toUseCaseResult(response);
-    }
+public async deleteMessage(conversationId: string, messageId: string): Promise<UseCaseResult<void>> {
+    const response = await this.omegaFyChatClient.deleteMessage(conversationId, messageId);
+    return this.toUseCaseResult(response);
+}
 
-    public async addMemberToGroup(conversationId: string, request: AddMemberToGroupRequest): Promise<UseCaseResult<AddMemberToGroupResult>> {
-        const response = await this.omegaFyChatClient.addMemberToGroup(conversationId, request);
-        return this.toUseCaseResult(response);
-    }
+public async markMessageAsRead(conversationId: string, messageId: string): Promise<UseCaseResult<void>> {
+    const response = await this.omegaFyChatClient.markMessageAsRead(conversationId, messageId);
+    return this.toUseCaseResult(response);
+}
 
-    public async changeGroupConfig(conversationId: string, request: ChangeGroupConfigRequest): Promise<UseCaseResult<ChangeGroupConfigResult>> {
-        const response = await this.omegaFyChatClient.changeGroupConfig(conversationId, request);
-        return this.toUseCaseResult(response);
-    }
+public async createGroupConversation(request: CreateGroupConversationRequest): Promise<UseCaseResult<CreateGroupConversationResult>> {
+    const response = await this.omegaFyChatClient.createGroupConversation(request);
+    return this.toUseCaseResult(response);
+}
 
-    public async removeMemberFromGroup(conversationId: string, memberId: string): Promise<UseCaseResult<void>> {
-        const response = await this.omegaFyChatClient.removeMemberFromGroup(conversationId, memberId);
-        return this.toUseCaseResult(response);
-    }
+public async addMemberToGroup(conversationId: string, request: AddMemberToGroupRequest): Promise<UseCaseResult<AddMemberToGroupResult>> {
+    const response = await this.omegaFyChatClient.addMemberToGroup(conversationId, request);
+    return this.toUseCaseResult(response);
+}
 
-    public async getUsers(request: GetUsersRequest): Promise<UseCaseResult<GetUsersResult>> {
-        const response = await this.omegaFyChatClient.getUsers(request);
+public async changeGroupConfig(conversationId: string, request: ChangeGroupConfigRequest): Promise<UseCaseResult<ChangeGroupConfigResult>> {
+    const response = await this.omegaFyChatClient.changeGroupConfig(conversationId, request);
+    return this.toUseCaseResult(response);
+}
+
+public async removeMemberFromGroup(conversationId: string, memberId: string): Promise<UseCaseResult<void>> {
+    const response = await this.omegaFyChatClient.removeMemberFromGroup(conversationId, memberId);
+    return this.toUseCaseResult(response);
+}
+
+public async getUsers(request: GetUsersRequest): Promise<UseCaseResult<GetUsersResult>> {
+    const response = await this.omegaFyChatClient.getUsers(request);
         return this.toUseCaseResult(response);
     }
 

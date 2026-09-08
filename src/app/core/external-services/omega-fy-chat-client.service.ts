@@ -55,34 +55,42 @@ export class OmegaFyChatClient {
         return this.get<GetUserConversationMessagesResult>(`Chat/me/${conversationId}/messages?Take=${pagination.take}&Cursor=${pagination.cursor ?? ''}`);
     }
 
-    public async sendMessage(conversationId: string, request: SendMessageRequest): Promise<ApiResponse<SendMessageResult>> {
-        return this.post<SendMessageRequest, SendMessageResult>(`Chat/${conversationId}/messages`, request);
-    }
+public async sendMessage(conversationId: string, request: SendMessageRequest): Promise<ApiResponse<SendMessageResult>> {
+    return this.post<SendMessageRequest, SendMessageResult>(`Chat/${conversationId}/messages`, request);
+}
 
-    public async createGroupConversation(request: CreateGroupConversationRequest): Promise<ApiResponse<CreateGroupConversationResult>> {
-        return this.post<CreateGroupConversationRequest, CreateGroupConversationResult>('Chat', request);
-    }
+public async deleteMessage(conversationId: string, messageId: string): Promise<ApiResponse<void>> {
+    return this.delete<null, void>(`Chat/${conversationId}/messages/${messageId}`, null);
+}
 
-    public async addMemberToGroup(conversationId: string, request: AddMemberToGroupRequest): Promise<ApiResponse<AddMemberToGroupResult>> {
-        return this.post<AddMemberToGroupRequest, AddMemberToGroupResult>(`Chat/${conversationId}/members`, request);
-    }
+public async markMessageAsRead(conversationId: string, messageId: string): Promise<ApiResponse<void>> {
+    return this.post<{ messageId: string }, void>(`Chat/${conversationId}/messages/${messageId}/read`, { messageId });
+}
 
-    public async changeGroupConfig(conversationId: string, request: ChangeGroupConfigRequest): Promise<ApiResponse<ChangeGroupConfigResult>> {
-        return this.put<ChangeGroupConfigRequest, ChangeGroupConfigResult>(`Chat/${conversationId}/group-config`, request);
-    }
+public async createGroupConversation(request: CreateGroupConversationRequest): Promise<ApiResponse<CreateGroupConversationResult>> {
+    return this.post<CreateGroupConversationRequest, CreateGroupConversationResult>('Chat', request);
+}
 
-    public async removeMemberFromGroup(conversationId: string, memberId: string): Promise<ApiResponse<void>> {
-        return this.delete<void, void>(`Chat/${conversationId}/members/${memberId}`, undefined as any);
-    }
+public async addMemberToGroup(conversationId: string, request: AddMemberToGroupRequest): Promise<ApiResponse<AddMemberToGroupResult>> {
+    return this.post<AddMemberToGroupRequest, AddMemberToGroupResult>(`Chat/${conversationId}/members`, request);
+}
 
-    public async getUsers(request: GetUsersRequest): Promise<ApiResponse<GetUsersResult>> {
-        const params = new URLSearchParams();
-        if (request.displayName) params.append('DisplayName', request.displayName);
-        if (request.status) params.append('Status', request.status.toString());
+public async changeGroupConfig(conversationId: string, request: ChangeGroupConfigRequest): Promise<ApiResponse<ChangeGroupConfigResult>> {
+    return this.put<ChangeGroupConfigRequest, ChangeGroupConfigResult>(`Chat/${conversationId}/group-config`, request);
+}
 
-        const queryString = params.toString();
-        return this.get<GetUsersResult>(queryString ? `Chat/users?${queryString}` : 'Chat/users');
-    }
+public async removeMemberFromGroup(conversationId: string, memberId: string): Promise<ApiResponse<void>> {
+    return this.delete<void, void>(`Chat/${conversationId}/members/${memberId}`, undefined as any);
+}
+
+public async getUsers(request: GetUsersRequest): Promise<ApiResponse<GetUsersResult>> {
+    const params = new URLSearchParams();
+    if (request.displayName) params.append('DisplayName', request.displayName);
+    if (request.status) params.append('Status', request.status.toString());
+
+    const queryString = params.toString();
+    return this.get<GetUsersResult>(queryString ? `Chat/users?${queryString}` : 'Chat/users');
+}
 
     private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {
         try {

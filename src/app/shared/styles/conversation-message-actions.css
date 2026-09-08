@@ -1,0 +1,17 @@
+.message__actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.message__action-button {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.message__action-button:hover {
+    opacity: 1;
+}
