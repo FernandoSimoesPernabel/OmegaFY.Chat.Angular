@@ -1,8 +1,7 @@
 export enum FriendshipStatus {
-    NotFriends = 0,
-    SentRequest = 1,
-    ReceivedRequest = 2,
-    Friends = 3
+    Pending = 0,
+    Accepted = 1,
+    Rejected = 2
 }
 
 export type UserModel = {

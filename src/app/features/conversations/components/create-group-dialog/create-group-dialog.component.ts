@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ChatFacade } from '../../facades/chat.facade';
 import { CreateGroupConversationRequest } from '../../../../core/models/conversations/create-group-conversation-request';
+import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
 
 @Component({
     selector: 'app-create-group-dialog',
@@ -17,6 +18,7 @@ import { CreateGroupConversationRequest } from '../../../../core/models/conversa
         MatInputModule,
         FormsModule
     ],
+    providers: [ComponentLoadingService],
     templateUrl: './create-group-dialog.component.html',
     styleUrl: './create-group-dialog.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,37 +30,32 @@ export class CreateGroupDialogComponent {
 
     private readonly notificationService = inject(NotificationService);
 
-    protected readonly groupName = signal('');
+    public readonly loadingService = inject(ComponentLoadingService);
 
-    protected readonly maxMembers = signal(10);
+    protected groupName = '';
 
-    protected readonly isLoading = signal(false);
+    protected maxMembers = 10;
 
     public async createGroup(): Promise<void> {
-        if (this.isLoading())
+        if (this.loadingService.isLoading())
             return;
 
-        const name = this.groupName().trim();
-        const max = this.maxMembers();
+        const request: CreateGroupConversationRequest = {
+            groupName: this.groupName.trim(),
+            maxNumberOfMembers: this.maxMembers
+        };
 
-        if (!name) {
+        if (!request.groupName) {
             this.notificationService.error('Nome do grupo é obrigatório.');
             return;
         }
 
-        if (max < 2) {
+        if (request.maxNumberOfMembers < 2) {
             this.notificationService.error('O número máximo de membros deve ser no mínimo 2.');
             return;
         }
 
-        this.isLoading.set(true);
-
-        try {
-            const request: CreateGroupConversationRequest = {
-                groupName: name,
-                maxNumberOfMembers: max
-            };
-
+        await this.loadingService.trackAsync(async () => {
             const result = await this.chatFacade.createGroupConversation(request);
 
             if (!result.success) {
@@ -67,9 +64,7 @@ export class CreateGroupDialogComponent {
             }
 
             this.dialogRef.close(result.data.conversationId);
-        } finally {
-            this.isLoading.set(false);
-        }
+        });
     }
 
     public close(): void {

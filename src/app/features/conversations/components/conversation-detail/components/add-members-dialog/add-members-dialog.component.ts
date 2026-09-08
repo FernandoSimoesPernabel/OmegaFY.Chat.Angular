@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -32,7 +32,7 @@ import { GetUsersRequest } from '../../../../../../core/models/conversations/get
     styleUrl: './add-members-dialog.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddMembersDialogComponent {
+export class AddMembersDialogComponent implements OnInit {
     private readonly dialogRef = inject(MatDialogRef<AddMembersDialogComponent>);
 
     private readonly chatFacade = inject(ChatFacade);
@@ -49,25 +49,22 @@ export class AddMembersDialogComponent {
 
     protected readonly availableUsers = signal<UserModel[]>([]);
 
-    protected readonly filteredUsers = computed(() => {
-        const query = this.searchQuery().toLowerCase();
-        if (!query) return this.availableUsers();
-
-        return this.availableUsers().filter(user =>
-            user.displayName.toLowerCase().includes(query) ||
-            user.email.toLowerCase().includes(query)
-        );
-    });
-
     protected readonly isUserAlreadyMember = (userId: string): boolean => {
         return this.currentMembers().some(m => m.userId === userId);
     };
 
-    constructor() {
-        effect(async () => {
-            if (this.conversationId() && this.currentMembers()) {
-                await this.loadUsers();
+    public async ngOnInit(): Promise<void> {
+        await this.loadingService.trackAsync(async () => {
+            const request: GetUsersRequest = {};
+            const result = await this.chatFacade.getUsers(request);
+
+            if (!result.success) {
+                this.notificationService.error('Não foi possível carregar a lista de usuários.');
+                this.availableUsers.set([]);
+                return;
             }
+
+            this.availableUsers.set(result.data.users);
         });
     }
 
@@ -84,6 +81,7 @@ export class AddMembersDialogComponent {
             }
 
             const user = this.availableUsers().find(u => u.id === userId);
+
             if (user) {
                 this.notificationService.success(`${user.displayName} foi adicionado ao grupo.`);
             }
@@ -94,20 +92,5 @@ export class AddMembersDialogComponent {
 
     public close(): void {
         this.dialogRef.close();
-    }
-
-    private async loadUsers(): Promise<void> {
-        await this.loadingService.trackAsync(async () => {
-            const request: GetUsersRequest = {};
-            const result = await this.chatFacade.getUsers(request);
-
-            if (!result.success) {
-                this.notificationService.error('Não foi possível carregar a lista de usuários.');
-                this.availableUsers.set([]);
-                return;
-            }
-
-            this.availableUsers.set(result.data.users);
-        });
     }
 }

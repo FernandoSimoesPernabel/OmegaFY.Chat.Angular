@@ -78,11 +78,10 @@ export class OmegaFyChatClient {
     public async getUsers(request: GetUsersRequest): Promise<ApiResponse<GetUsersResult>> {
         const params = new URLSearchParams();
         if (request.displayName) params.append('DisplayName', request.displayName);
-        if (request.status !== undefined && request.status !== null) params.append('Status', request.status.toString());
+        if (request.status) params.append('Status', request.status.toString());
 
         const queryString = params.toString();
-        const endpoint = queryString ? `Chat/users?${queryString}` : 'Chat/users';
-        return this.get<GetUsersResult>(endpoint);
+        return this.get<GetUsersResult>(queryString ? `Chat/users?${queryString}` : 'Chat/users');
     }
 
     private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {

@@ -15,7 +15,7 @@
     }
 
     <div class="add-members-dialog__list" [attr.aria-busy]="loadingService.isLoading()">
-        @for (user of filteredUsers(); track user.id) {
+        @for (user of availableUsers(); track user.id) {
             <article class="user-card">
                 <span class="user-card__avatar" aria-hidden="true">
                     <app-display-name-initial [displayName]="user.displayName" />
@@ -43,11 +43,7 @@
         } @empty {
             @if (!loadingService.isLoading()) {
                 <p class="add-members-dialog__empty">
-                    @if (searchQuery()) {
-                        Nenhum usuário encontrado.
-                    } @else {
-                        Nenhum usuário disponível.
-                    }
+                    Nenhum usuário disponível.
                 </p>
             }
         }
