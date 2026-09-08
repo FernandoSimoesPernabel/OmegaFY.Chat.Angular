@@ -44,7 +44,7 @@
 }
 
 .message__actions {
-    justify-content: flex-start;
+    justify-content: flex-end;
 }
 
 .message__action-button {

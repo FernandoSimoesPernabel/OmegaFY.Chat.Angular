@@ -1,4 +1,4 @@
-<article class="message message--deleted">
+<article class="message message--deleted" [class.message--mine]="message().isMessageFromMember" [class.message--other]="!message().isMessageFromMember">
     <p>
         <span class="material-icons message__content-icon" aria-hidden="true">block</span>
         Mensagem deletada

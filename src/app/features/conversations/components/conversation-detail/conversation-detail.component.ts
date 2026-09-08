@@ -127,9 +127,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     }
 
     public onMessageDeleted(deletedMessage: MessageFromMemberModel): void {
-        this.messages.update(messages =>
-            messages.map(message => message.messageId === deletedMessage.messageId ? deletedMessage : message)
-        );
+        this.messages.update(messages => messages.map(message => message.messageId === deletedMessage.messageId ? deletedMessage : message));
     }
 
     private async refreshMessagesWithMerge(): Promise<void> {
@@ -282,7 +280,7 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         if (!messageId)
             return;
 
-        const messageIndex = this.messages().findIndex(m => m.messageId === messageId);
+        const messageIndex = this.messages().findIndex(message => message.messageId === messageId);
 
         if (messageIndex < 0)
             return;
@@ -297,12 +295,6 @@ export class ConversationDetailComponent extends DestroyableComponent implements
         if (!result.success)
             return;
 
-        this.messages.update(messages =>
-            messages.map((message, index) =>
-                index === messageIndex && message.status === MemberMessageStatus.Unread
-                    ? { ...message, status: MemberMessageStatus.Read }
-                    : message
-            )
-        );
+        this.messages.update(messages => messages.map((message, index) => index === messageIndex ? { ...message, status: MemberMessageStatus.Read } : message));
     }
 }
