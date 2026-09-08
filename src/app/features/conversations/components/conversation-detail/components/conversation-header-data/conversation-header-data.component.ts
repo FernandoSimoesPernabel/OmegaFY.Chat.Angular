@@ -12,6 +12,8 @@ import { ComponentLoadingService } from '../../../../../../shared/services/compo
 import { NotificationService } from '../../../../../../shared/services/notification.service';
 import { ChatFacade } from '../../../../facades/chat.facade';
 import { ConversationMembersDialogComponent } from '../conversation-members-dialog/conversation-members-dialog.component';
+import { AuthService } from '../../../../../../core/auth/services/auth.service';
+import { EditGroupDialogComponent } from '../edit-group-dialog/edit-group-dialog.component';
 
 @Component({
     selector: 'app-conversation-header-data',
@@ -43,12 +45,22 @@ export class ConversationHeaderDataComponent implements OnInit {
         return Math.max(0, membersCount - this.membersPreview().length);
     });
 
+    protected readonly isGroupChat = computed(() => {
+        return this.conversation()?.type === ConversationType.GroupChat;
+    });
+
+    protected readonly isCreator = computed(() => {
+        const userId = this.authService.getLoggedUserId();
+        return this.conversation()?.groupConfig?.createdByUserId === userId;
+    });
+
     public readonly conversationId = input.required<string>();
 
     constructor(
         private readonly chatFacade: ChatFacade,
         private readonly dialog: MatDialog,
         private readonly notificationService: NotificationService,
+        private readonly authService: AuthService,
         public readonly loadingService: ComponentLoadingService) { }
 
     public async ngOnInit(): Promise<void> {
@@ -68,6 +80,23 @@ export class ConversationHeaderDataComponent implements OnInit {
             autoFocus: false
         }).afterClosed().subscribe(async (result) => {
             if (result?.refreshMembers)
+                await this.loadConversationData();
+        });
+    }
+
+    public openEditGroupDialog(): void {
+        const conversation = this.conversation();
+
+        if (!conversation)
+            return;
+
+        this.dialog.open(EditGroupDialogComponent, {
+            data: { conversation: conversation },
+            width: '560px',
+            maxWidth: '95vw',
+            autoFocus: false
+        }).afterClosed().subscribe(async (result) => {
+            if (result?.updated)
                 await this.loadConversationData();
         });
     }

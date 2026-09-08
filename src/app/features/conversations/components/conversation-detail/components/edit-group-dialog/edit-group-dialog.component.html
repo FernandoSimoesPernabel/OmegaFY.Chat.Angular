@@ -1,0 +1,36 @@
+<h2 mat-dialog-title class="edit-group-dialog__title">
+    <span class="material-icons" aria-hidden="true">edit</span>
+    Editar grupo
+</h2>
+
+<mat-dialog-content class="edit-group-dialog__content">
+    @if (loadingService.isLoading()) {
+        <div class="edit-group-dialog__loading">
+            <mat-spinner diameter="40"></mat-spinner>
+        </div>
+    }
+
+    <mat-form-field appearance="outline" class="edit-group-dialog__field">
+        <mat-label>Nome do grupo</mat-label>
+        <input matInput [(ngModel)]="groupName" [disabled]="loadingService.isLoading()" />
+        <span matPrefix class="material-icons">group_work</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="edit-group-dialog__field">
+        <mat-label>Número máximo de membros</mat-label>
+        <input matInput type="number" min="2" [(ngModel)]="maxMembers" [disabled]="loadingService.isLoading()" />
+        <span matPrefix class="material-icons">people</span>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button type="button" mat-button (click)="close()" [disabled]="loadingService.isLoading()">
+        <span class="material-icons" aria-hidden="true">close</span>
+        Cancelar
+    </button>
+
+    <button type="button" mat-raised-button color="primary" (click)="saveChanges()" [disabled]="loadingService.isLoading()">
+        <span class="material-icons" aria-hidden="true">save</span>
+        Salvar
+    </button>
+</mat-dialog-actions>

@@ -10,10 +10,15 @@ import { ConversationTypeLabelComponent } from '../../../../../../shared/compone
 import { ConversationDateTimePipe } from '../../../../../../shared/pipes/conversation-date-time.pipe';
 import { AuthService } from '../../../../../../core/auth/services/auth.service';
 import { AddMembersDialogComponent } from '../add-members-dialog/add-members-dialog.component';
+import { EditGroupDialogComponent } from '../edit-group-dialog/edit-group-dialog.component';
+import { ChatFacade } from '../../../../facades/chat.facade';
+import { NotificationService } from '../../../../../../shared/services/notification.service';
+import { ComponentLoadingService } from '../../../../../../shared/services/component-loading.service';
 
 @Component({
     selector: 'app-conversation-members-dialog',
     imports: [MatButtonModule, MatDialogModule, DisplayNameInitialComponent, ConversationTypeLabelComponent, ConversationStatusLabelComponent, ConversationDateTimePipe],
+    providers: [ComponentLoadingService],
     templateUrl: './conversation-members-dialog.component.html',
     styleUrl: './conversation-members-dialog.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,30 +32,77 @@ export class ConversationMembersDialogComponent {
 
     private readonly authService = inject(AuthService);
 
+    private readonly chatFacade = inject(ChatFacade);
+
+    private readonly notificationService = inject(NotificationService);
+
+    public readonly loadingService = inject(ComponentLoadingService);
+
     protected readonly conversationType = ConversationType;
 
-    protected readonly conversation = this.dialogData.conversation;
+    protected readonly conversation = signal<ConversationAndMembersModel>(this.dialogData.conversation);
 
-    protected readonly isGroupChat = computed(() => this.conversation.type === ConversationType.GroupChat);
+    protected readonly isGroupChat = computed(() => this.conversation().type === ConversationType.GroupChat);
 
     protected readonly isCreator = computed(() => {
         const userId = this.authService.getLoggedUserId();
-        return this.conversation.groupConfig?.createdByUserId === userId;
+        return this.conversation().groupConfig?.createdByUserId === userId;
     });
 
     protected readonly canAddMembers = computed(() => this.isGroupChat() && this.isCreator());
 
+    constructor(private readonly componentLoadingService: ComponentLoadingService) { }
+
     public openAddMembersDialog(): void {
         this.dialog.open(AddMembersDialogComponent, {
             data: {
-                conversationId: this.conversation.conversationId,
-                currentMembers: this.conversation.members
+                conversationId: this.conversation().conversationId,
+                currentMembers: this.conversation().members
             },
             width: '560px',
             maxWidth: '95vw',
             autoFocus: false
         }).afterClosed().subscribe(() => {
             this.dialogRef.close({ refreshMembers: true });
+        });
+    }
+
+    public openEditGroupDialog(): void {
+        this.dialog.open(EditGroupDialogComponent, {
+            data: {
+                conversation: this.conversation()
+            },
+            width: '560px',
+            maxWidth: '95vw',
+            autoFocus: false
+        }).afterClosed().subscribe((result) => {
+            if (result?.updated)
+                this.dialogRef.close({ refreshMembers: true });
+        });
+    }
+
+    public async removeMember(memberId: string): Promise<void> {
+        if (this.loadingService.isLoading())
+            return;
+
+        const confirmed = window.confirm('Tem certeza que deseja remover este membro do grupo?');
+
+        if (!confirmed)
+            return;
+
+        await this.loadingService.trackAsync(async () => {
+            const result = await this.chatFacade.removeMemberFromGroup(this.conversation().conversationId, memberId);
+
+            if (!result.success) {
+                this.notificationService.error('Não foi possível remover o membro.');
+                return;
+            }
+
+            const updatedMembers = this.conversation().members.filter(m => m.memberId !== memberId);
+            const updated = this.conversation();
+            updated.members = updatedMembers;
+            this.conversation.set({ ...updated });
+            this.notificationService.success('Membro removido com sucesso.');
         });
     }
 
