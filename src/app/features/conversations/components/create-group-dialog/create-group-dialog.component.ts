@@ -25,7 +25,7 @@ export class CreateGroupDialogComponent {
 
     protected maxMembers = signal<number>(100);
 
-    public constructor(
+    constructor(
         private readonly dialogRef: MatDialogRef<CreateGroupDialogComponent>,
         private readonly chatFacade: ChatFacade,
         private readonly notificationService: NotificationService,

@@ -6,7 +6,7 @@ import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core';
     standalone: true
 })
 export class ConversationDateTimePipe implements PipeTransform {
-    public constructor(@Inject(LOCALE_ID) private readonly localeId: string) { }
+    constructor(@Inject(LOCALE_ID) private readonly localeId: string) { }
 
     public transform(value: string | Date | null | undefined): string | Date | null | undefined {
         if (!value)

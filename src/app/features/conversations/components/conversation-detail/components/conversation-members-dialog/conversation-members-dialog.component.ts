@@ -35,7 +35,7 @@ export class ConversationMembersDialogComponent {
 
     protected readonly canAddMembers = computed(() => this.isGroupChat() && this.isCreator());
 
-    public constructor(
+    constructor(
         private readonly dialogRef: MatDialogRef<ConversationMembersDialogComponent>,
         private readonly dialog: MatDialog,
         private readonly authService: AuthService,

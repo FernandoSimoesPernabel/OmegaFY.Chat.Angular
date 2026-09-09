@@ -11,7 +11,7 @@ import { ConfirmationDialogData } from '../../models/dialogs/confirmation-dialog
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmationDialogComponent {
-    public constructor(
+    constructor(
         private readonly dialogRef: MatDialogRef<ConfirmationDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public readonly data: ConfirmationDialogData) { }
 

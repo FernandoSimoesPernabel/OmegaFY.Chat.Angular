@@ -3,7 +3,7 @@ import { NotificationService } from '../../../shared/services/notification.servi
 
 @Injectable({ providedIn: 'root' })
 export class GroupDialogValidationService {
-    public constructor(private readonly notificationService: NotificationService) { }
+    constructor(private readonly notificationService: NotificationService) { }
 
     public validateForm(groupName: string, maxMembers: number): boolean {
         if (!groupName.trim()) {

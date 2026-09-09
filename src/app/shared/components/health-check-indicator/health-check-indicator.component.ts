@@ -15,7 +15,7 @@ export class HealthCheckIndicatorComponent extends DestroyableComponent implemen
 
   public readonly healthStatus = signal<HealthCheckStatus | undefined>(undefined);
 
-  public constructor(private readonly healthCheckService: HealthCheckService) {
+  constructor(private readonly healthCheckService: HealthCheckService) {
     super();
   }
 

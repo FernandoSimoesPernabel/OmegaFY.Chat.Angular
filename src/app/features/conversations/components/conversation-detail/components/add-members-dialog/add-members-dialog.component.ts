@@ -47,7 +47,7 @@ export class AddMembersDialogComponent {
         return this.currentMembers().some(member => member.userId === userId);
     };
 
-    public constructor(
+    constructor(
         private readonly dialogRef: MatDialogRef<AddMembersDialogComponent>,
         private readonly chatFacade: ChatFacade,
         private readonly notificationService: NotificationService,

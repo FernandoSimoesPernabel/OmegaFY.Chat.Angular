@@ -28,7 +28,7 @@ export class EditGroupDialogComponent {
 
     protected maxMembers = signal<number>(100);
 
-    public constructor(
+    constructor(
         private readonly dialogRef: MatDialogRef<EditGroupDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private readonly dialogData: { conversation: ConversationAndMembersModel },
         private readonly chatFacade: ChatFacade,

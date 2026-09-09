@@ -17,7 +17,7 @@ const SIGNAL_R_REFRESH_INTERVAL = 10000;
 export class SignalRConnectionLoopComponent extends DestroyableComponent implements OnInit, OnDestroy {
     private isConnectAttemptInProgress = false;
 
-    public constructor(
+    constructor(
         private readonly signalRService: SignalRService,
         private readonly authService: AuthService) {
 
