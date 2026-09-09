@@ -1,0 +1,24 @@
+.create-group-dialog__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+.create-group-dialog__title .material-icons {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+}
+
+.create-group-dialog__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 0;
+}
+
+.create-group-dialog__field {
+    width: 100%;
+}

@@ -1,0 +1,57 @@
+<h2 mat-dialog-title class="add-members-dialog__title">
+    <span class="material-icons" aria-hidden="true">person_add</span>
+    Adicionar membros
+</h2>
+
+<mat-dialog-content class="add-members-dialog__content">
+    <mat-form-field appearance="outline" class="add-members-dialog__search">
+        <mat-label>Pesquisar usuários</mat-label>
+        <input matInput [(ngModel)]="searchQuery" [disabled]="loadingService.isLoading()" />
+        <span matPrefix class="material-icons">search</span>
+    </mat-form-field>
+
+    @if (loadingService.isLoading()) {
+        <app-loading-overlay />
+    }
+
+    <div class="add-members-dialog__list" [attr.aria-busy]="loadingService.isLoading()">
+        @for (user of filteredUsers(); track user.id) {
+            <article class="user-card">
+                <span class="user-card__avatar" aria-hidden="true">
+                    <app-display-name-initial [displayName]="user.displayName" />
+                </span>
+
+                <div class="user-card__identity">
+                    <strong>{{ user.displayName }}</strong>
+                    <small>{{ user.email }}</small>
+                </div>
+
+                @if (isUserAlreadyMember(user.id)) {
+                    <span class="user-card__status">
+                        <span class="material-icons">check_circle</span>
+                        Já na conversa
+                    </span>
+                } @else {
+                    <button type="button" mat-stroked-button class="user-card__action" (click)="addMember(user.id)"
+                        [disabled]="loadingService.isLoading()">
+                        <span class="material-icons">person_add</span>
+                        Adicionar
+                    </button>
+                }
+            </article>
+        } @empty {
+            @if (!loadingService.isLoading()) {
+                <p class="add-members-dialog__empty">
+                    Nenhum usuário disponível.
+                </p>
+            }
+        }
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button type="button" mat-button (click)="close()" [disabled]="loadingService.isLoading()">
+        <span class="material-icons" aria-hidden="true">close</span>
+        Fechar
+    </button>
+</mat-dialog-actions>

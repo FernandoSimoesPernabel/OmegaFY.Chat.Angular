@@ -1,0 +1,28 @@
+<h2 mat-dialog-title class="create-group-dialog__title">
+    <span class="material-icons" aria-hidden="true">groups</span>
+    Criar novo grupo
+</h2>
+
+<mat-dialog-content class="create-group-dialog__content">
+    <app-group-dialog-form [isLoading]="loadingService.isLoading()" [groupName]="groupName()"
+        [maxMembers]="maxMembers()" (groupNameChange)="groupName.set($event)"
+        (maxMembersChange)="maxMembers.set($event)" />
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button type="button" mat-button (click)="close()" [disabled]="loadingService.isLoading()">
+        <span class="material-icons" aria-hidden="true">close</span>
+        Cancelar
+    </button>
+    <button type="button" mat-flat-button color="primary" (click)="createGroup()"
+        [disabled]="loadingService.isLoading()">
+        <ng-container>
+            @if (loadingService.isLoading()) {
+                <span>Criando...</span>
+            } @else {
+                <span class="material-icons" aria-hidden="true">add</span>
+                <span>Criar</span>
+            }
+        </ng-container>
+    </button>
+</mat-dialog-actions>
