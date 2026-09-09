@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -31,14 +31,6 @@ import { ChatFacade } from '../../../../facades/chat.facade';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddMembersDialogComponent {
-    private readonly dialogRef = inject(MatDialogRef<AddMembersDialogComponent>);
-
-    private readonly chatFacade = inject(ChatFacade);
-
-    private readonly notificationService = inject(NotificationService);
-
-    public readonly loadingService = inject(ComponentLoadingService);
-
     public readonly conversationId = input.required<string>();
 
     public readonly currentMembers = input.required<MemberModel[]>();
@@ -55,7 +47,12 @@ export class AddMembersDialogComponent {
         return this.currentMembers().some(member => member.userId === userId);
     };
 
-    constructor() {
+    public constructor(
+        private readonly dialogRef: MatDialogRef<AddMembersDialogComponent>,
+        private readonly chatFacade: ChatFacade,
+        private readonly notificationService: NotificationService,
+        public readonly loadingService: ComponentLoadingService) {
+
         effect(async () => {
             await this.loadingService.trackAsync(async () => {
                 const result = await this.chatFacade.getUsers({ displayName: this.searchQuery() });

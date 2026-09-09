@@ -1,22 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { CreateGroupConversationRequest } from '../../../../core/models/conversations/create-group-conversation-request';
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ChatFacade } from '../../facades/chat.facade';
+import { GroupDialogValidationService } from '../../services/group-dialog-validation.service';
+import { GroupDialogFormComponent } from '../shared/group-dialog-form/group-dialog-form.component';
 
 @Component({
     selector: 'app-create-group-dialog',
     imports: [
         MatButtonModule,
         MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        FormsModule
+        GroupDialogFormComponent
     ],
     providers: [ComponentLoadingService],
     templateUrl: './create-group-dialog.component.html',
@@ -24,43 +21,30 @@ import { ChatFacade } from '../../facades/chat.facade';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateGroupDialogComponent {
-    private readonly dialogRef = inject(MatDialogRef<CreateGroupDialogComponent>);
+    protected groupName = signal<string>('');
 
-    private readonly chatFacade = inject(ChatFacade);
+    protected maxMembers = signal<number>(100);
 
-    private readonly notificationService = inject(NotificationService);
-
-    public readonly loadingService = inject(ComponentLoadingService);
-
-    protected groupName = '';
-
-    protected maxMembers = 100;
+    public constructor(
+        private readonly dialogRef: MatDialogRef<CreateGroupDialogComponent>,
+        private readonly chatFacade: ChatFacade,
+        private readonly notificationService: NotificationService,
+        private readonly validationService: GroupDialogValidationService,
+        public readonly loadingService: ComponentLoadingService) { }
 
     public async createGroup(): Promise<void> {
         if (this.loadingService.isLoading())
             return;
 
-        const request: CreateGroupConversationRequest = {
-            groupName: this.groupName.trim(),
-            maxNumberOfMembers: this.maxMembers
-        };
-
-        if (!request.groupName) {
-            this.notificationService.error('Nome do grupo é obrigatório.');
+        if (!this.validationService.validateForm(this.groupName(), this.maxMembers()))
             return;
-        }
-
-        if (request.maxNumberOfMembers < 2) {
-            this.notificationService.error('O número máximo de membros deve ser no mínimo 2.');
-            return;
-        }
-
-        if (request.maxNumberOfMembers > 100) {
-            this.notificationService.error('O número máximo de membros deve ser no máximo 100.');
-            return;
-        }
 
         await this.loadingService.trackAsync(async () => {
+            const request: CreateGroupConversationRequest = {
+                groupName: this.groupName().trim(),
+                maxNumberOfMembers: this.maxMembers()
+            };
+
             const result = await this.chatFacade.createGroupConversation(request);
 
             if (!result.success) {

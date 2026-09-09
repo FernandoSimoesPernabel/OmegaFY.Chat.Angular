@@ -23,23 +23,9 @@ import { EditGroupDialogComponent } from '../edit-group-dialog/edit-group-dialog
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConversationMembersDialogComponent {
-    private readonly dialogRef = inject(MatDialogRef<ConversationMembersDialogComponent>);
-
-    private readonly dialogData = inject<{ conversation: ConversationAndMembersModel }>(MAT_DIALOG_DATA);
-
-    private readonly dialog = inject(MatDialog);
-
-    private readonly authService = inject(AuthService);
-
-    private readonly chatFacade = inject(ChatFacade);
-
-    private readonly notificationService = inject(NotificationService);
-
-    public readonly loadingService = inject(ComponentLoadingService);
-
     protected readonly conversationType = ConversationType;
 
-    protected readonly conversation = signal<ConversationAndMembersModel>(this.dialogData.conversation);
+    protected readonly conversation = signal<ConversationAndMembersModel>(inject(MAT_DIALOG_DATA).conversation);
 
     protected readonly isGroupChat = computed(() => this.conversation().type === ConversationType.GroupChat);
 
@@ -48,6 +34,14 @@ export class ConversationMembersDialogComponent {
     });
 
     protected readonly canAddMembers = computed(() => this.isGroupChat() && this.isCreator());
+
+    public constructor(
+        private readonly dialogRef: MatDialogRef<ConversationMembersDialogComponent>,
+        private readonly dialog: MatDialog,
+        private readonly authService: AuthService,
+        private readonly chatFacade: ChatFacade,
+        private readonly notificationService: NotificationService,
+        public readonly loadingService: ComponentLoadingService) { }
 
     public openAddMembersDialog(): void {
         this.dialog.open(AddMembersDialogComponent, {

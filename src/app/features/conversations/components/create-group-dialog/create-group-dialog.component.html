@@ -4,15 +4,9 @@
 </h2>
 
 <mat-dialog-content class="create-group-dialog__content">
-    <mat-form-field appearance="outline" class="create-group-dialog__field">
-        <mat-label>Nome do grupo</mat-label>
-        <input matInput [(ngModel)]="groupName" [disabled]="loadingService.isLoading()" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="create-group-dialog__field">
-        <mat-label>Máximo de membros</mat-label>
-        <input matInput type="number" [(ngModel)]="maxMembers" [disabled]="loadingService.isLoading()" min="2" />
-    </mat-form-field>
+    <app-group-dialog-form [isLoading]="loadingService.isLoading()" [groupName]="groupName()"
+        [maxMembers]="maxMembers()" (groupNameChange)="groupName.set($event)"
+        (maxMembersChange)="maxMembers.set($event)" />
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

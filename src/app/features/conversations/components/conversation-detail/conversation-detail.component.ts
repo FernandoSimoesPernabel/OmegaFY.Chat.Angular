@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChildren, ElementRef, signal, QueryList, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -6,8 +6,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { auditTime, timer } from 'rxjs';
 import { CursorPagination } from '../../../../core/models/base/cursor-pagination';
 import { GetUserConversationMessagesResult } from '../../../../core/models/conversations/get-user-conversation-messages-result';
-import { MessageFromMemberModel } from '../../../../core/models/conversations/message-from-member-model';
 import { MemberMessageStatus } from '../../../../core/models/conversations/member-message-status';
+import { MessageFromMemberModel } from '../../../../core/models/conversations/message-from-member-model';
 import { SignalRConnectionStatus } from '../../../../core/models/signal-r/signal-r-connection-status';
 import { SignalREventType } from '../../../../core/models/signal-r/signal-r-event-type';
 import { SignalRService } from '../../../../core/services/signal-r.service';
@@ -62,13 +62,14 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     @ViewChild('messagesContainer', { read: ElementRef }) private messagesContainer?: ElementRef<HTMLDivElement>;
 
     constructor(
+        destroyRef: DestroyRef,
         private readonly route: ActivatedRoute,
         private readonly chatFacade: ChatFacade,
         private readonly notificationService: NotificationService,
         private readonly signalRService: SignalRService,
         public readonly loadingService: ComponentLoadingService) {
 
-        super();
+        super(destroyRef);
 
         this.conversationId = this.route.snapshot.paramMap.get('id') ?? '';
     }

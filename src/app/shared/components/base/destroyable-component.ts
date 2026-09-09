@@ -1,5 +1,9 @@
-import { DestroyRef, inject } from '@angular/core';
+import { DestroyRef } from '@angular/core';
 
 export abstract class DestroyableComponent {
-    protected readonly destroyRef = inject(DestroyRef);
+    protected readonly destroyRef: DestroyRef;
+
+    public constructor(destroyRef: DestroyRef) {
+        this.destroyRef = destroyRef;
+    }
 }

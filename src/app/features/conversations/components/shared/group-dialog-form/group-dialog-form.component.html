@@ -1,0 +1,17 @@
+<mat-form-field appearance="outline" class="group-dialog-form__field">
+    <mat-label>Nome do grupo</mat-label>
+    <input matInput [value]="groupName()" (input)="onGroupNameChange($any($event.target).value)"
+        [disabled]="isLoading()" type="text" />
+    @if (showPrefixIcons()) {
+        <span matPrefix class="material-icons">group_work</span>
+    }
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="group-dialog-form__field">
+    <mat-label>Máximo de membros</mat-label>
+    <input matInput [value]="maxMembers()" (input)="onMaxMembersChange($any($event.target).valueAsNumber)"
+        [disabled]="isLoading()" type="number" min="2" />
+    @if (showPrefixIcons()) {
+        <span matPrefix class="material-icons">people</span>
+    }
+</mat-form-field>
