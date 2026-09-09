@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { timer } from 'rxjs';
 import { AuthService } from '../../../core/auth/services/auth.service';
@@ -18,11 +18,10 @@ export class SignalRConnectionLoopComponent extends DestroyableComponent impleme
     private isConnectAttemptInProgress = false;
 
     public constructor(
-        destroyRef: DestroyRef,
         private readonly signalRService: SignalRService,
         private readonly authService: AuthService) {
 
-        super(destroyRef);
+        super();
     }
 
     public ngOnInit(): void {

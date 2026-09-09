@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { timer } from 'rxjs';
 import { HealthCheckStatus } from '../../../core/models/health-check/health-check-status';
@@ -15,11 +15,8 @@ export class HealthCheckIndicatorComponent extends DestroyableComponent implemen
 
   public readonly healthStatus = signal<HealthCheckStatus | undefined>(undefined);
 
-  public constructor(
-    destroyRef: DestroyRef,
-    private readonly healthCheckService: HealthCheckService) {
-      
-    super(destroyRef);
+  public constructor(private readonly healthCheckService: HealthCheckService) {
+    super();
   }
 
   public async ngOnInit(): Promise<void> {

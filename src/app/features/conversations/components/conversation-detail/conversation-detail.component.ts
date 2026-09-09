@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -62,14 +62,13 @@ export class ConversationDetailComponent extends DestroyableComponent implements
     @ViewChild('messagesContainer', { read: ElementRef }) private messagesContainer?: ElementRef<HTMLDivElement>;
 
     constructor(
-        destroyRef: DestroyRef,
         private readonly route: ActivatedRoute,
         private readonly chatFacade: ChatFacade,
         private readonly notificationService: NotificationService,
         private readonly signalRService: SignalRService,
         public readonly loadingService: ComponentLoadingService) {
 
-        super(destroyRef);
+        super();
 
         this.conversationId = this.route.snapshot.paramMap.get('id') ?? '';
     }
