@@ -1,19 +1,17 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { signal } from '@angular/core';
-import { LoadingOverlayComponent } from '../../../../../../shared/components/loading-overlay/loading-overlay.component';
+import { MemberModel } from '../../../../../../core/models/conversations/member-model';
+import { UserModel } from '../../../../../../core/models/conversations/user-model';
 import { DisplayNameInitialComponent } from '../../../../../../shared/components/display-name-initial/display-name-initial.component';
+import { LoadingOverlayComponent } from '../../../../../../shared/components/loading-overlay/loading-overlay.component';
 import { ComponentLoadingService } from '../../../../../../shared/services/component-loading.service';
 import { NotificationService } from '../../../../../../shared/services/notification.service';
 import { ChatFacade } from '../../../../facades/chat.facade';
-import { MemberModel } from '../../../../../../core/models/conversations/member-model';
-import { UserModel } from '../../../../../../core/models/conversations/user-model';
-import { GetUsersRequest } from '../../../../../../core/models/conversations/get-users-request';
 
 @Component({
     selector: 'app-add-members-dialog',
@@ -54,15 +52,13 @@ export class AddMembersDialogComponent {
     });
 
     protected readonly isUserAlreadyMember = (userId: string): boolean => {
-        return this.currentMembers().some(m => m.userId === userId);
+        return this.currentMembers().some(member => member.userId === userId);
     };
 
     constructor() {
         effect(async () => {
-            const query = this.searchQuery();
             await this.loadingService.trackAsync(async () => {
-                const request: GetUsersRequest = query ? { displayName: query } : {};
-                const result = await this.chatFacade.getUsers(request);
+                const result = await this.chatFacade.getUsers({ displayName: this.searchQuery() });
 
                 if (!result.success) {
                     this.notificationService.error('Não foi possível carregar a lista de usuários.');

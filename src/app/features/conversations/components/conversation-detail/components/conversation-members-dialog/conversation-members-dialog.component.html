@@ -47,8 +47,7 @@
 
                 @if (isCreator() && isGroupChat()) {
                     <button type="button" mat-icon-button class="member-card__delete"
-                        (click)="removeMember(member.memberId)"
-                        [disabled]="loadingService.isLoading()"
+                        (click)="removeMember(member.memberId)" [disabled]="loadingService.isLoading()"
                         title="Remover membro">
                         <span class="material-icons" aria-hidden="true">delete</span>
                     </button>
@@ -62,14 +61,16 @@
 
 <mat-dialog-actions align="end">
     @if (canAddMembers()) {
-        <button type="button" mat-stroked-button (click)="openAddMembersDialog()" [disabled]="loadingService.isLoading()">
+        <button type="button" mat-stroked-button (click)="openAddMembersDialog()"
+            [disabled]="loadingService.isLoading()">
             <span class="material-icons" aria-hidden="true">person_add</span>
             Adicionar membro
         </button>
     }
 
     @if (isCreator() && isGroupChat()) {
-        <button type="button" mat-stroked-button (click)="openEditGroupDialog()" [disabled]="loadingService.isLoading()">
+        <button type="button" mat-stroked-button (click)="openEditGroupDialog()"
+            [disabled]="loadingService.isLoading()">
             <span class="material-icons" aria-hidden="true">edit</span>
             Editar grupo
         </button>

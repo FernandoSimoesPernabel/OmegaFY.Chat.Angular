@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, computed, input, signal } f
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from '../../../../../../core/auth/services/auth.service';
 import { ConversationAndMembersModel } from '../../../../../../core/models/conversations/conversation-and-members-model';
 import { ConversationType } from '../../../../../../core/models/conversations/conversation-type';
 import { ConversationStatusLabelComponent } from '../../../../../../shared/components/conversation-status-label/conversation-status-label.component';
@@ -12,7 +13,6 @@ import { ComponentLoadingService } from '../../../../../../shared/services/compo
 import { NotificationService } from '../../../../../../shared/services/notification.service';
 import { ChatFacade } from '../../../../facades/chat.facade';
 import { ConversationMembersDialogComponent } from '../conversation-members-dialog/conversation-members-dialog.component';
-import { AuthService } from '../../../../../../core/auth/services/auth.service';
 import { EditGroupDialogComponent } from '../edit-group-dialog/edit-group-dialog.component';
 
 @Component({
@@ -50,8 +50,7 @@ export class ConversationHeaderDataComponent implements OnInit {
     });
 
     protected readonly isCreator = computed(() => {
-        const userId = this.authService.getLoggedUserId();
-        return this.conversation()?.groupConfig?.createdByUserId === userId;
+        return this.conversation()?.groupConfig?.createdByUserId === this.authService.getLoggedUserId();
     });
 
     public readonly conversationId = input.required<string>();

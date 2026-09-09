@@ -1,19 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from '../../../../../../core/auth/services/auth.service';
 import { ConversationAndMembersModel } from '../../../../../../core/models/conversations/conversation-and-members-model';
 import { ConversationType } from '../../../../../../core/models/conversations/conversation-type';
-import { DisplayNameInitialComponent } from '../../../../../../shared/components/display-name-initial/display-name-initial.component';
 import { ConversationStatusLabelComponent } from '../../../../../../shared/components/conversation-status-label/conversation-status-label.component';
 import { ConversationTypeLabelComponent } from '../../../../../../shared/components/conversation-type-label/conversation-type-label.component';
+import { DisplayNameInitialComponent } from '../../../../../../shared/components/display-name-initial/display-name-initial.component';
 import { ConversationDateTimePipe } from '../../../../../../shared/pipes/conversation-date-time.pipe';
-import { AuthService } from '../../../../../../core/auth/services/auth.service';
+import { ComponentLoadingService } from '../../../../../../shared/services/component-loading.service';
+import { NotificationService } from '../../../../../../shared/services/notification.service';
+import { ChatFacade } from '../../../../facades/chat.facade';
 import { AddMembersDialogComponent } from '../add-members-dialog/add-members-dialog.component';
 import { EditGroupDialogComponent } from '../edit-group-dialog/edit-group-dialog.component';
-import { ChatFacade } from '../../../../facades/chat.facade';
-import { NotificationService } from '../../../../../../shared/services/notification.service';
-import { ComponentLoadingService } from '../../../../../../shared/services/component-loading.service';
 
 @Component({
     selector: 'app-conversation-members-dialog',
@@ -45,13 +44,10 @@ export class ConversationMembersDialogComponent {
     protected readonly isGroupChat = computed(() => this.conversation().type === ConversationType.GroupChat);
 
     protected readonly isCreator = computed(() => {
-        const userId = this.authService.getLoggedUserId();
-        return this.conversation().groupConfig?.createdByUserId === userId;
+        return this.conversation().groupConfig?.createdByUserId === this.authService.getLoggedUserId();
     });
 
     protected readonly canAddMembers = computed(() => this.isGroupChat() && this.isCreator());
-
-    constructor(private readonly componentLoadingService: ComponentLoadingService) { }
 
     public openAddMembersDialog(): void {
         this.dialog.open(AddMembersDialogComponent, {
@@ -98,10 +94,10 @@ export class ConversationMembersDialogComponent {
                 return;
             }
 
-            const updatedMembers = this.conversation().members.filter(m => m.memberId !== memberId);
-            const updated = this.conversation();
-            updated.members = updatedMembers;
-            this.conversation.set({ ...updated });
+            const updatedMembers = this.conversation().members.filter(member => member.memberId !== memberId);
+
+            this.conversation.set({ ...this.conversation(), members: updatedMembers });
+
             this.notificationService.success('Membro removido com sucesso.');
         });
     }

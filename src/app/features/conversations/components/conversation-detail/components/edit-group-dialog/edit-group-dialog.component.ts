@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormsModule } from '@angular/forms';
-import { NotificationService } from '../../../../../../shared/services/notification.service';
-import { ChatFacade } from '../../../../facades/chat.facade';
-import { ComponentLoadingService } from '../../../../../../shared/services/component-loading.service';
 import { ChangeGroupConfigRequest } from '../../../../../../core/models/conversations/change-group-config-request';
 import { ConversationAndMembersModel } from '../../../../../../core/models/conversations/conversation-and-members-model';
+import { ComponentLoadingService } from '../../../../../../shared/services/component-loading.service';
+import { NotificationService } from '../../../../../../shared/services/notification.service';
+import { ChatFacade } from '../../../../facades/chat.facade';
 
 @Component({
     selector: 'app-edit-group-dialog',
@@ -39,13 +39,12 @@ export class EditGroupDialogComponent {
 
     protected groupName = '';
 
-    protected maxMembers = 10;
+    protected maxMembers = 100;
 
     constructor() {
-        const conversation = this.dialogData.conversation;
-        if (conversation.groupConfig) {
-            this.groupName = conversation.groupConfig.groupName;
-            this.maxMembers = conversation.groupConfig.maxNumberOfMembers;
+        if (this.dialogData.conversation.groupConfig) {
+            this.groupName = this.dialogData.conversation.groupConfig.groupName;
+            this.maxMembers = this.dialogData.conversation.groupConfig.maxNumberOfMembers;
         }
     }
 
@@ -68,9 +67,13 @@ export class EditGroupDialogComponent {
             return;
         }
 
+        if (request.maxNumberOfMembers > 100) {
+            this.notificationService.error('O número máximo de membros deve ser no máximo 100.');
+            return;
+        }
+
         await this.loadingService.trackAsync(async () => {
-            const conversation = this.dialogData.conversation;
-            const result = await this.chatFacade.changeGroupConfig(conversation.conversationId, request);
+            const result = await this.chatFacade.changeGroupConfig(this.dialogData.conversation.conversationId, request);
 
             if (!result.success) {
                 this.notificationService.error('Não foi possível atualizar o grupo.');
@@ -78,6 +81,7 @@ export class EditGroupDialogComponent {
             }
 
             this.notificationService.success('Grupo atualizado com sucesso.');
+
             this.dialogRef.close({ updated: true });
         });
     }

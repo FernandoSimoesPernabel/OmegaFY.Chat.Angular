@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-import { NotificationService } from '../../../../shared/services/notification.service';
-import { ChatFacade } from '../../facades/chat.facade';
 import { CreateGroupConversationRequest } from '../../../../core/models/conversations/create-group-conversation-request';
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
+import { NotificationService } from '../../../../shared/services/notification.service';
+import { ChatFacade } from '../../facades/chat.facade';
 
 @Component({
     selector: 'app-create-group-dialog',
@@ -34,7 +34,7 @@ export class CreateGroupDialogComponent {
 
     protected groupName = '';
 
-    protected maxMembers = 10;
+    protected maxMembers = 100;
 
     public async createGroup(): Promise<void> {
         if (this.loadingService.isLoading())
@@ -52,6 +52,11 @@ export class CreateGroupDialogComponent {
 
         if (request.maxNumberOfMembers < 2) {
             this.notificationService.error('O número máximo de membros deve ser no mínimo 2.');
+            return;
+        }
+
+        if (request.maxNumberOfMembers > 100) {
+            this.notificationService.error('O número máximo de membros deve ser no máximo 100.');
             return;
         }
 

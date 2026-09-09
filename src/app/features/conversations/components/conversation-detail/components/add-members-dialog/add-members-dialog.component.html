@@ -32,8 +32,7 @@
                         Já na conversa
                     </span>
                 } @else {
-                    <button type="button" mat-stroked-button class="user-card__action"
-                        (click)="addMember(user.id)"
+                    <button type="button" mat-stroked-button class="user-card__action" (click)="addMember(user.id)"
                         [disabled]="loadingService.isLoading()">
                         <span class="material-icons">person_add</span>
                         Adicionar
