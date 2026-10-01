@@ -1,4 +1,4 @@
 export type ChangeGroupConfigRequest = {
-    groupName: string;
-    maxNumberOfMembers: number;
+    newGroupName: string;
+    newMaxNumberOfMembers: number;
 };

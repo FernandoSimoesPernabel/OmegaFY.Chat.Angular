@@ -16,6 +16,9 @@ import { MatInputModule } from '@angular/material/input';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupDialogFormComponent {
+    protected readonly MIN_MEMBERS = 2;
+    protected readonly MAX_MEMBERS = 100;
+
     public readonly isLoading = input<boolean>(false);
 
     public readonly showPrefixIcons = input<boolean>(false);
@@ -33,6 +36,6 @@ export class GroupDialogFormComponent {
     }
 
     protected onMaxMembersChange(value: number): void {
-        this.maxMembersChange.emit(value);
+        this.maxMembersChange.emit(Math.max(Math.min(value, this.MAX_MEMBERS), this.MIN_MEMBERS));
     }
 }

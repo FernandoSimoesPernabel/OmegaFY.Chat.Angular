@@ -6,7 +6,7 @@ import { ComponentLoadingService } from '../../../../shared/services/component-l
 import { NotificationService } from '../../../../shared/services/notification.service';
 import { ChatFacade } from '../../facades/chat.facade';
 import { GroupDialogValidationService } from '../../services/group-dialog-validation.service';
-import { GroupDialogFormComponent } from '../shared/group-dialog-form/group-dialog-form.component';
+import { GroupDialogFormComponent } from '../group-dialog-form/group-dialog-form.component';
 
 @Component({
     selector: 'app-create-group-dialog',

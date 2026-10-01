@@ -90,7 +90,7 @@ export class OmegaFyChatClient {
         
         if (request.status) params.append('Status', request.status.toString());
 
-        return this.get<GetUsersResult>(`Chat/users?${params}`);
+        return this.get<GetUsersResult>(`Users?${params}`);
     }
 
     private async get<TResponse>(endpoint: string): Promise<ApiResponse<TResponse>> {

@@ -8,7 +8,7 @@ import { ComponentLoadingService } from '../../../../../../shared/services/compo
 import { NotificationService } from '../../../../../../shared/services/notification.service';
 import { ChatFacade } from '../../../../facades/chat.facade';
 import { GroupDialogValidationService } from '../../../../services/group-dialog-validation.service';
-import { GroupDialogFormComponent } from '../../../shared/group-dialog-form/group-dialog-form.component';
+import { GroupDialogFormComponent } from '../../../group-dialog-form/group-dialog-form.component';
 
 @Component({
     selector: 'app-edit-group-dialog',
@@ -51,8 +51,8 @@ export class EditGroupDialogComponent {
 
         await this.loadingService.trackAsync(async () => {
             const request: ChangeGroupConfigRequest = {
-                groupName: this.groupName().trim(),
-                maxNumberOfMembers: this.maxMembers()
+                newGroupName: this.groupName().trim(),
+                newMaxNumberOfMembers: this.maxMembers()
             };
 
             const result = await this.chatFacade.changeGroupConfig(this.dialogData.conversation.conversationId, request);
