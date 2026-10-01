@@ -50,6 +50,13 @@
             </div>
 
             <div class="conversation-header-data__actions">
+                @if (isCreator() && isGroupChat()) {
+                    <button type="button" mat-stroked-button (click)="openEditGroupDialog()">
+                        <span class="material-icons" aria-hidden="true">edit</span>
+                        Editar
+                    </button>
+                }
+
                 <button type="button" mat-stroked-button (click)="openMembersModal()">
                     <span class="material-icons" aria-hidden="true">group</span>
                     Ver membros

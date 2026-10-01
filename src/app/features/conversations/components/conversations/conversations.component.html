@@ -12,10 +12,17 @@
             </small>
         </div>
 
-        <button type="button" class="page-header__action" mat-stroked-button (click)="logoff()">
-            <span class="material-icons page-header__action-icon" aria-hidden="true">logout</span>
-            Sair
-        </button>
+        <div class="page-header__actions">
+            <button type="button" class="page-header__action" mat-stroked-button (click)="openCreateGroupDialog()">
+                <span class="material-icons page-header__action-icon" aria-hidden="true">group_add</span>
+                Novo Grupo
+            </button>
+
+            <button type="button" class="page-header__action" mat-stroked-button (click)="logoff()">
+                <span class="material-icons page-header__action-icon" aria-hidden="true">logout</span>
+                Sair
+            </button>
+        </div>
     </header>
 
     <mat-card class="conversations-card">

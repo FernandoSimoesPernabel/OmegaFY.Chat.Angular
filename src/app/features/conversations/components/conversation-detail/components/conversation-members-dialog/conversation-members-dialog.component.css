@@ -62,7 +62,7 @@
 
 .member-card {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr auto auto;
     align-items: center;
     gap: 10px;
     padding: 10px;
@@ -115,6 +115,14 @@
     height: 13px;
 }
 
+.member-card__delete {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .members-dialog__empty {
     margin: 4px 0;
     text-align: center;
@@ -135,11 +143,16 @@ mat-dialog-actions .material-icons {
 
 @media (max-width: 640px) {
     .member-card {
-        grid-template-columns: auto 1fr;
+        grid-template-columns: auto 1fr auto;
     }
 
     .member-card__joined-date {
         grid-column: 1 / -1;
         justify-self: flex-start;
+    }
+
+    .member-card__delete {
+        grid-column: 3;
+        grid-row: 1 / 3;
     }
 }

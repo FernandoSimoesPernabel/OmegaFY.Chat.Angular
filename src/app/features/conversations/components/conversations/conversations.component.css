@@ -65,6 +65,12 @@
     line-height: 1.2;
 }
 
+.page-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .page-header__action {
     display: inline-flex;
     align-items: center;

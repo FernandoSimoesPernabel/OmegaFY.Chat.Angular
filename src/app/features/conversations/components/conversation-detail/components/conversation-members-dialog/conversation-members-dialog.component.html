@@ -7,29 +7,29 @@
     <section class="members-dialog__summary">
         <span class="members-summary-pill">
             <span class="material-icons" aria-hidden="true">forum</span>
-            <app-conversation-type-label [type]="conversation.type" />
+            <app-conversation-type-label [type]="conversation().type" />
         </span>
 
         <span class="members-summary-pill">
             <span class="material-icons" aria-hidden="true">check_circle</span>
-            <app-conversation-status-label [status]="conversation.status" />
+            <app-conversation-status-label [status]="conversation().status" />
         </span>
 
         <span class="members-summary-pill">
             <span class="material-icons" aria-hidden="true">groups</span>
-            {{ conversation.members.length }} participante(s)
+            {{ conversation().members.length }} participante(s)
         </span>
     </section>
 
-    @if (conversation.type === conversationType.GroupChat && conversation.groupConfig.groupName) {
+    @if (conversation().type === conversationType.GroupChat && conversation().groupConfig.groupName) {
         <p class="members-dialog__group-name">
             <span class="material-icons" aria-hidden="true">group_work</span>
-            {{ conversation.groupConfig.groupName }}
+            {{ conversation().groupConfig.groupName }}
         </p>
     }
 
     <div class="members-dialog__list">
-        @for (member of conversation.members; track member.memberId) {
+        @for (member of conversation().members; track member.memberId) {
             <article class="member-card">
                 <span class="member-card__avatar" aria-hidden="true">
                     <app-display-name-initial [displayName]="member.displayName" />
@@ -44,6 +44,14 @@
                     <span class="material-icons" aria-hidden="true">schedule</span>
                     {{ member.joinedDate | appConversationDateTime }}
                 </time>
+
+                @if (isCreator() && isGroupChat()) {
+                    <button type="button" mat-icon-button class="member-card__delete"
+                        (click)="removeMember(member.memberId)" [disabled]="loadingService.isLoading()"
+                        title="Remover membro">
+                        <span class="material-icons" aria-hidden="true">delete</span>
+                    </button>
+                }
             </article>
         } @empty {
             <p class="members-dialog__empty">Nenhum membro foi encontrado para esta conversa.</p>
@@ -52,7 +60,23 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button type="button" mat-button (click)="close()">
+    @if (canAddMembers()) {
+        <button type="button" mat-stroked-button (click)="openAddMembersDialog()"
+            [disabled]="loadingService.isLoading()">
+            <span class="material-icons" aria-hidden="true">person_add</span>
+            Adicionar membro
+        </button>
+    }
+
+    @if (isCreator() && isGroupChat()) {
+        <button type="button" mat-stroked-button (click)="openEditGroupDialog()"
+            [disabled]="loadingService.isLoading()">
+            <span class="material-icons" aria-hidden="true">edit</span>
+            Editar grupo
+        </button>
+    }
+
+    <button type="button" mat-button (click)="close()" [disabled]="loadingService.isLoading()">
         <span class="material-icons" aria-hidden="true">close</span>
         Fechar
     </button>

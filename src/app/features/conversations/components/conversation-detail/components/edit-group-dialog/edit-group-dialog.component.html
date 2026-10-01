@@ -1,0 +1,29 @@
+<h2 mat-dialog-title class="edit-group-dialog__title">
+    <span class="material-icons" aria-hidden="true">edit</span>
+    Editar grupo
+</h2>
+
+<mat-dialog-content class="edit-group-dialog__content">
+    @if (loadingService.isLoading()) {
+        <div class="edit-group-dialog__loading">
+            <mat-spinner diameter="40"></mat-spinner>
+        </div>
+    }
+
+    <app-group-dialog-form [isLoading]="loadingService.isLoading()" [showPrefixIcons]="true" [groupName]="groupName()"
+        [maxMembers]="maxMembers()" (groupNameChange)="groupName.set($event)"
+        (maxMembersChange)="maxMembers.set($event)" />
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button type="button" mat-button (click)="close()" [disabled]="loadingService.isLoading()">
+        <span class="material-icons" aria-hidden="true">close</span>
+        Cancelar
+    </button>
+
+    <button type="button" mat-raised-button color="primary" (click)="saveChanges()"
+        [disabled]="loadingService.isLoading()">
+        <span class="material-icons" aria-hidden="true">save</span>
+        Salvar
+    </button>
+</mat-dialog-actions>

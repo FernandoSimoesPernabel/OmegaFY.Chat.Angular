@@ -1,0 +1,28 @@
+.edit-group-dialog__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+
+    .material-icons {
+        font-size: 24px;
+    }
+}
+
+.edit-group-dialog__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 0;
+}
+
+.edit-group-dialog__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+}
+
+.edit-group-dialog__field {
+    width: 100%;
+}
