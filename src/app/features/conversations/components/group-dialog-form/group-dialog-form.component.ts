@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MAX_GROUP_MEMBERS, MIN_GROUP_MEMBERS, DEFAULT_GROUP_MEMBERS } from '../../constants/group-limits.constants';
+import { DEFAULT_GROUP_MEMBERS, MAX_GROUP_MEMBERS, MIN_GROUP_MEMBERS } from '../../constants/group-limits.constants';
 
 @Component({
     selector: 'app-group-dialog-form',
@@ -18,6 +18,7 @@ import { MAX_GROUP_MEMBERS, MIN_GROUP_MEMBERS, DEFAULT_GROUP_MEMBERS } from '../
 })
 export class GroupDialogFormComponent {
     protected readonly MIN_MEMBERS = MIN_GROUP_MEMBERS;
+    
     protected readonly MAX_MEMBERS = MAX_GROUP_MEMBERS;
 
     public readonly isLoading = input<boolean>(false);

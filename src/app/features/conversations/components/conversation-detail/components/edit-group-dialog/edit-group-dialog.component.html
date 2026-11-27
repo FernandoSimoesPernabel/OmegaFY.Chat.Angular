@@ -14,14 +14,13 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="edit-group-dialog__actions">
-    <button type="button" mat-button class="edit-group-dialog__cancel-button"
-        (click)="close()" [disabled]="loadingService.isLoading()">
+    <button type="button" mat-button class="edit-group-dialog__cancel-button" (click)="close()"
+        [disabled]="loadingService.isLoading()">
         <mat-icon fontIcon="close" aria-hidden="true"></mat-icon>
         Cancelar
     </button>
 
-    <button type="button" mat-flat-button color="primary" class="edit-group-dialog__save-button"
-        (click)="saveChanges()"
+    <button type="button" mat-flat-button color="primary" class="edit-group-dialog__save-button" (click)="saveChanges()"
         [disabled]="loadingService.isLoading()">
         <mat-icon fontIcon="save" aria-hidden="true"></mat-icon>
         <span>{{ loadingService.isLoading() ? 'Salvando...' : 'Salvar' }}</span>

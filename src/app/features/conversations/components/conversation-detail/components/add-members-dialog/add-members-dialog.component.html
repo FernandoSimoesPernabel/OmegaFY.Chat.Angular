@@ -29,8 +29,8 @@
 
                 @if (isUserAlreadyMember(user.id)) {
                     <button type="button" mat-stroked-button color="warn"
-                        class="user-card__action user-card__action--remove"
-                        (click)="removeMember(user.id)" [disabled]="loadingService.isLoading()">
+                        class="user-card__action user-card__action--remove" (click)="removeMember(user.id)"
+                        [disabled]="loadingService.isLoading()">
                         <span class="material-icons">person_remove</span>
                         Remover
                     </button>

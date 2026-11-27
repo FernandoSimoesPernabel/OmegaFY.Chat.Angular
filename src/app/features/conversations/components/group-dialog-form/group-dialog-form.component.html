@@ -12,7 +12,7 @@
 <mat-form-field appearance="outline" class="group-dialog-form__field">
     <mat-label>Limite de participantes</mat-label>
 
-    <input matInput [value]="maxMembers()" [maxLength]="3" 
+    <input matInput [value]="maxMembers()" [maxLength]="3"
         (keyup)="onMaxMembersChange($any($event.target).valueAsNumber)" [disabled]="isLoading()" type="number"
         [min]="MIN_MEMBERS" [max]="MAX_MEMBERS" />
 
