@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChildren, ElementRef, signal, QueryList, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, QueryList, signal, ViewChild, ViewChildren } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -6,8 +6,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { auditTime, timer } from 'rxjs';
 import { CursorPagination } from '../../../../core/models/base/cursor-pagination';
 import { GetUserConversationMessagesResult } from '../../../../core/models/conversations/get-user-conversation-messages-result';
-import { MessageFromMemberModel } from '../../../../core/models/conversations/message-from-member-model';
 import { MemberMessageStatus } from '../../../../core/models/conversations/member-message-status';
+import { MessageFromMemberModel } from '../../../../core/models/conversations/message-from-member-model';
 import { SignalRConnectionStatus } from '../../../../core/models/signal-r/signal-r-connection-status';
 import { SignalREventType } from '../../../../core/models/signal-r/signal-r-event-type';
 import { SignalRService } from '../../../../core/services/signal-r.service';

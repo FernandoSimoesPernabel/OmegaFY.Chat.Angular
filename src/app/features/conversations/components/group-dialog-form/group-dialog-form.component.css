@@ -1,0 +1,19 @@
+:host {
+    display: block;
+}
+
+.group-dialog-form__field {
+    width: 100%;
+}
+
+.group-dialog-form__field + .group-dialog-form__field {
+    margin-top: 4px;
+}
+
+.group-dialog-form__icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    color: var(--mat-sys-on-surface-variant);
+}

@@ -1,0 +1,28 @@
+<h2 mat-dialog-title class="create-group-dialog__title">
+    <mat-icon fontIcon="groups" aria-hidden="true"></mat-icon>
+    Criar novo grupo
+</h2>
+
+<mat-dialog-content class="create-group-dialog__content">
+    <p class="create-group-dialog__description">
+        Informe o nome do grupo e o limite de participantes.
+    </p>
+
+    <app-group-dialog-form [isLoading]="loadingService.isLoading()" [groupName]="groupName()"
+        [maxMembers]="maxMembers()" (groupNameChange)="groupName.set($event)"
+        (maxMembersChange)="maxMembers.set($event)" />
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="create-group-dialog__actions">
+    <button type="button" mat-button class="create-group-dialog__cancel-button" (click)="close()"
+        [disabled]="loadingService.isLoading()">
+        <mat-icon fontIcon="close" aria-hidden="true"></mat-icon>
+        Cancelar
+    </button>
+
+    <button type="button" mat-flat-button color="primary" class="create-group-dialog__create-button"
+        (click)="createGroup()" [disabled]="loadingService.isLoading()">
+        <mat-icon fontIcon="add" aria-hidden="true"></mat-icon>
+        <span>{{ loadingService.isLoading() ? 'Criando...' : 'Criar grupo' }}</span>
+    </button>
+</mat-dialog-actions>
