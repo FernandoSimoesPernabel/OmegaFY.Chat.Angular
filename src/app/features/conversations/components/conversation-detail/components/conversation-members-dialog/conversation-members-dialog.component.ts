@@ -75,6 +75,13 @@ export class ConversationMembersDialogComponent {
         if (this.loadingService.isLoading())
             return;
 
+        const member = this.conversation().members.find(item => item.memberId === memberId);
+
+        if (this.isCreator() && member?.userId === this.authService.getLoggedUserId()) {
+            this.notificationService.warning('Não é possível remover o criador do grupo.');
+            return;
+        }
+
         const confirmed = window.confirm('Tem certeza que deseja remover este membro do grupo?');
 
         if (!confirmed)

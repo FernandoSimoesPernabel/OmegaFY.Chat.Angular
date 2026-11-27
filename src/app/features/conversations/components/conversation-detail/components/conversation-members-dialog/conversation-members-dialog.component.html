@@ -47,8 +47,8 @@
 
                 @if (isCreator() && isGroupChat()) {
                     <button type="button" mat-icon-button class="member-card__delete"
-                        (click)="removeMember(member.memberId)" [disabled]="loadingService.isLoading()"
-                        title="Remover membro">
+                        (click)="removeMember(member.memberId)" [disabled]="loadingService.isLoading() || isCreator() "
+                        [title]="isCreator() ? 'O criador do grupo não pode ser removido' : 'Remover membro'">
                         <span class="material-icons" aria-hidden="true">delete</span>
                     </button>
                 }
