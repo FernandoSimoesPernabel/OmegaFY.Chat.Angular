@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, Inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -31,24 +31,25 @@ import { ChatFacade } from '../../../../facades/chat.facade';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddMembersDialogComponent {
-    public readonly conversationId = input.required<string>();
-
-    public readonly currentMembers = input.required<MemberModel[]>();
-
     protected readonly searchQuery = signal('');
 
     protected readonly availableUsers = signal<UserModel[]>([]);
 
     protected readonly filteredUsers = computed(() => {
-        return this.availableUsers();
+        return this.availableUsers().filter(user => user.id !== this.dialogData.groupCreatorUserId);
     });
 
     protected readonly isUserAlreadyMember = (userId: string): boolean => {
-        return this.currentMembers().some(member => member.userId === userId);
+        return this.dialogData.currentMembers.some(member => member.userId === userId);
     };
 
     constructor(
         private readonly dialogRef: MatDialogRef<AddMembersDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) private readonly dialogData: {
+            conversationId: string;
+            currentMembers: MemberModel[];
+            groupCreatorUserId: string | null;
+        },
         private readonly chatFacade: ChatFacade,
         private readonly notificationService: NotificationService,
         public readonly loadingService: ComponentLoadingService) {
@@ -73,7 +74,7 @@ export class AddMembersDialogComponent {
             return;
 
         await this.loadingService.trackAsync(async () => {
-            const result = await this.chatFacade.addMemberToGroup(this.conversationId(), { userId });
+            const result = await this.chatFacade.addMemberToGroup(this.dialogData.conversationId, { userId });
 
             if (!result.success) {
                 this.notificationService.error('Não foi possível adicionar o membro.');

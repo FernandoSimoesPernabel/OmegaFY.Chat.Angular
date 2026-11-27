@@ -33,6 +33,8 @@ export class ConversationMembersDialogComponent {
         return this.conversation().groupConfig?.createdByUserId === this.authService.getLoggedUserId();
     });
 
+    protected readonly groupCreatorUserId = computed(() => this.conversation().groupConfig?.createdByUserId ?? null);
+
     protected readonly canAddMembers = computed(() => this.isGroupChat() && this.isCreator());
 
     constructor(
@@ -47,7 +49,8 @@ export class ConversationMembersDialogComponent {
         this.dialog.open(AddMembersDialogComponent, {
             data: {
                 conversationId: this.conversation().conversationId,
-                currentMembers: this.conversation().members
+                currentMembers: this.conversation().members,
+                groupCreatorUserId: this.groupCreatorUserId()
             },
             width: '560px',
             maxWidth: '95vw',
@@ -77,7 +80,7 @@ export class ConversationMembersDialogComponent {
 
         const member = this.conversation().members.find(item => item.memberId === memberId);
 
-        if (this.isCreator() && member?.userId === this.authService.getLoggedUserId()) {
+        if (member?.userId === this.groupCreatorUserId()) {
             this.notificationService.warning('Não é possível remover o criador do grupo.');
             return;
         }
