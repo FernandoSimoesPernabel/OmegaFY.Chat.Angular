@@ -62,7 +62,7 @@ export class ConversationMembersDialogComponent {
             data: {
                 conversation: this.conversation()
             },
-            width: '560px',
+            width: '460px',
             maxWidth: '95vw',
             autoFocus: false
         }).afterClosed().subscribe((result) => {

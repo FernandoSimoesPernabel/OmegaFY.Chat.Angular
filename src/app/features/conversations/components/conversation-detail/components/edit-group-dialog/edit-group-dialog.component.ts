@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { ChangeGroupConfigRequest } from '../../../../../../core/models/conversations/change-group-config-request';
 import { ConversationAndMembersModel } from '../../../../../../core/models/conversations/conversation-and-members-model';
 import { ComponentLoadingService } from '../../../../../../shared/services/component-loading.service';
@@ -16,7 +16,7 @@ import { GroupDialogFormComponent } from '../../../group-dialog-form/group-dialo
     imports: [
         MatButtonModule,
         MatDialogModule,
-        MatProgressSpinnerModule,
+        MatIconModule,
         GroupDialogFormComponent
     ],
     providers: [ComponentLoadingService],

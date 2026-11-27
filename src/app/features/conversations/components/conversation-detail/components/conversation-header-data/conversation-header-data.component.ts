@@ -91,7 +91,7 @@ export class ConversationHeaderDataComponent implements OnInit {
 
         this.dialog.open(EditGroupDialogComponent, {
             data: { conversation: conversation },
-            width: '560px',
+            width: '460px',
             maxWidth: '95vw',
             autoFocus: false
         }).afterClosed().subscribe(async (result) => {

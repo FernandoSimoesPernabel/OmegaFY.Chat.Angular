@@ -1,29 +1,29 @@
 <h2 mat-dialog-title class="edit-group-dialog__title">
-    <span class="material-icons" aria-hidden="true">edit</span>
+    <mat-icon fontIcon="edit" aria-hidden="true"></mat-icon>
     Editar grupo
 </h2>
 
 <mat-dialog-content class="edit-group-dialog__content">
-    @if (loadingService.isLoading()) {
-        <div class="edit-group-dialog__loading">
-            <mat-spinner diameter="40"></mat-spinner>
-        </div>
-    }
+    <p class="edit-group-dialog__description">
+        Informe o nome do grupo e o limite de participantes.
+    </p>
 
-    <app-group-dialog-form [isLoading]="loadingService.isLoading()" [showPrefixIcons]="true" [groupName]="groupName()"
+    <app-group-dialog-form [isLoading]="loadingService.isLoading()" [groupName]="groupName()"
         [maxMembers]="maxMembers()" (groupNameChange)="groupName.set($event)"
         (maxMembersChange)="maxMembers.set($event)" />
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-    <button type="button" mat-button (click)="close()" [disabled]="loadingService.isLoading()">
-        <span class="material-icons" aria-hidden="true">close</span>
+<mat-dialog-actions align="end" class="edit-group-dialog__actions">
+    <button type="button" mat-button class="edit-group-dialog__cancel-button"
+        (click)="close()" [disabled]="loadingService.isLoading()">
+        <mat-icon fontIcon="close" aria-hidden="true"></mat-icon>
         Cancelar
     </button>
 
-    <button type="button" mat-raised-button color="primary" (click)="saveChanges()"
+    <button type="button" mat-flat-button color="primary" class="edit-group-dialog__save-button"
+        (click)="saveChanges()"
         [disabled]="loadingService.isLoading()">
-        <span class="material-icons" aria-hidden="true">save</span>
-        Salvar
+        <mat-icon fontIcon="save" aria-hidden="true"></mat-icon>
+        <span>{{ loadingService.isLoading() ? 'Salvando...' : 'Salvar' }}</span>
     </button>
 </mat-dialog-actions>
