@@ -55,8 +55,9 @@ export class ConversationMembersDialogComponent {
             width: '560px',
             maxWidth: '95vw',
             autoFocus: false
-        }).afterClosed().subscribe(() => {
-            this.dialogRef.close({ refreshMembers: true });
+        }).afterClosed().subscribe((result) => {
+            if (result?.memberId || result?.removedMemberId)
+                this.dialogRef.close({ refreshMembers: true });
         });
     }
 
