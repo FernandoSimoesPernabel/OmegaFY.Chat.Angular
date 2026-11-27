@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MAX_GROUP_MEMBERS, MIN_GROUP_MEMBERS, DEFAULT_GROUP_MEMBERS } from '../../constants/group-limits.constants';
 
 @Component({
     selector: 'app-group-dialog-form',
@@ -16,8 +17,8 @@ import { MatInputModule } from '@angular/material/input';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupDialogFormComponent {
-    protected readonly MIN_MEMBERS = 2;
-    protected readonly MAX_MEMBERS = 100;
+    protected readonly MIN_MEMBERS = MIN_GROUP_MEMBERS;
+    protected readonly MAX_MEMBERS = MAX_GROUP_MEMBERS;
 
     public readonly isLoading = input<boolean>(false);
 
@@ -25,7 +26,7 @@ export class GroupDialogFormComponent {
 
     public readonly groupName = input<string>('');
 
-    public readonly maxMembers = input<number>(100);
+    public readonly maxMembers = input<number>(DEFAULT_GROUP_MEMBERS);
 
     public readonly groupNameChange = output<string>();
 

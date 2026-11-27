@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { CreateGroupConversationRequest } from '../../../../core/models/conversations/create-group-conversation-request';
 import { ComponentLoadingService } from '../../../../shared/services/component-loading.service';
 import { NotificationService } from '../../../../shared/services/notification.service';
+import { MAX_GROUP_MEMBERS } from '../../constants/group-limits.constants';
 import { ChatFacade } from '../../facades/chat.facade';
 import { GroupDialogValidationService } from '../../services/group-dialog-validation.service';
 import { GroupDialogFormComponent } from '../group-dialog-form/group-dialog-form.component';
@@ -13,6 +15,7 @@ import { GroupDialogFormComponent } from '../group-dialog-form/group-dialog-form
     imports: [
         MatButtonModule,
         MatDialogModule,
+        MatIconModule,
         GroupDialogFormComponent
     ],
     providers: [ComponentLoadingService],
@@ -23,7 +26,7 @@ import { GroupDialogFormComponent } from '../group-dialog-form/group-dialog-form
 export class CreateGroupDialogComponent {
     protected groupName = signal<string>('');
 
-    protected maxMembers = signal<number>(100);
+    protected maxMembers = signal<number>(MAX_GROUP_MEMBERS);
 
     constructor(
         private readonly dialogRef: MatDialogRef<CreateGroupDialogComponent>,

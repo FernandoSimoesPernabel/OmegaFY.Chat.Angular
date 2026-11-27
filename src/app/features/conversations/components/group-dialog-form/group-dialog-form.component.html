@@ -5,18 +5,20 @@
         [disabled]="isLoading()" type="text" />
 
     @if (showPrefixIcons()) {
-        <span matPrefix class="material-icons">group_work</span>
+        <span matPrefix class="material-icons group-dialog-form__icon">group_work</span>
     }
 </mat-form-field>
 
 <mat-form-field appearance="outline" class="group-dialog-form__field">
-    <mat-label>Máximo de membros</mat-label>
+    <mat-label>Limite de participantes</mat-label>
 
     <input matInput [value]="maxMembers()" [maxLength]="3" 
         (keyup)="onMaxMembersChange($any($event.target).valueAsNumber)" [disabled]="isLoading()" type="number"
         [min]="MIN_MEMBERS" [max]="MAX_MEMBERS" />
 
     @if (showPrefixIcons()) {
-        <span matPrefix class="material-icons">people</span>
+        <span matPrefix class="material-icons group-dialog-form__icon">people</span>
     }
+
+    <mat-hint align="end">Entre {{ MIN_MEMBERS }} e {{ MAX_MEMBERS }} participantes</mat-hint>
 </mat-form-field>

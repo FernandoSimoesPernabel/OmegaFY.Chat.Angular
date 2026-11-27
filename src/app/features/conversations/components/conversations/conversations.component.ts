@@ -64,7 +64,7 @@ export class ConversationsComponent implements OnInit {
 
     public openCreateGroupDialog(): void {
         const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
-            width: '400px',
+            width: '460px',
             maxWidth: '95vw',
             autoFocus: false
         });

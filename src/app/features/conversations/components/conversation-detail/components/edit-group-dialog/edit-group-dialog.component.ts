@@ -6,6 +6,7 @@ import { ChangeGroupConfigRequest } from '../../../../../../core/models/conversa
 import { ConversationAndMembersModel } from '../../../../../../core/models/conversations/conversation-and-members-model';
 import { ComponentLoadingService } from '../../../../../../shared/services/component-loading.service';
 import { NotificationService } from '../../../../../../shared/services/notification.service';
+import { DEFAULT_GROUP_MEMBERS } from '../../../../constants/group-limits.constants';
 import { ChatFacade } from '../../../../facades/chat.facade';
 import { GroupDialogValidationService } from '../../../../services/group-dialog-validation.service';
 import { GroupDialogFormComponent } from '../../../group-dialog-form/group-dialog-form.component';
@@ -26,7 +27,7 @@ import { GroupDialogFormComponent } from '../../../group-dialog-form/group-dialo
 export class EditGroupDialogComponent {
     protected groupName = signal<string>('');
 
-    protected maxMembers = signal<number>(100);
+    protected maxMembers = signal<number>(DEFAULT_GROUP_MEMBERS);
 
     constructor(
         private readonly dialogRef: MatDialogRef<EditGroupDialogComponent>,

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NotificationService } from '../../../shared/services/notification.service';
+import { MAX_GROUP_MEMBERS, MIN_GROUP_MEMBERS } from '../constants/group-limits.constants';
 
 @Injectable({ providedIn: 'root' })
 export class GroupDialogValidationService {
@@ -11,13 +12,13 @@ export class GroupDialogValidationService {
             return false;
         }
 
-        if (maxMembers < 2) {
-            this.notificationService.error('O número máximo de membros deve ser no mínimo 2.');
+        if (maxMembers < MIN_GROUP_MEMBERS) {
+            this.notificationService.error(`O número máximo de membros deve ser no mínimo ${MIN_GROUP_MEMBERS}.`);
             return false;
         }
 
-        if (maxMembers > 100) {
-            this.notificationService.error('O número máximo de membros deve ser no máximo 100.');
+        if (maxMembers > MAX_GROUP_MEMBERS) {
+            this.notificationService.error(`O número máximo de membros deve ser no máximo ${MAX_GROUP_MEMBERS}.`);
             return false;
         }
 
